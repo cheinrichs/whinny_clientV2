@@ -1,0 +1,28 @@
+<ion-view hide-nav-bar="true">
+  <div class="content-container">
+
+    <div class="bar bar-header bar-energized">
+      <a class="button icon-left ion-arrow-left-c button-energized" ng-click="backToBroadcastsPage()"></a>
+      <h1 class="title">Find new broadcasts to subscribe to!</h1>
+      <div class="chatSubheader"></div>
+    </div>
+
+    <ion-content padding="true" class="has-header">
+
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Type here to search</span>
+        <input type="text" placeholder="Broadcast Name" ng-model="data.searchInput">
+      </label>
+      <br>
+
+      <ion-item ng-repeat="broadcast in broadcastSearchObjects | filter:data.searchInput" class="item item-avatar" ng-click="goToBroadcastProfilePage(broadcast)">
+        <img ng-src="{{broadcast.broadcast_photo}}" alt="">
+        {{broadcast.broadcast_name}}
+        <br>
+        {{broadcast.broadcast_discipline}}
+      </ion-item>
+
+    </ion-content>
+  </div>
+
+</ion-view>

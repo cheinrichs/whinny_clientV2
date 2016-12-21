@@ -1,0 +1,31 @@
+<ion-view title="MessagesPage" hide-nav-bar="true" id="page2">
+  <div class="content-container">
+
+    <ion-header-bar align-title="center" class="bar-light">
+      <div class="buttons">
+        <button class="button button-energized icon-left ion-android-settings" ng-click="toSettingsPage()"></button>
+      </div>
+      <h1 class="title whinnyHeader">Whinny</h1>
+      <div class="buttons">
+        <button class="button button-energized icon-right ion-android-create" ng-click="createNewChat()"></button>
+      </div>
+    </ion-header-bar>
+
+
+    <ion-content padding="true" class="manual-ios-statusbar-padding">
+
+      <div ng-repeat="convo in chatMessages track by $index">
+        <ion-item class="item item-avatar" ng-click="goToChatWithUser($index)">
+          <img ng-src="{{convo.convoUser.portrait_link}}" alt="">
+          <i ng-if="!convo.unread" class="messageIcon icon ion-chevron-right energized"></i>
+          <i ng-if="convo.unread" class="messageIcon newMessageIcon icon ion-record energized"></i>
+          <span ng-if="!convo.convoUser.first_name">{{convo.convoUser.phone}}</span>
+          <h3>{{convo.convoUser.first_name}} {{convo.convoUser.last_name}}</h3>
+          {{convo.messages[convo.messages.length-1].content | messageShortener}}
+        </ion-item>
+      </div>
+
+     </ion-content>
+
+  </div>
+</ion-view>

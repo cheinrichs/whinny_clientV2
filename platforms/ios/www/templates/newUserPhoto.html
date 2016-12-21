@@ -1,0 +1,23 @@
+<ion-view title="newUserPhoto" hide-nav-bar="true" id="newUserPhoto" class="nonTabPagePadding">
+  <ion-content>
+    <h1>New User Photo!</h1>
+    <ul>
+      <li class="item">
+
+        Current Profile Picture:
+        <div class="profilePicBorder">
+          <img ng-hide="data.imgURI !== undefined" ng-src="{{data.currentUser.portrait_link}}" class="groupProfilePic" alt=""> <!--TODO show placeholder and format -->
+          <img ng-hide="data.imgURI === undefined" ng-src="{{data.imgURI}}" class="groupProfilePic" alt=""> <!--TODO show placeholder and format -->
+
+        </div>
+        <div class="row">
+          <button class="col-50 button button-tangerine" ng-click="data.takePhoto()">Take New Photo</button>
+          <button class="col-50 button button-tangerine" ng-click="data.choosePhoto()">Choose New Photo</button>
+        </div>
+        <div class="row">
+          <button class="button button-outline button-energized button-block" ng-click="data.uploadUpdatedPhoto()">Submit</button>
+        </div>
+      </li>
+    </ul>
+  </ion-content>
+</ion-view>

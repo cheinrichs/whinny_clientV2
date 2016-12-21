@@ -1,0 +1,551 @@
+/*
+To customize the look and feel of Ionic, you can override the variables
+in ionic's _variables.scss file.
+
+For example, you might change some of the default colors:
+
+$light:                           #fff !default;
+$stable:                          #f8f8f8 !default;
+$positive:                        #387ef5 !default;
+$calm:                            #11c1f3 !default;
+$balanced:                        #33cd5f !default;
+$energized:                       #ffc900 !default;
+$assertive:                       #ef473a !default;
+$royal:                           #886aea !default;
+$dark:                            #444 !default;
+*/
+
+$energized:                       #FFB554 !default;
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+
+
+// Include all of Ionic
+@import "www/lib/ionic/scss/ionic";
+
+@font-face {
+  font-family: 'Aquatico Regular';
+  src: url('../lib/ionic/fonts/Aquatico-Regular.otf');
+}
+@font-face {
+  font-family: 'Aquatico Light';
+  src: url('../lib/ionic/fonts/Aquatico-Light.otf');
+}
+@font-face {
+  font-family: 'Assistant Regular';
+  src: url('../lib/ionic/fonts/Assistant-Regular.ttf');
+}
+@font-face {
+  font-family: 'Assistant Light';
+  src: url('../lib/ionic/fonts/Assistant-Light.ttf');
+}
+
+* {
+  font-family: 'Assistant Regular' !important;
+}
+
+// * {
+//   font-family: 'Didact Gothic' !important;
+// }
+
+.errors {
+  color: red;
+  text-align: center;
+}
+
+.createGroupSpinner {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.broadcastCardLink {
+  text-transform: uppercase;
+  color: #FFB554;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.discipline {
+  height: 100px;
+  width: 110px;
+  border: 3px solid #FFB554;
+  border-radius: 5px;
+  text-align: center;
+}
+.selectedDisciplineColor {
+  background-color: #FFB554;
+}
+
+.disciplinePic {
+  height: 50px;
+  display: block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+
+
+
+.tabs-energized > .tabs,
+.tabs.tabs-energized {
+  border-color: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: linear-gradient(0deg, #ffaa3b, #ffaa3b 50%, transparent 50%) !important;
+  color: #FFB554 !important; }
+.tabs-energized > .tabs .tab-item .badge,
+.tabs.tabs-energized .tab-item .badge {
+  background-color: #FFFFFF !important;
+  color: #FFB554 !important; }
+
+
+.tabs-striped.tabs-energized .tabs {
+  background-color: #FFFFFF !important; }
+
+.tabs-striped.tabs-energized .tab-item {
+  color: rgba(255, 181, 84, 0.4) !important;
+  opacity: 1 !important; }
+.tabs-striped.tabs-energized .tab-item .badge {
+  opacity: 0.4 !important; }
+.tabs-striped.tabs-energized .tab-item.tab-item-active, .tabs-striped.tabs-energized .tab-item.active, .tabs-striped.tabs-energized .tab-item.activated {
+  margin-top: -2px !important;
+  color: #FFB554 !important;
+  border-style: solid !important;
+  border-width: 2px 0 0 0 !important;
+  border-color: #FFB554 !important; }
+
+
+.landingPageImage {
+  height: 280px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+.backToWelcomePageButton {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.nonTabPagePadding {
+  padding: 20px 10px 0px 10px;
+  background-color: white;
+}
+
+.confirmationPagePadding {
+  margin-top: 142px;
+  text-align: center;
+}
+
+.whinnyHeader {
+  font-family: 'Aquatico Regular' !important;
+  color: #FFB554 !important;
+}
+
+.registerTitle {
+  text-align: center;
+  font-family: 'Aquatico Regular' !important;
+  font-size: 20px;
+  color: #FFB554;
+  margin-bottom: 15px;
+}
+
+.termsCheckbox{
+  font-size: 12px !important;
+}
+
+.termsAndConditions {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.groupPrivacyButton {
+  font-size: 25px;
+  text-align: right;
+  position: relative;
+  left: 5px;
+}
+
+.groupExplanationText {
+  font-size: 14px !important;
+  color: #AAAAAA;
+}
+
+.toMessage{
+  position:relative;
+  padding: 5px;
+  color: #000;
+  margin: 5px;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  border-radius:10px;
+  text-align: right;
+  background: #ffb554;
+  font-size: 18px !important;
+}
+
+.fromMessage {
+  position:relative;
+  padding: 5px;
+  color:#000;
+  margin: 0px 5px;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  border-radius:10px;
+
+  text-align: left;
+
+  background: #FCDAA9;
+
+  font-size: 18px !important;
+
+}
+
+.platform-ios .messageIcon {
+  float: right;
+  margin-top: 5px;
+  color: #a3a3a3;
+}
+
+.platform-ios .newMessageIcon {
+  color: #FFB554 !important;
+  margin-right: -2px;
+}
+
+.platform-android .messageIcon {
+  float: right;
+  margin-top: 5px;
+  color: #a3a3a3;
+}
+
+.platform-android .newMessageIcon {
+  color: #FFB554 !important;
+  margin-right: -2px;
+}
+
+.timeSent {
+  text-align: center;
+  color: #dee0e2;
+  font-size: 10px;
+  margin: 0px;
+}
+
+.groupChatPortrait {
+  border: 1px solid white;
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+}
+
+//used in create group
+.groupProfilePic {
+  height: 300px;
+  width: 300px;
+}
+.profilePicBorder {
+  margin: 10px 20px;
+  border: 1px solid #DDDDDD;
+  border-radius: 5px;
+  padding: 5px 0px 0px 0px;
+  text-align: center;
+}
+
+.individualChatPortrait {
+  position: absolute;
+  top: 10px;
+  right: 17px;
+  height: 80px;
+  width: 80px;
+  z-index: 1;
+  border-radius: 10px;
+  background-color: white;
+  border: 2px solid #FDB55F;
+}
+
+.individualBroadcastPortrait {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  height: 80px;
+  width: 80px;
+  z-index: 1;
+  border-radius: 10px;
+  background-color: white;
+  border: 2px solid #FDB55F;
+}
+
+.individualGroupPortrait {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  height: 80px;
+  width: 80px;
+  z-index: 1;
+  border-radius: 10px;
+  background-color: white;
+  border: 2px solid #FDB55F;
+}
+
+.chatSubheader {
+  position: absolute;
+  top: $bar-height;
+  left: 0px;
+  width: 100%;
+  height: 3px;
+  background-color: #FFD8AD;
+}
+
+.bar.bar-energized {
+  border-color: #ffaa3b;
+  background-color: #FFFFFF;
+  background-image: linear-gradient(0deg, #FFD8AD, #FFD8AD 50%, transparent 50%);
+  color: #ffaa3b; }
+  .bar.bar-energized .title {
+    color: #ffaa3b; }
+  .bar.bar-energized.bar-footer {
+    background-image: linear-gradient(180deg, #ffaa3b, #ffaa3b 50%, transparent 50%); }
+
+.chatTitle{
+  font-size: 25px !important;
+  color: red;
+}
+
+.chatScreen {
+  padding: 30px 0px 60px 0px;
+}
+
+.footer-input {
+  position: relative;
+  top: 1px;
+  border: 1px solid #c0c0c0 !important;
+  border-radius: 10px;
+  width: 100%;
+  padding: 3px 5px;
+  height: 46px !important;
+}
+
+.footer-send {
+  border-color: transparent;
+  border-radius: 5px;
+  background-color: #FFB554;
+  color: #fff;
+  text-decoration: none;
+}
+
+.emojiButton {
+  height: 30px;
+  width: 35px !important;
+  margin: 0px;
+}
+
+.AngryFaceEButton {
+  background-image: url('../img/emoji/AngryFace.png');
+}
+
+.ArabianHorseEButton {
+  background-image: url('../img/emoji/ArabianHorse.png');
+}
+
+.BarrelHorseEButton {
+  background-image: url('../img/emoji/BarrelHorse.png');
+}
+
+.BlanketEButton {
+  background-image: url('../img/emoji/Blanket.png');
+}
+.BrushEButton {
+  background-image: url('../img/emoji/Brush.png');
+}
+.BucketEButton {
+  background-image: url('../img/emoji/Bucket.png');
+}
+.BuckingHorseEButton {
+  background-image: url('../img/emoji/BuckingHorse.png');
+}
+.CarrotEButton {
+  background-image: url('../img/emoji/Carrot.png');
+}
+.CorgiDogEButton {
+  background-image: url('../img/emoji/CorgiDog.png');
+}
+.DressageHorseEButton {
+  background-image: url('../img/emoji/DressageHorse.png');
+}
+.DrivingHorseEButton {
+  background-image: url('../img/emoji/DrivingHorse.png');
+}
+.EnglishSaddleEButton {
+  background-image: url('../img/emoji/EnglishSaddle.png');
+}
+.EventingHorseEButton {
+  background-image: url('../img/emoji/EventingHorse.png');
+}
+.FlyEButton {
+  background-image: url('../img/emoji/Fly.png');
+}
+.GolfCartEButton {
+  background-image: url('../img/emoji/GolfCart.png');
+}
+.GrazingHorseEButton {
+  background-image: url('../img/emoji/GrazingHorse.png');
+}
+.HappyFaceEButton {
+  background-image: url('../img/emoji/HappyFace.png');
+}
+.HarrowEButton {
+  background-image: url('../img/emoji/Harrow.png');
+}
+.HayBaleEButton {
+  background-image: url('../img/emoji/HayBale.png');
+}
+.HoofPickEButton {
+  background-image: url('../img/emoji/HoofPick.png');
+}
+.HorsePaddockEButton {
+  background-image: url('../img/emoji/HorsePaddock.png');
+}
+.HorseShoeEButton {
+  background-image: url('../img/emoji/HorseShoe.png');
+}
+.HunterHorseEButton {
+  background-image: url('../img/emoji/HunterHorse.png');
+}
+.JackRussellDogEButton {
+  background-image: url('../img/emoji/JackRussellDog.png');
+}
+.JumpingHorseEButton {
+  background-image: url('../img/emoji/JumpingHorse.png');
+}
+.LayingHorseEButton {
+  background-image: url('../img/emoji/LayingHorse.png');
+}
+.LegBandagesEButton {
+  background-image: url('../img/emoji/LegBandages.png');
+}
+.MareAndFoalEButton {
+  background-image: url('../img/emoji/MareAndFoal.png');
+}
+.PitchforkEButton {
+  background-image: url('../img/emoji/Pitchfork.png');
+}
+.PoloPonyEButton {
+  background-image: url('../img/emoji/PoloPony.png');
+}
+.RacingHorsesEButton {
+  background-image: url('../img/emoji/RacingHorses.png');
+}
+.ReiningHorseEButton {
+  background-image: url('../img/emoji/ReiningHorse.png');
+}
+.RibbonEButton {
+  background-image: url('../img/emoji/Ribbon.png');
+}
+.ShetlandPonyEButton {
+  background-image: url('../img/emoji/ShetlandPony.png');
+}
+.TractorEButton {
+  background-image: url('../img/emoji/Tractor.png');
+}
+.TrailerEButton {
+  background-image: url('../img/emoji/Trailer.png');
+}
+.TrailHorseEButton {
+  background-image: url('../img/emoji/TrailHorse.png');
+}
+.VetSymbolEButton {
+  background-image: url('../img/emoji/VetSymbol.png');
+}
+.WesternSaddleEButton {
+  background-image: url('../img/emoji/WesternSaddle.png');
+}
+.WheelbarrowEButton {
+  background-image: url('../img/emoji/WheelBarrow.png');
+}
+
+.emojiButton {
+  background-size: 35px 35px;
+  margin: 0px 5px;
+}
+
+.emoji {
+  height: 50px;
+}
+
+.messageFooter {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  background-color: white;
+  height: $bar-height + 65px;
+  border-top: 1px solid #FFB554;
+}
+
+.top-container{
+    height: 100%;
+    overflow-y:scroll;
+}
+
+
+// .chat-footer  {
+//   width: 100%;
+//   background-color: #FFB554;
+//   position: absolute;
+//   bottom: $bar-height + 20px;
+// }
+
+.button.button-energized {
+  border-color: transparent;
+  background-color: #fff;
+  color: #FFB554; }
+  .button.button-energized:hover {
+    color: #FFB554;
+    text-decoration: none; }
+  .button.button-energized.active, .button.button-energized.activated {
+    background-color: #FF8354;
+    color: #fff; }
+  .button.button-energized.button-clear {
+    border-color: transparent;
+    background: none;
+    box-shadow: none;
+    color: #FFB554; }
+  .button.button-energized.button-icon {
+    border-color: transparent;
+    background: none; }
+  .button.button-energized.button-outline {
+    border-color: #FFB554;
+    background: transparent;
+    color: #FFB554; }
+    .button.button-energized.button-outline.active, .button.button-energized.button-outline.activated {
+      background-color: #FFB554;
+      box-shadow: none;
+      color: #fff; }
+
+.button.button-tangerine {
+  border-color: transparent;
+  background-color: #FFB554;
+  color: #fff; }
+  .button.button-tangerine:hover {
+    color: #fff;
+    text-decoration: none; }
+  .button.button-tangerine.active, .button.button-tangerine.activated {
+    background-color: #FF8354; }
+  .button.button-tangerine.button-clear {
+    border-color: transparent;
+    background: none;
+    box-shadow: none;
+    color: #ffc900; }
+  .button.button-tangerine.button-icon {
+    border-color: transparent;
+    background: none; }
+  .button.button-tangerine.button-outline {
+    border-color: #ffc900;
+    background: transparent;
+    color: #ffc900; }
+    .button.button-tangerine.button-outline.active, .button.button-tangerine.button-outline.activated {
+      background-color: #ffc900;
+      box-shadow: none;
+      color: #fff; }

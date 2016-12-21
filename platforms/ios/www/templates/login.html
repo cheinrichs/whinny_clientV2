@@ -1,0 +1,16 @@
+<ion-view title="Login" hide-nav-bar="true" id="login" class="nonTabPagePadding">
+  <img src="img/Whinnie_landing_Page.png" class="landingPageImage" alt="">
+  <!-- Deprecated -->
+  <div class="list list-inset">
+    <label class="item item-input" focus-me>
+      <input type="text" placeholder="Phone Number" ng-model="phone">
+    </label>
+  </div>
+
+  <div class="row">
+    <button class="col-offset-25 col-50 button button-tangerine right-align" ng-click="data.loginToWhinny()">Log In</button>
+  </div>
+  <div class="row">
+    <a class="button button-energized icon-left ion-arrow-left-c backToWelcomePageButton" ng-click="data.backToWelcomePage()"></a>
+  </div>
+</ion-view>

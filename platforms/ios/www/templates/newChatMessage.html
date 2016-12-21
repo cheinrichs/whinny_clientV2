@@ -1,0 +1,97 @@
+<ion-view title="createNewChatMessagePage" hide-nav-bar="true" id="createNewGroupPage">
+  <div ng-controller="newChatMessageCtrl">
+
+    <div class="bar bar-header bar-energized">
+      <a class="button icon-left ion-arrow-left-c button-energized" ng-click="backToChatPage()"></a>
+      <h1 class="title chatTitle">New Message</h1>
+      <div class="chatSubheader"></div>
+    </div>
+
+    <ion-content class="has-header has-footer">
+
+      <div class="list">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Contact Name or (xxx) xxx-xxxx</span>
+          <input type="text" placeholder="To:" ng-model="data.newChatRecipient" ng-change="data.showContacts()">
+        </label>
+      </div>
+
+      <div ng-repeat="error in data.errors">
+        {{error}}
+      </div>
+
+      <div ng-hide="data.contactsHidden">
+        <ul class="list" ng-show="data.newChatRecipient.length > 0">
+          <li ng-repeat="contact in data.contacts | filter:data.newChatRecipient" class="item" ng-click="data.chooseContact(contact)">
+            {{contact.name.formatted}}
+          </li>
+        </ul>
+      </div>
+
+    </ion-content>
+
+    <div class="messageFooter" keyboard-attach>
+
+      <div class="row">
+
+        <div class="col col-80">
+          <input type="text" class="item footer-input" placeholder="Enter Message" ng-model="chatMessage" ng-focus="focus=true" ng-blur="focus=false">
+        </div>
+
+        <div class="col col-20">
+          <button class="button button-tangerine" ng-click="createNewChatMessage()">Send</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <ion-scroll zooming="false" paging="false" scrollbar-x="false" direction="x" style="height: 40px;">
+          <div class="row" style="height:40px; width: 1600px;">
+            <ion-label class="emojiButton AngryFaceEButton" ng-click="addEmoji(':AngryFace:')"></ion-label>
+            <ion-label class="emojiButton ArabianHorseEButton" ng-click="addEmoji(':ArabianHorse:')"></ion-label>
+            <ion-label class="emojiButton BarrelHorseEButton" ng-click="addEmoji(':BarrelHorse:')"></ion-label>
+            <ion-label class="emojiButton BlanketEButton" ng-click="addEmoji(':Blanket:')"></ion-label>
+            <ion-label class="emojiButton BrushEButton" ng-click="addEmoji(':Brush:')"></ion-label>
+            <ion-label class="emojiButton BucketEButton" ng-click="addEmoji(':Bucket:')"></ion-label>
+            <ion-label class="emojiButton BuckingHorseEButton" ng-click="addEmoji(':BuckingHorse:')"></ion-label>
+            <ion-label class="emojiButton CarrotEButton" ng-click="addEmoji(':Carrot:')"></ion-label>
+            <ion-label class="emojiButton CorgiDogEButton" ng-click="addEmoji(':CorgiDog:')"></ion-label>
+            <ion-label class="emojiButton DressageHorseEButton" ng-click="addEmoji(':DressageHorse:')"></ion-label>
+            <ion-label class="emojiButton DrivingHorseEButton" ng-click="addEmoji(':DrivingHorse:')"></ion-label>
+            <ion-label class="emojiButton EnglishSaddleEButton" ng-click="addEmoji(':EnglishSaddle:')"></ion-label>
+            <ion-label class="emojiButton EventingHorseEButton" ng-click="addEmoji(':EventingHorse:')"></ion-label>
+            <ion-label class="emojiButton FlyEButton" ng-click="addEmoji(':Fly:')"></ion-label>
+            <ion-label class="emojiButton GolfCartEButton" ng-click="addEmoji(':GolfCart:')"></ion-label>
+            <ion-label class="emojiButton GrazingHorseEButton" ng-click="addEmoji(':GrazingHorse:')"></ion-label>
+            <ion-label class="emojiButton HappyFaceEButton" ng-click="addEmoji(':HappyFace:')"></ion-label>
+            <ion-label class="emojiButton HarrowEButton" ng-click="addEmoji(':Harrow:')"></ion-label>
+            <ion-label class="emojiButton HayBaleEButton" ng-click="addEmoji(':HayBale:')"></ion-label>
+            <ion-label class="emojiButton HoofPickEButton" ng-click="addEmoji(':HoofPick:')"></ion-label>
+            <ion-label class="emojiButton HorsePaddockEButton" ng-click="addEmoji(':HorsePaddock:')"></ion-label>
+            <ion-label class="emojiButton HorseShoeEButton" ng-click="addEmoji(':HorseShoe:')"></ion-label>
+            <ion-label class="emojiButton HunterHorseEButton" ng-click="addEmoji(':HunterHorse:')"></ion-label>
+            <ion-label class="emojiButton JackRussellDogEButton" ng-click="addEmoji(':JackRussellDog:')"></ion-label>
+            <ion-label class="emojiButton JumpingHorseEButton" ng-click="addEmoji(':JumpingHorse:')"></ion-label>
+            <ion-label class="emojiButton LayingHorseEButton" ng-click="addEmoji(':LayingHorse:')"></ion-label>
+            <ion-label class="emojiButton LegBandagesEButton" ng-click="addEmoji(':LegBandages:')"></ion-label>
+            <ion-label class="emojiButton MareAndFoalEButton" ng-click="addEmoji(':MareAndFoal:')"></ion-label>
+            <ion-label class="emojiButton PitchforkEButton" ng-click="addEmoji(':Pitchfork:')"></ion-label>
+            <ion-label class="emojiButton PoloPonyEButton" ng-click="addEmoji(':PoloPony:')"></ion-label>
+            <ion-label class="emojiButton RacingHorsesEButton" ng-click="addEmoji(':RacingHorses:')"></ion-label>
+            <ion-label class="emojiButton ReiningHorseEButton" ng-click="addEmoji(':ReiningHorse:')"></ion-label>
+            <ion-label class="emojiButton RibbonEButton" ng-click="addEmoji(':Ribbon:')"></ion-label>
+            <ion-label class="emojiButton ShetlandPonyEButton" ng-click="addEmoji(':ShetlandPony:')"></ion-label>
+            <ion-label class="emojiButton TractorEButton" ng-click="addEmoji(':Tractor:')"></ion-label>
+            <ion-label class="emojiButton TrailerEButton" ng-click="addEmoji(':Trailer:')"></ion-label>
+            <ion-label class="emojiButton TrailHorseEButton" ng-click="addEmoji(':TrailHorse:')"></ion-label>
+            <ion-label class="emojiButton VetSymbolEButton" ng-click="addEmoji(':VetSymbol:')"></ion-label>
+            <ion-label class="emojiButton WesternSaddleEButton" ng-click="addEmoji(':WesternSaddle:')"></ion-label>
+            <ion-label class="emojiButton WheelbarrowEButton" ng-click="addEmoji(':Wheelbarrow:')"></ion-label>
+          </div>
+        </ion-scroll>
+      </div>
+
+    </div>
+
+  </div>
+
+</ion-view>

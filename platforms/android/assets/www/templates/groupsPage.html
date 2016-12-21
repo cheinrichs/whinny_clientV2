@@ -1,0 +1,76 @@
+<ion-view title="GroupsPage" hide-nav-bar="true" id="page3">
+
+  <ion-header-bar align-title="center" class="bar-light">
+    <div class="buttons">
+      <button class="button button-energized icon-left ion-android-settings headerButton" ng-click="toSettingsPage()"></button>
+    </div>
+    <h1 class="title whinnyHeader">Whinny</h1>
+
+    <div class="buttons">
+      <button class="button button-energized icon-right ion-android-search headerButton" ng-click="goToGroupSearchPage()"></button>
+      <button class="button button-energized icon-right ion-android-create headerButton" ng-click="createNewGroup()"></button>
+    </div>
+  </ion-header-bar>
+
+
+  <ion-content padding="true" class="manual-ios-statusbar-padding">
+
+    <div ng-repeat="group in groupApplications" ng-hide="groupApplications.noCurrentApplications">
+      <ion-list>
+        {{group.group_name | nameShortener}} Applications -
+      </ion-list>
+      <div ng-repeat="app in group.applications">
+        <div class="item item-button-right">
+          {{app.first_name}} {{app.last_name}}
+          <div class="buttons">
+            <button class="button button-positive" ng-click="acceptGroupApplication(app.user_id, app.group_id)">
+              Accept
+            </button>
+
+            <button class="button button-assertive" ng-click="declineGroupApplication(app.application_id)">
+              Decline
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <span ng-show="groupInvitations.length > 0">
+      <ion-list>
+        New Group Invitations -
+      </ion-list>
+      <div ng-repeat="inv in groupInvitations">
+        <div class="item item-button-right">
+          Join {{inv.group_name | nameShortener}}?
+          <div class="buttons">
+            <button class="button button-positive" ng-click="acceptGroupInvitation(inv.user_id, inv.group_id)">
+              <i class="icon ion-checkmark"></i>
+            </button>
+
+            <button class="button button-assertive" ng-click="declineGroupInvitation(inv.invitation_id)">
+              <i class="icon ion-close"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <br>
+    </span>
+
+    <ion-list>
+      <ion-item ng-repeat="group in groupObjects" class="item item-avatar" ng-click="goToGroupMessage(group.group_id)">
+        <img ng-src="{{group.group_photo}}" alt="">
+        <h3>{{group.group_name}}</h3>
+
+        <ion-option-button class="button-assertive"
+                           ng-click="leaveGroup(group.group_id)">
+          Leave Group
+        </ion-option-button>
+
+        <i class="icon ion-chevron-right energized"></i>
+
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
+
+</ion-view>

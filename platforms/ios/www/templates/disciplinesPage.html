@@ -1,0 +1,114 @@
+<ion-view title="DisciplineSelect" hide-nav-bar="true" id="disciplineSelect" class="nonTabPagePadding">
+
+  <div class="bar bar-header bar-energized">
+    <a ng-hide="data.turnOffBackButton" class="button icon-left ion-arrow-left-c button-energized" ng-click="backToSettingsPage()"></a>
+    <h1 class="title chatTitle">Interests</h1>
+    <div class="chatSubheader"></div>
+  </div>
+
+  <ion-content class="has-header">
+    <div class="row">
+      <div class="col">
+        Please select your mane interests (see what we did there?)
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col col-33">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(1) }" ng-click="data.selectDiscipline(1)">
+          <img src="img/emoji/BarrelHorse.png" class="disciplinePic">
+          Barrel Racing
+        </div>
+      </div>
+      <div class="col col-33">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(2) }" ng-click="data.selectDiscipline(2)">
+          <img src="img/emoji/JumpingHorse.png" class="disciplinePic">
+          Jumper
+        </div>
+      </div>
+      <div class="col col-33">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(3) }" ng-click="data.selectDiscipline(3)">
+          <img src="img/emoji/DressageHorse.png" class="disciplinePic">
+          Dressage
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col col-33">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(4) }" ng-click="data.selectDiscipline(4)">
+          <img src="img/emoji/HunterHorse.png" class="disciplinePic">
+          Hunter
+        </div>
+      </div>
+      <div class="col col-33">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(5) }" ng-click="data.selectDiscipline(5)">
+          <img src="img/emoji/EventingHorse.png" class="disciplinePic">
+          Eventing
+        </div>
+      </div>
+      <div class="col col-33">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(6) }" ng-click="data.selectDiscipline(6)">
+          <img src="img/emoji/ReiningHorse.png" class="disciplinePic">
+          Reining
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col col-33">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(7) }" ng-click="data.selectDiscipline(7)">
+          <img src="img/emoji/ArabianHorse.png" class="disciplinePic">
+          Arabian Horses
+        </div>
+      </div>
+      <div class="col col-33">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(8) }" ng-click="data.selectDiscipline(8)">
+          <img src="img/emoji/DrivingHorse.png" class="disciplinePic">
+          Driving
+        </div>
+      </div>
+      <div class="col col-33">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(9) }" ng-click="data.selectDiscipline(9)">
+          <img src="img/emoji/RacingHorses.png" class="disciplinePic">
+          Racing
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col col-33">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(10) }" ng-click="data.selectDiscipline(10)">
+          <img src="img/emoji/TrailHorse.png" class="disciplinePic">
+          Trail Riding
+        </div>
+      </div>
+      <div class="col col-33">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(11) }" ng-click="data.selectDiscipline(11)">
+          <img src="img/emoji/PoloPony.png" class="disciplinePic">
+          Polo
+        </div>
+      </div>
+      <div class="col col-33">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(12) }" ng-click="data.selectDiscipline(12)">
+          <img src="img/emoji/VetSymbol.png" class="disciplinePic">
+          Veterinary
+        </div>
+      </div>
+    </div>
+
+    <form ng-submit="data.submitDiscipline()">
+      <div class="list">
+        <label class="item item-input">
+          <input type="text" placeholder="if you would like another discipline, please enter it here:" ng-model="data.suggestedDiscipline">
+        </label>
+      </div>
+
+      <div class="row">
+        <button type="submit" class="col-offset-25 col-50 button button-tangerine">Submit</button>
+      </div>
+    </form>
+
+  </ion-content>
+</ion-view>

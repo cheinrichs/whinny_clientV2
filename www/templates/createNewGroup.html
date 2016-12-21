@@ -1,0 +1,112 @@
+<ion-view title="createNewGroupPage" hide-nav-bar="true" id="createNewGroupPage">
+  <div ng-controller="createNewGroupCtrl" class="content-container">
+
+    <div class="bar bar-header bar-energized">
+      <a class="button icon-left ion-arrow-left-c button-energized" ng-click="backToChatPage()"></a>
+      <h1 class="title chatTitle">Create New Group</h1>
+      <div class="chatSubheader"></div>
+    </div>
+
+    <ion-content class="has-header has-footer">
+
+      <div class="list list-inset">
+        <label class="item item-input">
+          <input type="text" placeholder="Group Name" ng-model="groupData.createGroupInfo.groupName">
+        </label>
+      </div>
+
+      <div class="list list-inset">
+        <div class="row">
+          <div class="col-90">
+            This group will be:
+          </div>
+          <div class="col groupPrivacyButton">
+            <a class="icon-right ion-help-circled" ng-click="groupData.showGroupPrivacyExplanation()"></a>
+          </div>
+        </div>
+        <ion-radio ng-model="groupData.createGroupInfo.is_private" ng-value="true">Private <div class="groupExplanationText" ng-show="groupData.showExplanations">Users can search for your group and ask to join.</div></ion-radio>
+        <ion-radio ng-model="groupData.createGroupInfo.is_public" ng-value="false">Public <div class="groupExplanationText" ng-show="groupData.showExplanations">Users can search for and join your group.</div></ion-radio>
+        <ion-radio ng-model="groupData.createGroupInfo.hidden" ng-value="true">Hidden <div class="groupExplanationText" ng-show="groupData.showExplanations">Users can not search for your group, they can <br> only be invited by you.</div></ion-radio>
+      </div>
+
+      <div class="list list-inset">
+
+        <label class="item item-input">
+          <input type="text" placeholder="Group Zip Code" ng-model="groupData.createGroupInfo.zip">
+        </label>
+
+        <label class="item item-input">
+          <input type="text" placeholder="Short Description" ng-model="groupData.createGroupInfo.description">
+        </label>
+
+        <div class="profilePicBorder">
+          <img ng-src="{{groupData.imgURI}}" class="groupProfilePic" alt=""> <!--TODO show placeholder and format -->
+        </div>
+
+        <div class="row">
+          <button class="col-50 button button-tangerine" ng-click="groupData.takePhoto()">Take Photo</button>
+          <button class="col-50 button button-tangerine" ng-click="groupData.choosePhoto()">Choose Photo</button>
+        </div>
+
+
+      </div>
+
+      <div class="list list-inset">
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Group Discipline
+          </div>
+          <select ng-model="groupData.createGroupInfo.discipline">
+            <option>N/A</option>
+            <option>Barrel Racing</option>
+            <option>Jumper</option>
+            <option>Dressage</option>
+            <option>Hunter</option>
+            <option>Eventing</option>
+            <option>Reining</option>
+            <option>Arabian Horses</option>
+            <option>Driving</option>
+            <option>Racing</option>
+            <option>Trail Riding</option>
+            <option>Polo</option>
+            <option>Veterinary</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="list list-inset" ng-show="groupData.createGroupInfo.invited.length > 0">
+        <div class="item">
+          <div ng-repeat="member in groupData.createGroupInfo.invited">
+            <span class="" ng-click="groupData.removeInvitation(member)">{{member.name}} | X</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="list list-inset">
+        <label class="item item-input">
+          <input type="text" placeholder="Invite People to Join" ng-model="groupData.memberSearch">
+        </label>
+      </div>
+
+      <ul class="list" ng-show="groupData.memberSearch.length > 0">
+        <div ng-repeat="contact in groupData.contacts | filter:groupData.memberSearch">
+          <li ng-repeat="phone in contact.phoneNumbers" class="item" ng-click="groupData.inviteToGroup(contact.name.formatted, phone.value)">
+            {{contact.name.formatted}}: {{phone.value}}
+          </li>
+        </div>
+
+      </ul>
+
+      <div class="errors" ng-repeat="error in groupData.errors">
+        {{error}}
+      </div>
+
+      <div class="row">
+        <button ng-hide="hideCreateGroupButton" class="col-offset-10 col-80 button button-tangerine" ng-click="createGroup()">Create Group</button>
+        <ion-spinner class="spinner-energized createGroupSpinner" icon="android"  ng-show="hideCreateGroupButton"></ion-spinner>
+      </div>
+
+    </ion-content>
+
+  </div>
+</ion-vew>

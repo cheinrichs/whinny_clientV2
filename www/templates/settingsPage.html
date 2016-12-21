@@ -1,0 +1,84 @@
+<ion-view title="SettingsPage" hide-nav-bar="true" id="settingsPage">
+  <div ng-controller="settingsCtrl" class="content-container">
+    <div class="bar bar-header bar-energized">
+      <a class="button icon-left ion-arrow-left-c button-energized" ng-click="backToChatPage()"></a>
+      <h1 class="title chatTitle">Settings</h1>
+      <div class="chatSubheader"></div>
+    </div>
+
+    <ion-content class="has-header has-footer">
+
+      <ul class="list">
+
+        <li class="item item-toggle">
+           Message Notifications
+           <label class="toggle toggle-energized">
+             <input type="checkbox" ng-model="data.messageNotifications" ng-change="updateMessageNotificationSettings()">
+             <div class="track">
+               <div class="handle"></div>
+             </div>
+           </label>
+        </li>
+
+        <li class="item item-toggle">
+           Group Notifications
+           <label class="toggle toggle-energized">
+             <input type="checkbox" ng-model="data.groupNotifications" ng-change="updateGroupNotificationSettings()">
+             <div class="track">
+               <div class="handle"></div>
+             </div>
+           </label>
+        </li>
+
+        <li class="item item-toggle">
+           Broadcast Notifications
+           <label class="toggle toggle-energized">
+             <input type="checkbox" ng-model="data.broadcastNotifications" ng-change="updateBroadcastNotificationSettings()">
+             <div class="track">
+               <div class="handle"></div>
+             </div>
+           </label>
+        </li>
+
+        <li class="item">
+
+          Current Profile Picture:
+          <div class="profilePicBorder">
+            <img ng-hide="data.imgURI !== undefined" ng-src="{{data.currentUser.portrait_link}}" class="groupProfilePic" alt=""> <!--TODO show placeholder and format -->
+            <img ng-hide="data.imgURI === undefined" ng-src="{{data.imgURI}}" class="groupProfilePic" alt=""> <!--TODO show placeholder and format -->
+
+          </div>
+          <div class="row">
+            <button class="col-50 button button-tangerine" ng-click="data.takePhoto()">Take New Photo</button>
+            <button class="col-50 button button-tangerine" ng-click="data.choosePhoto()">Choose New Photo</button>
+          </div>
+          <div class="row">
+            <button class="button button-outline button-energized button-block" ng-click="data.uploadUpdatedPhoto()">Upload updated photo</button>
+          </div>
+        </li>
+
+        <li class="item item-text-wrap">
+          Your interests help us curate content for you. Depending on what you select on this page,
+          we will suggest specific broadcast content to help you get the most out of Whinny!
+
+          <div class="row">
+            <button class="button button-block button-royal" ng-click="goToDisciplines()">Interests</button>
+          </div>
+        </li>
+
+        <li class="item item-text-wrap">
+          If you're looking to remove your user data and log out of the app on this device, click here.
+          This will not delete your account. Next time you log in to access any of your chat information, you'll have to provide your
+          login credentials.
+
+          <div class="row">
+            <button class="button button-block button-assertive" ng-click="logout()">Logout</button>
+          </div>
+        </li>
+      </ul>
+
+
+    </ion-content>
+
+  </div>
+</ion-vew>

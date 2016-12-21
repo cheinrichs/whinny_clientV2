@@ -1,0 +1,1140 @@
+angular.module('app.controllers', ['app.services'])
+
+.controller('welcomePageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaCamera', '$localStorage', '$ionicPlatform', '$ionicPush',
+function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, $localStorage, $ionicPlatform, $ionicPush) {
+  //read from file,
+  //if logged in, redirect to tabs.messages
+  var currentUser = messageFactory.getCurrentUser();
+
+  $scope.data = {};
+  $scope.data.errors = [];
+
+  $ionicPlatform.ready(function () {
+
+    $ionicPush.register({
+      canShowAlert: true, //Can pushes show an alert on your screen?
+      canSetBadge: true, //Can pushes update app icon badges?
+      canPlaySound: true, //Can notifications play a sound?
+      canRunActionsOnWake: true, //Can run actions outside the app,
+      onNotification: function (notification, event) {
+        // Handle new push notifications here
+        console.log("thingslkajsfd;lz");
+        console.log(notification);
+      }
+    }).then(function (t) {
+      console.log("anythingz?");
+      var option = { ignore_user: true };
+      return $ionicPush.saveToken(t, option);
+    }).then(function (t) {
+      $localStorage.token = t;
+      console.log('Tokenz saved: ', t);
+      for(key in t){
+        console.log(key + ": " + t[key]);
+      }
+    })
+
+  })
+
+  if($localStorage.whinny_user){
+    if($localStorage.whinny_user.verified){
+      console.log($localStorage.whinny_user);
+      messageFactory.versionCheck().then(function (res) {
+        if(res.deprecatedClient){
+          alert("Your Whinny app is now out of date! Please download the new version!");
+          $scope.data.errors.push("Please download the new version of Whinny");
+        } else {
+          messageFactory.setCurrentUser($localStorage.whinny_user);
+          $state.go('tabsController.chatPage');
+        }
+      })
+    }
+  }
+  // if(Object.keys(currentUser) > 0) $state.go('tabsController.chatPage');
+
+
+  $scope.data.goToLogin = function () {
+    $state.go('loginPage');
+  }
+
+  $scope.data.loginToWhinny = function () {
+    $scope.data.errors = [];
+    if(!$scope.data.phone){
+      $scope.data.errors.push('Please enter your phone number');
+      return;
+    }
+    if($scope.data.phone.length < 10 || $scope.data.phone.length > 10){
+      $scope.data.errors.push('Please enter a valid phone number without punctuation - 3031231234')
+    }
+    if($scope.data.errors.length === 0){
+      messageFactory.logIn($scope.data.phone).then(function (res) {
+        if(res.data.deprecatedClient){
+          alert("Your Whinny app is now out of date! Please download the new version!");
+          $scope.data.errors.push("Please download the new version of Whinny");
+        }
+        if(res.data.newUser){
+          $state.go('newUserCreation', { phone: $scope.data.phone });
+        } else if(res.data[0]){
+          if(res.data[0].user_id > 0) $state.go('confirmationPage', { newUserData: $scope.data });
+        }
+      })
+    }
+  }
+
+  $scope.data.goToTerms = function () {
+    $state.go('termsPage');
+  }
+
+  $scope.data.backToWelcomePage = function () {
+    $state.go('welcomePage');
+  }
+
+  $scope.data.takePhoto = function () {
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.DATA_URL,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+        $scope.data.imgURI = "data:image/jpeg;base64," + imageData;
+    }, function (err) {
+        console.log("error in take photo");
+    });
+  }
+
+  $scope.data.choosePhoto = function () {
+    console.log("choosing photo");
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.DATA_URL,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    }
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      $scope.data.imgURI = "data:image/jpeg;base64," + imageData;
+    }, function (err) {
+      console.log("error has occurred in get picture");
+    })
+  }
+
+}])
+
+.controller('termsPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
+function ($scope, $state, $stateParams, messageFactory) {
+  console.log("terms page controller!");
+  console.log($stateParams);
+
+  $scope.returnToNewUserCreation = function () {
+    $state.go('newUserCreation')
+  }
+
+}])
+
+.controller('newUserCreationCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
+function ($scope, $state, $stateParams, messageFactory) {
+  console.log("params");
+  console.log($stateParams);
+
+  console.log("newUserCreationCtrl");
+  $scope.data = {};
+  $scope.data.errors = [];
+
+  $scope.data.phone = $stateParams.phone;
+
+  $scope.data.joinWhinny = function () {
+    console.log("joining");
+    $scope.data.errors = [];
+    if(!$scope.data.first_name || !$scope.data.last_name) $scope.data.errors.push("You must enter your name to continue");
+    if(!$scope.data.licenseAgreement) $scope.data.errors.push("You must agree to the terms and conditions to continue");
+
+    if($scope.data.errors.length === 0){
+      messageFactory.joinWhinny($scope.data).then(function (res) {
+        console.log(res);
+        $state.go('confirmationPage', { newUserData: $scope.data });
+      });
+    }
+  }
+
+  $scope.data.goToTerms = function () {
+    $state.go('termsPage');
+  }
+
+  $scope.data.backToWelcomePage = function () {
+    $state.go('welcomePage');
+  }
+
+}])
+
+.controller('confirmationPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
+function ($scope, $state, $stateParams, messageFactory) {
+  //read from file,
+  //if logged in, redirect to tabs.messages
+
+  console.log($stateParams.newUserData);
+
+  $scope.data = {};
+  $scope.data.errors = [];
+
+  $scope.confirmPhoneNumber = function () {
+    $scope.data.errors = [];
+
+    if(!$scope.confirmationNumber){
+      $scope.data.errors.push('Please enter your confirmation number.');
+    }
+    if($scope.confirmationNumber){
+      if($scope.confirmationNumber.length > 4){
+        $scope.data.errors.push('It looks like you entered too many characters. Check your confirmation code');
+      }
+    }
+    if($scope.data.errors.length === 0){
+      messageFactory.submitConfirmationNumber($stateParams.newUserData.phone, $scope.confirmationNumber).then(function (res) {
+        if (res.data.verified === true) {
+          //If you have a user picture and
+          if(res.data.account_is_setup === true){
+            //Go to tabs
+            $state.go('tabsController.chatPage');
+          } else {
+            //Go to interests and then photo
+            $state.go('disciplines', {returnPage: 'newUserPhoto'});
+          }
+        } else if(res.data.status === 'Incorrect code given') {
+          $scope.data.errors.push('Hmmm, looks like the code you submitted didn\'t work. Try to send it again.');
+          console.log("An error has occurred");
+        }
+      });
+    }
+  }
+  $scope.backToWelcomePage = function () {
+    $state.go('welcomePage'); //TODO comes with context to go back to registration page or to welcome
+  }
+}])
+
+.controller('disciplinesCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
+function ($scope, $state, $stateParams, messageFactory) {
+  console.log("disciplines Ctrl to", $stateParams.returnPage);
+  $scope.data = {};
+  $scope.data.selectedDisciplines = [];
+
+  if($stateParams.returnPage === 'newUserPhoto'){
+    $scope.data.turnOffBackButton = true;
+  } else {
+    $scope.data.turnOffBackButton = false;
+  }
+
+  messageFactory.getUserInterests().then(function (res) {
+    $scope.data.selectedDisciplines = res;
+  });
+
+  $scope.data.selectDiscipline = function (discipline) {
+    console.log("selecting", discipline);
+    var index = $scope.data.selectedDisciplines.indexOf(discipline);
+    if(index === -1){
+      $scope.data.selectedDisciplines.push(discipline);
+    } else {
+      $scope.data.selectedDisciplines.splice(index, 1);
+    }
+  }
+
+  $scope.data.submitDiscipline = function () {
+    console.log("submitting discipline");
+    console.log($scope.data.selectedDisciplines, $scope.data.suggestedDiscipline);
+    messageFactory.addUserInterests($scope.data.selectedDisciplines, $scope.data.suggestedDiscipline).then(function (res) {
+      console.log("successful!");
+      $state.go($stateParams.returnPage);
+    })
+  }
+
+  $scope.backToSettingsPage = function () {
+    $state.go('settingsPage', { context: 'chat'})
+  }
+
+}])
+
+.controller('newUserPhotoCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPush',
+function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFactory, $timeout, $ionicPush) {
+  console.log("new User Phot CTRL");
+  $scope.data = {};
+  $scope.data.currentUser = messageFactory.getCurrentUser();
+
+  $scope.data.takePhoto = function () {
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.data.imgURI = imageData;
+    }, function (err) {
+        console.log("error in take photo");
+    });
+  }
+
+  $scope.data.choosePhoto = function () {
+    console.log("choosing photo");
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    }
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.data.imgURI = imageData;
+    }, function (err) {
+      console.log("error has occurred in get picture");
+    })
+  }
+
+  $scope.data.uploadUpdatedPhoto = function () {
+
+    var filename = $scope.data.currentUser.user_id + '_PersonalProfilePic.jpg'
+    photoFactory.uploadPersonalProfilePhoto(filename, $scope.data.imgURI);
+
+    $timeout(function () {
+      //Give it a second to upload and then redirect to tabs?
+
+      $state.go('tabsController.chatPage');
+
+    }, 1000);
+
+  }
+}])
+
+.controller('chatPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$localStorage',
+function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localStorage) {
+  $scope.currentUser = messageFactory.getCurrentUser();
+  //Send users to log in if there is no user id
+  if(!$scope.currentUser.user_id) $state.go('welcomePage');
+
+  $scope.chatMessages = messageFactory.getChatMessages();
+  $scope.chatUsers = messageFactory.getUserObjects();
+
+  $scope.unread = [false, true];
+
+  $scope.local_storage = $localStorage;
+
+
+  //load all contacts for use with other pages in the app //TODO **__** CONTAX
+  document.addEventListener("deviceready", onDeviceReady, false);
+  function onDeviceReady() {
+    console.log("device is ready?");
+    contactsFactory.updateContacts();
+  }
+
+
+  // if($scope.chatMessages.length === 0){
+  //TODO Once we have messages stored in a file on your phone turn on this if statement
+    messageFactory.updateChatMessages().then(function (res) {
+      $scope.chatMessages = messageFactory.getChatMessages();
+      $scope.chatUsers = messageFactory.getUserObjects();
+
+      console.log($scope.chatMessages);
+    });
+  // }
+
+  var updateInterval = setInterval(function () {
+    messageFactory.updateChatMessages().then(function (res) {
+      $scope.chatMessages = messageFactory.getChatMessages();
+      $scope.chatUsers = messageFactory.getUserObjects();
+      console.log("updated");
+      console.log($scope.chatMessages);
+    });
+  }, 10000);
+
+  $scope.goToChatWithUser = function(index){
+    console.log(index);
+    $state.go('individualChat', { index: index });
+  }
+
+  $scope.toSettingsPage = function (){
+    $state.go('settingsPage', { context: 'chat'})
+  }
+
+  $scope.goToWelcome = function () {
+    messageFactory.logout();
+    $state.go('welcomePage');
+  }
+
+  $scope.createNewChat = function () {
+    $state.go('newChatMessage');
+  }
+
+  $scope.$onDestroy = function () {
+    clearInterval(updateInterval);
+  };
+
+}])
+
+.controller('groupsPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
+function ($scope, $state, $stateParams, messageFactory) {
+  $scope.currentUser = messageFactory.getCurrentUser();
+  //Send users to log in if there is no user id
+  if(!$scope.currentUser.user_id) $state.go('welcomePage');
+
+  $scope.groupMessages = messageFactory.getGroupMessages();
+  $scope.groupObjects = messageFactory.getGroupObjects();
+
+  // if($scope.groupMessages.length === 0){ //TODO
+    messageFactory.updateGroupMessages().then(function (res) {
+      $scope.groupMessages = messageFactory.getGroupMessages();
+      $scope.groupObjects = messageFactory.getGroupObjects();
+    });
+  // }
+
+  $scope.groupInvitations = messageFactory.getGroupInvitations();
+  console.log("initial group invitations", $scope.groupInvitations);
+  messageFactory.updateGroupInvitations().then(function (res) {
+    console.log("updated group invitations", res);
+    $scope.groupInvitations = res;
+  });
+
+  $scope.groupApplications = messageFactory.getGroupApplications();
+  messageFactory.updateGroupApplications().then(function (res) {
+    console.log(res);
+    $scope.groupApplications = res;
+  });
+
+  $scope.acceptGroupApplication = function (user_id, group_id) {
+    console.log("accepting ", user_id, group_id);
+    messageFactory.acceptGroupApplication(user_id, group_id).then(function () {
+      messageFactory.updateGroupApplications().then(function (apps) {
+        $scope.groupApplications = apps;
+        messageFactory.updateGroupMessages().then(function (res) {
+          $scope.groupMessages = messageFactory.getGroupMessages();
+          $scope.groupObjects = messageFactory.getGroupObjects();
+        });
+      });
+    });
+  }
+  $scope.declineGroupApplication = function (application_id) {
+    console.log("declining ", application_id);
+    messageFactory.declineGroupApplication(application_id).then(function () {
+      messageFactory.updateGroupApplications().then(function (apps) {
+        $scope.groupApplications = apps;
+        messageFactory.updateGroupMessages().then(function (res) {
+          $scope.groupMessages = messageFactory.getGroupMessages();
+          $scope.groupObjects = messageFactory.getGroupObjects();
+        });
+      });
+    });
+  }
+
+  $scope.acceptGroupInvitation = function (user_id, group_id) {
+    messageFactory.acceptGroupInvitation(user_id, group_id).then(function () {
+      messageFactory.updateGroupInvitations().then(function (res) {
+        $scope.groupInvitations = res;
+        messageFactory.updateGroupMessages().then(function (res) {
+          $scope.groupMessages = messageFactory.getGroupMessages();
+          $scope.groupObjects = messageFactory.getGroupObjects();
+        });
+      })
+    });
+  }
+
+  $scope.declineGroupInvitation = function (invitation_id) {
+    messageFactory.declineGroupInvitation(invitation_id).then(function () {
+      messageFactory.updateGroupInvitations().then(function (res) {
+        console.log("updated group invitations after decline", res);
+        $scope.groupInvitations = res;
+      })
+    })
+  }
+
+
+  // var updateInterval = setInterval(function () {
+  //   $scope.groupMessages = messageFactory.updateGroupMessages();
+  // }, 1000);
+
+  $scope.goToGroupMessage = function (group_id) {
+    $state.go('groupMessagePage', { group_id: group_id });
+  }
+
+  $scope.createNewGroup = function () {
+    $state.go('createNewGroup');
+  }
+
+  $scope.goToGroupSearchPage = function () {
+    $state.go('groupSearch');
+  }
+
+  $scope.toSettingsPage = function (){
+    $state.go('settingsPage', { context: 'groups'});
+  }
+
+  $scope.leaveGroup = function (group_id) {
+    console.log("leaving group", group_id);
+    messageFactory.leaveGroup(group_id).then(function () {
+      messageFactory.updateGroupMessages().then(function (res) {
+        $scope.groupMessages = messageFactory.getGroupMessages();
+        $scope.groupObjects = messageFactory.getGroupObjects();
+      });
+    })
+  }
+
+}])
+
+.controller('groupSearchCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
+function ($scope, $state, $stateParams, messageFactory) {
+  console.log("in group search");
+  $scope.groupSearchObjects = messageFactory.getSearchGroupObjects();
+
+  messageFactory.updateSearchGroupObjects().then(function (res) {
+    $scope.groupSearchObjects = res;
+  })
+
+  $scope.backToGroupsPage = function () {
+    $state.go('tabsController.groupsPage');
+  }
+
+  $scope.goToGroupPage = function (group) {
+    console.log(group);
+    $state.go('groupProfilePage', { group: group });
+  }
+
+}])
+
+.controller('groupProfileCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
+function ($scope, $state, $stateParams, messageFactory) {
+
+  console.log("group profile controller", $stateParams.group);
+
+  $scope.data = {};
+  $scope.data.group = $stateParams.group;
+  $scope.data.requestSent = false;
+
+  $scope.joinGroup = function (group_id) {
+    messageFactory.joinGroup(group_id).then(function () {
+      $state.go('tabsController.groupsPage');
+    })
+  }
+
+  $scope.requestToJoinGroup = function (group_id) {
+    console.log("requesting join group");
+    $scope.data.requestSent = true;
+  }
+
+  $scope.backToGroupSearch = function () {
+    $state.go('groupSearch');
+  }
+
+  $scope.$onDestroy = function () {
+    console.log("group profile ctrl destroyed?");
+  };
+
+}])
+
+.controller('broadcastsPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
+function ($scope, $state, $stateParams, messageFactory) {
+  $scope.currentUser = messageFactory.getCurrentUser();
+  //Send users to log in if there is no user id
+  if(!$scope.currentUser.user_id) $state.go('welcomePage');
+
+  $scope.broadcastMessages = messageFactory.getBroadcastMessages();
+  $scope.broadcastObjects = messageFactory.getBroadcastObjects();
+  // if($scope.broadcastMessages.length === 0){
+    messageFactory.updateBroadcastMessages().then(function (res) {
+      $scope.broadcastMessages = messageFactory.getBroadcastMessages();
+      $scope.broadcastObjects = messageFactory.getBroadcastObjects();
+    });
+  // }
+
+  $scope.goToIndividualBroadcast = function (broadcast_id) {
+    console.log('go to broadcast' + broadcast_id);
+    $state.go('individualBroadcast', { broadcast_id: broadcast_id });
+  }
+
+  $scope.backToBroadcastsPage = function (){
+    $state.go('tabsController.broadcastsPage');
+  }
+
+  $scope.createNewBroadcast = function () {
+    $state.go('createNewBroadcast');
+  }
+
+  $scope.unsubscribeFromBroadcast = function (broadcast_id) {
+    console.log("unsubscribe from ", broadcast_id);
+    messageFactory.unsubscribeToBroadcast(broadcast_id).then(function () {
+      console.log("unsubscribed from ", broadcast_id);
+      messageFactory.updateBroadcastMessages().then(function (res) {
+        $scope.broadcastMessages = messageFactory.getBroadcastMessages();
+        $scope.broadcastObjects = messageFactory.getBroadcastObjects();
+      });
+    });
+  }
+
+  $scope.goToBroadcastSearchPage = function () {
+    console.log("go to broadcast search");
+    $state.go('broadcastSearch');
+  }
+
+  $scope.toSettingsPage = function (){
+    $state.go('settingsPage', { context: 'broadcasts'})
+  }
+
+  $scope.goToWelcome = function () {
+    messageFactory.logout();
+    $state.go('welcomePage');
+  }
+  // $scope.$onDestroy = function () {
+  //   clearInterval(updateInterval);
+  // };
+}])
+
+.controller('broadcastSearchCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
+function ($scope, $state, $stateParams, messageFactory){
+  console.log("b search ctrl");
+  $scope.broadcastSearchObjects = messageFactory.getBroadcastSearchObjects();
+
+  messageFactory.updateSearchBroadcastObjects().then(function (res) {
+    $scope.broadcastSearchObjects = res;
+  })
+
+  $scope.goToBroadcastProfilePage = function (broadcast) {
+    console.log(broadcast);
+    $state.go('broadcastProfilePage', { broadcast: broadcast });
+  }
+
+  $scope.backToBroadcastsPage = function () {
+    $state.go('tabsController.broadcastsPage');
+  }
+}])
+
+.controller('broadcastProfileCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
+function ($scope, $state, $stateParams, messageFactory){
+  console.log("b profile ctrl");
+  $scope.data = {};
+  $scope.data.broadcast = $stateParams.broadcast;
+
+  $scope.subscribeToBroadcast = function (broadcast_id) {
+    console.log("subscribe to ", broadcast_id);
+    messageFactory.subscribeToBroadcast(broadcast_id).then(function (res) {
+      $state.go('tabsController.broadcastsPage');
+    })
+  }
+
+  $scope.backToBroadcastSearch = function () {
+    $state.go('broadcastSearch');
+  }
+}])
+
+.controller('individualChatCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
+function ($scope, $state, $stateParams, messageFactory) {
+
+  $scope.currentUser = messageFactory.getCurrentUser();
+
+  $scope.showEmojiKeyboard = false;
+  $scope.chatMessages = messageFactory.getChatMessages();
+  $scope.chatUsers = messageFactory.getUserObjects();
+  $scope.convo = $scope.chatMessages[$stateParams.index];
+
+  //when we enter an individual chat, take the chat message ids of that specific
+  //user and send the ids in an array in a post request to tell the server they
+  //are all read
+  // console.log("********"); //TODO read messages
+  // console.log($scope.chatMessages[$stateParams.user_id].messages);
+  // var newlyReadMessages = [];
+  // for(key in $scope.chatMessages[$stateParams.user_id].messages){
+  //   console.log($scope.chatMessages[$stateParams.user_id].messages[key].read);
+  //   if(!$scope.chatMessages[$stateParams.user_id].messages[key].read){
+  //     newlyReadMessages.push($scope.chatMessages[$stateParams.user_id].messages[key].message_id);
+  //   }
+  // }
+  // console.log(newlyReadMessages);
+  //TODO messageFactory.markMessagesAsRead(newlyReadMessages);
+
+  console.log("chatting with ", $stateParams.user_id);
+  $scope.chatWithUser = $stateParams.user_id;
+  messageFactory.updateChatMessages().then(function (res) {
+    $scope.chatMessages = messageFactory.getChatMessages();
+    $scope.chatUsers = messageFactory.getUserObjects();
+  })
+
+  var updateInterval = setInterval(function () {
+    messageFactory.updateChatMessages().then(function (res) {
+      $scope.chatMessages = messageFactory.getChatMessages();
+      $scope.chatUsers = messageFactory.getUserObjects();
+    });
+  }, 5000);
+
+  $scope.sendChatMessage = function () {
+    console.log("controller) sending message to ", $stateParams.user_id, $scope.chatMessage);
+    messageFactory.sendChatMessage($stateParams.user_id, $scope.chatMessage).then(function () {
+      $scope.chatMessage = "";
+      messageFactory.updateChatMessages().then(function (res) {
+        $scope.chatMessages = messageFactory.getChatMessages();
+        $scope.chatUsers = messageFactory.getUserObjects();
+        console.log("updated");
+        console.log($scope.chatMessages);
+      });
+    })
+  }
+
+  $scope.addEmoji = function (emoji) {
+    console.log("adding emoji", emoji);
+    if($scope.chatMessage){
+      $scope.chatMessage += emoji;
+    } else {
+      $scope.chatMessage = "" + emoji;
+    }
+  }
+
+  $scope.backToChatPage = function (){
+    clearInterval(updateInterval);
+    $state.go('tabsController.chatPage');
+  }
+
+  $scope.$onDestroy = function () {
+    console.log("individual chat controller destroyed");
+    clearInterval(updateInterval);
+  };
+}])
+
+.controller('individualGroupCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
+function ($scope, $state, $stateParams, messageFactory) {
+  $scope.currentUser = messageFactory.getCurrentUser();
+  $scope.group_id = $stateParams.group_id;
+  //get group messages
+  $scope.groupMessages = messageFactory.getGroupMessages();
+  //get group userObjects
+  $scope.groupObjects = messageFactory.getGroupObjects();
+  //get group objects
+  $scope.userObjects = messageFactory.getGroupUserObjects();
+
+  //update the group messages
+  //and replace messages and objects
+  messageFactory.updateGroupMessages().then(function(){
+    $scope.groupMessages = messageFactory.getGroupMessages();
+    $scope.groupObjects = messageFactory.getGroupObjects();
+    $scope.userObjects = messageFactory.getGroupUserObjects();
+  })
+
+  var updateInterval = setInterval(function () {
+    messageFactory.updateGroupMessages().then(function(){
+      $scope.groupMessages = messageFactory.getGroupMessages();
+      $scope.groupObjects = messageFactory.getGroupObjects();
+      $scope.userObjects = messageFactory.getGroupUserObjects();
+    })
+  }, 1000);
+
+  $scope.addEmoji = function (emoji) {
+    console.log("adding emoji", emoji);
+    // $('#groupInput').focus();
+    if($scope.groupMessage){
+      $scope.groupMessage += emoji;
+    } else {
+      $scope.groupMessage = "" + emoji;
+    }
+  }
+
+  $scope.sendGroupMessage = function () {
+    if($scope.groupMessage.length > 0){
+      messageFactory.sendGroupMessage($stateParams.group_id, $scope.groupMessage).then(function () {
+        $scope.groupMessage = "";
+        messageFactory.updateGroupMessages().then(function(){
+          $scope.groupMessages = messageFactory.getGroupMessages();
+          $scope.groupObjects = messageFactory.getGroupObjects();
+          $scope.userObjects = messageFactory.getGroupUserObjects();
+        })
+      })
+    }
+  }
+
+  $scope.backToGroupsPage = function (){
+    $state.go('tabsController.groupsPage');
+  }
+
+  $scope.$onDestroy = function () {
+    console.log("individual group controller destroyed");
+    clearInterval(updateInterval);
+  };
+}])
+
+.controller('individualBroadcastCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$window', '$timeout', '$cordovaInAppBrowser',
+function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cordovaInAppBrowser) {
+  console.log("individual broadcasts controller");
+  $scope.currentBroadcast_id = $stateParams.broadcast_id;
+  $scope.broadcastObjects = messageFactory.getBroadcastObjects();
+  $scope.broadcastObject = $scope.broadcastObjects[$stateParams.broadcast_id];
+  $scope.broadcastMessages = messageFactory.getBroadcastMessages();
+
+  $scope.focusInput = false;
+
+  $scope.backToBroadcastsPage = function (){
+    $state.go('tabsController.broadcastsPage');
+  }
+
+  $scope.goToLink = function (url) {
+    var options = {
+        location: 'no',
+        clearcache: 'yes',
+        toolbar: 'yes'
+     };
+    // window.open(url, '_blank');
+
+    $cordovaInAppBrowser.open(url, '_blank', options)
+
+      .then(function(event) {
+         // success
+      })
+
+      .catch(function(event) {
+         // error
+      });
+
+  }
+}])
+
+.controller('settingsCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPush', '$localStorage',
+function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFactory, $timeout, $ionicPush, $localStorage) {
+  console.log("settings controller!");
+  $scope.data = {};
+  $scope.data.currentUser = messageFactory.getCurrentUser();
+
+  $scope.data.messageNotifications = $scope.data.currentUser.message_notifications;
+  $scope.data.broadcastNotifications = $scope.data.currentUser.group_notifications;
+  $scope.data.groupNotifications= $scope.data.currentUser.broadcast_notifications;
+
+  $scope.updateNotificationSettings = function () {
+    messageFactory.updateNotificationSettings($scope.data.messageNotifications, $scope.data.groupNotifications, $scope.data.broadcastNotifications);
+  }
+
+  $scope.updateMessageNotificationSettings = function () {
+    console.log("update message settings");
+    messageFactory.updateMessageNotificationSettings($scope.data.messageNotifications).then(function (res) {
+      console.log(res);
+    })
+  }
+
+  $scope.updateGroupNotificationSettings = function () {
+    console.log("update group settings");
+    messageFactory.updateGroupNotificationSettings($scope.data.groupNotifications).then(function (res) {
+      console.log(res);
+    })
+  }
+
+  $scope.updateBroadcastNotificationSettings = function () {
+    console.log("update broadcast settings");
+    messageFactory.updateBroadcastNotificationSettings($scope.data.broadcastNotifications).then(function (res) {
+      console.log(res);
+    })
+  }
+
+  $scope.data.takePhoto = function () {
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.data.imgURI = imageData;
+    }, function (err) {
+        console.log("error in take photo");
+    });
+  }
+
+  $scope.data.choosePhoto = function () {
+    console.log("choosing photo");
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    }
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.data.imgURI = imageData;
+    }, function (err) {
+      console.log("error has occurred in get picture");
+    })
+  }
+
+  $scope.data.uploadUpdatedPhoto = function () {
+
+    var filename = $scope.data.currentUser.user_id + '_PersonalProfilePic.jpg'
+    photoFactory.uploadPersonalProfilePhoto(filename, $scope.data.imgURI);
+
+    $timeout(function () {
+      //TODO fix this bullshit
+      messageFactory.logIn($scope.data.currentUser.phone).then(function (res) {
+        console.log("in settings ctrl, received res after login");
+        console.log(res);
+        $scope.data.currentUser = messageFactory.getCurrentUser();
+      })
+    }, 1000);
+
+  }
+  $scope.backToChatPage = function () {
+    $state.go('tabsController.chatPage');
+  }
+
+  $scope.goToDisciplines = function () {
+    $state.go('disciplines', { returnPage: 'settingsPage' });
+  }
+
+  $scope.logout = function () {
+    $ionicPush.unregister();
+    delete $localStorage.whinny_user;
+    messageFactory.logout();
+    $state.go('welcomePage');
+  }
+
+}])
+
+
+.controller('newChatMessageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaContacts', 'contactsFactory',
+function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contactsFactory) {
+
+  console.log("create new chat message controller!");
+
+  $scope.data = {};
+  $scope.data.newChatRecipient = "";
+  $scope.data.contactsHidden = false;
+
+  //Load all contacts into the contacts factory
+  $scope.data.contacts = contactsFactory.getContacts();
+
+  $scope.data.chosenContact = {};
+
+  $scope.data.errors = [];
+
+  $scope.data.chooseContact = function (contact) {
+    $scope.data.chosenContact = contact;
+    $scope.data.newChatRecipient = contact.name.formatted;
+    $scope.data.contactsHidden = true;
+  }
+
+  $scope.data.showContacts = function () {
+    $scope.data.contactsHidden = false;
+  }
+
+  $scope.createNewChatMessage = function () {
+    // createNewChatMessage(to_phone, content)
+    if(Object.keys($scope.data.chosenContact).length === 0){
+      $scope.data.errors.push('Please enter a valid recipient!');
+    } else {
+      var i = $scope.data.errors.indexOf('Please enter a valid recipient!');
+      if(i != -1) $scope.data.errors.splice(i, 1);
+    }
+    if(!$scope.chatMessage){
+      $scope.data.errors.push('Please enter a message!');
+    } else {
+      var i = $scope.data.errors.indexOf('Please enter a message!');
+      if(i != -1) $scope.data.errors.splice(i, 1);
+    }
+    if($scope.data.errors.length > 0){
+      return;
+    }
+    var parsedPhone = $scope.data.chosenContact.phoneNumbers[0].value.replace(/[\s()-]/g, "");
+    messageFactory.createNewChatMessage(parsedPhone, $scope.chatMessage).then(function (res) {
+      messageFactory.updateChatMessages().then(function () {
+        console.log(res);
+        $scope.chatMessage = "";
+        $scope.data.newChatRecipient = "";
+        $state.go('individualChat', { user_id: res.data.user_id });
+      });
+    });
+  }
+
+  $scope.addEmoji = function (emoji) {
+    if($scope.chatMessage){
+      $scope.chatMessage += emoji;
+    } else {
+      $scope.chatMessage = "" + emoji;
+    }
+  }
+
+  $scope.backToChatPage = function () {
+    $state.go('tabsController.chatPage');
+  }
+}])
+
+.controller('createNewGroupCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$cordovaCamera', 'Upload', 'photoFactory', '$timeout',
+function ($scope, $state, $stateParams, messageFactory, contactsFactory, $cordovaCamera, Upload, photoFactory, $timeout) {
+  console.log("create new group  controller!");
+
+  $scope.groupData = {}; //used to fix scoping issues
+  $scope.groupData.errors = [];
+  $scope.groupData.contacts = contactsFactory.getContacts();
+
+  //TODO needs to be phone numbers
+  //This is the object we send to the server
+  $scope.groupData.createGroupInfo = {};
+  $scope.groupData.createGroupInfo.invited = [];
+
+
+  //Hides the button once pressed, replaces with a loading animation
+  $scope.hideCreateGroupButton = false;
+
+  //Shows and hides explanations for Public Private and Hidden when creating a group
+  $scope.groupData.showExplanations = false;
+  $scope.groupData.showGroupPrivacyExplanation = function () {
+    $scope.groupData.showExplanations = !$scope.groupData.showExplanations;
+  }
+
+  $scope.groupData.inviteToGroup = function (contact_name, contact_phone) {
+    var contact = {
+      name: contact_name,
+      phone: contact_phone
+    }
+    $scope.groupData.createGroupInfo.invited.push(contact);
+    $scope.groupData.memberSearch = "";
+  }
+
+  $scope.groupData.removeInvitation = function (contact) {
+    var index = $scope.groupData.createGroupInfo.invited.indexOf(contact);
+    $scope.groupData.createGroupInfo.invited.splice(index, 1);
+  }
+
+  $scope.groupData.takePhoto = function () {
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.groupData.imgURI = imageData;
+    }, function (err) {
+        console.log("error in take photo");
+    });
+  }
+
+  $scope.groupData.choosePhoto = function () {
+    console.log("choosing photo");
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    }
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.groupData.imgURI = imageData;
+    }, function (err) {
+      console.log("error has occurred in get picture");
+    })
+  }
+
+  $scope.createGroup = function () {
+    $scope.groupData.errors = [];
+    if(!$scope.groupData.imgURI) $scope.groupData.errors.push('Please select a group Profile Image');
+    if(!$scope.groupData.createGroupInfo.groupName){
+      $scope.groupData.errors.push('Please enter a name for your group');
+    } else if($scope.groupData.createGroupInfo.groupName.length === 0){
+      $scope.groupData.errors.push('Please enter a name for your group');
+    }
+    if(!$scope.groupData.createGroupInfo.zip){
+      $scope.groupData.errors.push('Please enter a zip code for your group');
+    } else if($scope.groupData.createGroupInfo.zip.length === 0){
+      $scope.groupData.errors.push('Please enter a zip a code for your group');
+    }
+
+    if(!$scope.groupData.createGroupInfo.description){
+      $scope.groupData.errors.push('Please enter a description for your group');
+    } else if($scope.groupData.createGroupInfo.description.length === 0){
+      $scope.groupData.errors.push('Please enter a description for your group');
+    }
+    if(!$scope.groupData.createGroupInfo.is_private && !$scope.groupData.createGroupInfo.is_public && !$scope.groupData.createGroupInfo.hidden){
+      $scope.groupData.errors.push('Please decide if your group will be private, public or hidden');
+    }
+    if(!$scope.groupData.createGroupInfo.discipline){
+      $scope.groupData.errors.push('Please select a discipline for your group');
+    }
+
+
+    if($scope.groupData.errors.length === 0){
+      console.log($scope.groupData.errors);
+      $scope.hideCreateGroupButton = true;
+      //Create group with placeholder link in profile pic
+      messageFactory.createNewGroup($scope.groupData.createGroupInfo).then(function (res) {
+        console.log("attempting to upload photo");
+        var filename = res.data.group_id + '_GroupProfilePic.jpg'
+        console.log("filename: ", filename);
+        photoFactory.uploadGroupProfilePhoto(filename, $scope.groupData.imgURI);
+        //update group pages
+        messageFactory.updateGroupMessages().then(function () {
+          $scope.groupData.groupName = "";
+          $scope.groupData.createGroupInfo.is_private = false;
+          $scope.groupData.createGroupInfo.is_private = false;
+          $scope.groupData.createGroupInfo.hidden = false;
+          $scope.groupData.createGroupInfo.zip = "";
+          $scope.groupData.createGroupInfo.description = "";
+          $scope.groupData.createGroupInfo.discipline = undefined;
+          $scope.groupData.createGroupInfo.invited = [];
+
+          $timeout(function () {
+            $state.go('groupMessagePage', { group_id: res.data.group_id });
+          }, 1000);
+        })
+      });
+    }
+
+  }
+
+  $scope.backToChatPage = function () {
+    $state.go('tabsController.groupsPage');
+  }
+}])
+
+.controller('createNewBroadcastCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
+function ($scope, $state, $stateParams, messageFactory) {
+
+  console.log("create new broadcast controller!");
+
+  $scope.createGroup = function () {
+    console.log("creating new group!");
+  }
+
+  $scope.backToBroadcastsPage = function () {
+    $state.go('tabsController.broadcastsPage');
+  }
+}])

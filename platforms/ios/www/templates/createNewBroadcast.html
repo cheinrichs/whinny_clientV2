@@ -1,0 +1,47 @@
+<ion-view title="createNewBroadcastPage" hide-nav-bar="true" id="createNewBroadcastPage">
+  <div ng-controller="createNewBroadcastCtrl" class="content-container">
+
+    <div class="bar bar-header bar-energized">
+      <a class="button icon-left ion-arrow-left-c button-energized" ng-click="backToBroadcastsPage()"></a>
+      <h1 class="title chatTitle">New Broadcast</h1>
+      <div class="chatSubheader"></div>
+    </div>
+
+    <ion-content class="has-header has-footer">
+
+      <div class="list list-inset">
+        <label class="item item-input">
+          <input type="text" placeholder="Broadcast Name">
+        </label>
+      </div>
+
+      <div class="list list-inset">
+
+        <label class="item item-input">
+          <input type="text" placeholder="Broadcast Zip Code">
+        </label>
+
+        <label class="item item-input">
+          <input type="text" placeholder="Short Description">
+        </label>
+
+        <label class="item item-input">
+          <input type="text" placeholder="Link to Group Image">
+        </label>
+
+      </div>
+
+      <div class="list list-inset">
+        <label class="item item-input">
+          <input type="text" placeholder="Create first content message (300 characters max):">
+        </label>
+      </div>
+
+      <div class="row">
+          <button class="col-offset-25 col-50 button button-tangerine" ng-click="createBroadcast()">Create Broadcast</button>
+      </div>
+
+    </ion-content>
+
+  </div>
+</ion-vew>

@@ -1,0 +1,50 @@
+<ion-view hide-nav-bar="true">
+  <div class="content-container">
+
+    <div class="bar bar-header bar-energized">
+      <a class="button icon-left ion-arrow-left-c button-energized" ng-click="backToGroupSearch()"></a>
+      <h1 class="title">{{data.group.group_name}}</h1>
+      <div class="chatSubheader"></div>
+    </div>
+
+    <ion-content padding="true" class="has-header">
+      <div class="list card">
+
+        <div class="item">
+          <h2>{{data.group.group_name}}</h2>
+        </div>
+
+        <div class="item item-image">
+          <img ng-src="{{data.group.group_photo}}" alt="">
+        </div>
+        
+        <div class="item item-text-wrap">
+          {{data.group.description}}
+        </div>
+
+        <div ng-if="!data.group.is_private">
+          <a class="item item-icon-left energized" ng-click="joinGroup(data.group.group_id)">
+            <i class="icon ion-person-add"></i>
+            Join
+          </a>
+        </div>
+
+        <div ng-if="data.group.is_private">
+
+          <a class="item item-icon-left energized" ng-hide="data.requestSent" ng-click="requestToJoinGroup(data.group.group_id)">
+            <i class="icon ion-person-add"></i>
+            Ask to Join
+          </a>
+
+          <span class="item" ng-show="data.requestSent">
+            Your request has been sent to {{data.group.group_name}}!
+          </span>
+
+        </div>
+
+      </div>
+
+    </ion-content>
+  </div>
+
+</ion-view>

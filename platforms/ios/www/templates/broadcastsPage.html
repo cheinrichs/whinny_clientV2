@@ -1,0 +1,33 @@
+<ion-view title="BroadcastsPage" hide-nav-bar="true" id="page4">
+  <div ng-controller="broadcastsPageCtrl" class="content-container">
+
+    <ion-header-bar align-title="center" class="bar-light">
+      <div class="buttons">
+        <button class="button button-energized icon-left ion-android-settings" ng-click="toSettingsPage()"></button>
+      </div>
+      <h1 class="title whinnyHeader">Whinny</h1>
+      <div class="buttons">
+        <button class="button button-energized icon-right ion-android-search headerButton" ng-click="goToBroadcastSearchPage()"></button>
+        <!-- <button class="button button-energized icon-right ion-android-create" ng-click="createNewBroadcast()"></button> -->
+      </div>
+    </ion-header-bar>
+
+    <ion-content padding="true" class="manual-ios-statusbar-padding">
+
+      <ion-list>
+        <ion-item ng-repeat="broadcast in broadcastObjects" class="item-thumbnail-left" ng-click="goToIndividualBroadcast(broadcast.broadcast_id)">
+          <img height="20px" width="20px" ng-src="{{broadcast.broadcast_photo}}">
+          {{message.content}}
+          <h3>{{broadcast.broadcast_name}}</h3>
+          <p>{{item.description}}</p>
+          <ion-option-button class="button-assertive"
+                             ng-click="unsubscribeFromBroadcast(broadcast.broadcast_id)">
+            Unsubscribe
+          </ion-option-button>
+          <i class="icon ion-chevron-right energized"></i>
+        </ion-item>
+      </ion-list>
+
+    </ion-content>
+  </div>
+</ion-view>

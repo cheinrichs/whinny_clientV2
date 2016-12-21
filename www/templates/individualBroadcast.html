@@ -1,0 +1,34 @@
+<ion-view hide-nav-bar="true">
+  <div ng-controller="individualBroadcastCtrl">
+
+    <div class="bar bar-header bar-energized">
+      <a class="button icon-left ion-arrow-left-c button-energized" ng-click="backToBroadcastsPage()"></a>
+      <h1 class="title chatTitle">{{broadcastObject.broadcast_name | nameShortener}}</h1>
+      <img ng-src="{{broadcastObject.broadcast_photo}}" class="individualBroadcastPortrait" alt="">
+    </div>
+
+    <ion-content class="has-header has-footer chatScreen">
+
+      <div ng-repeat="message in broadcastMessages">
+        <div ng-show="message.to_broadcast === currentBroadcast_id">
+
+          <div class="list card">
+            <div class="item item-image">
+              <img ng-src="{{message.broadcast_photo_url}}"  alt="">
+            </div>
+            <div class="item item-body">
+              <h2>{{message.broadcast_title}}</h2>
+              <p>{{message.broadcast_message}}</p>
+            </div>
+            <div class="item">
+              <a class="broadcastCardLink" ng-click="goToLink(message.link_url)">{{message.link_text}}</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </ion-content>
+
+  </div>
+</ion-view>

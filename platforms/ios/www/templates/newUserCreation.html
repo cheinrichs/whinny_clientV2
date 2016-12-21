@@ -1,0 +1,65 @@
+<ion-view title="newUserCreation" hide-nav-bar="true" id="newUserCreation" class="nonTabPagePadding">
+  <ion-content class="has-header">
+
+    <div class="col col-offset-10 col-80">
+
+      <div class="registerTitle">
+        Register
+      </div>
+
+      <label class="item item-input">
+        <input type="text" placeholder="First Name" ng-model="data.first_name">
+      </label>
+      <label class="item item-input">
+        <input type="text" placeholder="Last Name" ng-model="data.last_name">
+      </label>
+      <br>
+
+      <label class="item item-input">
+        <input type="text" placeholder="Email (Optional)" ng-model="data.email">
+      </label>
+      <br>
+
+      <label class="item item-input">
+        <input type="password" placeholder="Password (Optional)" ng-model="data.password">
+      </label>
+      <label class="item item-input">
+        <input type="password" placeholder="Confirm Password (Optional)" ng-model="data.confirmPassword">
+      </label>
+      <br>
+
+      <ion-list>
+        <ion-checkbox ng-model="data.licenseAgreement" class="termsCheckbox">Yes, I agree to the Whinny Terms of Use</ion-checkbox>
+      </ion-list>
+
+      <div class="termsAndConditions">
+        <a ng-click="data.goToTerms()">Read the Terms of Use</a>
+      </div>
+
+      <div class="errors">
+        <div ng-repeat="error in data.errors">
+          {{error}}
+        </div>
+      </div>
+
+    </div>
+
+
+
+    <div class="row">
+      <button class="col-offset-10 col-80 button button-tangerine" ng-click="data.joinWhinny()">Register</button>
+    </div>
+
+    <div class="row">
+      <div class="col col-offset-10 col-80">
+        NOTE: If you've already used Whinny, you may have entered your phone number incorrectly.
+      </div>
+    </div>
+
+    <div class="row">
+      <button class="col-offset-10 col-80 ion-arrow-left-c button button-energized" ng-click="data.backToWelcomePage()">  Go Back</button>
+    </div>
+
+  </ion-content>
+
+</ion-view>

@@ -1,0 +1,27 @@
+<ion-view hide-nav-bar="true">
+  <div class="content-container">
+
+    <div class="bar bar-header bar-energized">
+      <a class="button icon-left ion-arrow-left-c button-energized" ng-click="backToGroupsPage()"></a>
+      <h1 class="title">Find new groups to join!</h1>
+      <div class="chatSubheader"></div>
+    </div>
+
+    <ion-content padding="true" class="has-header">
+
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Group Name</span>
+        <input type="text" placeholder="Group Name" ng-model="data.searchInput">
+      </label>
+
+      <ion-item ng-repeat="group in groupSearchObjects | filter:data.searchInput" class="item item-avatar" ng-click="goToGroupPage(group)">
+        <img ng-src="{{group.group_photo}}" alt="">
+        {{group.group_name}}
+        <br>
+        {{group.description}}
+      </ion-item>
+
+    </ion-content>
+  </div>
+
+</ion-view>
