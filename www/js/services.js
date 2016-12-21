@@ -131,15 +131,15 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
   function updateChatMessages(){
     // if(currentUser.user_id){ //TODO
-      var url = 'http://localhost:3000/chatMessages/' + currentUser.user_id;
-      // var url = 'https://whinny-server.herokuapp.com/chatMessages/' + currentUser.user_id;
+      // var url = 'http://localhost:3000/chatMessages/' + currentUser.user_id;
+      var url = 'https://whinny-server.herokuapp.com/chatMessages/' + currentUser.user_id;
       return $http.get(url).then(function (res) {
         console.log(res);
         chatMessages = [];
         for (var i = 0; i < res.data.length; i++) {
           console.log(res.data[i]);
           if(res.data[i] !== null){
-            chatMessages.push(res.data[i])
+            chatMessages.push(res.data[i])  
           }
         }
         console.log(chatMessages);
