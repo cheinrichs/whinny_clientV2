@@ -32,7 +32,7 @@
     <author email="Cooper.heinrichs@gmail.com" href="http://Whinny.com/">
       Cooper Heinrichs
     </author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.10.200:8101" />
     <access origin="*" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />

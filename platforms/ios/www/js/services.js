@@ -35,6 +35,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     sendGroupMessage: sendGroupMessage,
     sendBroadcastMessage: sendBroadcastMessage,
 
+    markChatMessagesAsRead: markChatMessagesAsRead,
+
     createNewChatMessage: createNewChatMessage,
     createNewGroup: createNewGroup,
 
@@ -90,7 +92,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   var latestMessageUpdated = 0;
 
   //An array contain each 1 on 1 message between the current user and other users
-  var chatMessages = {};
+  var chatMessages = [];
   //An array containg any user in communication with the current user.
   //Each object in this array has each users name, profile picture
   var userObjects = [];
@@ -130,43 +132,11 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateChatMessages(){
-    // if(currentUser.user_id){ //TODO
-      // var url = 'http://localhost:3000/chatMessages/' + currentUser.user_id;
-      var url = 'https://whinny-server.herokuapp.com/chatMessages/' + currentUser.user_id;
-      return $http.get(url).then(function (res) {
-        console.log(res);
-        chatMessages = [];
-        for (var i = 0; i < res.data.length; i++) {
-          console.log(res.data[i]);
-          if(res.data[i] !== null){
-            chatMessages.push(res.data[i])  
-          }
-        }
-        console.log(chatMessages);
-        // chatMessages = res.data;
-        //TODO clean this up
-        // messages = res.data.messages;
-        // chatMessages = {};
-        //
-        // for (var i = 0; i < messages.length; i++) {
-        //   if(messages[i].to_user === currentUser.user_id){
-        //     if(!chatMessages[messages[i].from_user]) chatMessages[messages[i].from_user] = [];
-        //     // console.log("to current user ", messages[i]);
-        //     chatMessages[messages[i].from_user].push(messages[i]);
-        //   } else if(messages[i].from_user === currentUser.user_id){
-        //     if(!chatMessages[messages[i].to_user]) chatMessages[messages[i].to_user] = [];
-        //     // console.log("from current user", messages[i]);
-        //     chatMessages[messages[i].to_user].push(messages[i]);
-        //   }
-        // }
-        //
-        // userObjects = {};
-        // for (var i = 0; i < res.data.userObjects.length; i++) userObjects[res.data.userObjects[i].user_id] = res.data.userObjects[i];
-      })
-    // } else {
-    //   console.log("current user user id is not defined");
-    //   return;
-    // }
+    // var url = 'http://localhost:3000/chatMessages/' + currentUser.user_id;
+    var url = 'https://whinny-server.herokuapp.com/chatMessages/' + currentUser.user_id;
+    return $http.get(url).then(function (res) {
+      chatMessages = res.data;
+    })
   }
 
   function updateGroupMessages(){
@@ -322,6 +292,19 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     console.log("sending broadcast message with", currentUser, " to broadcast ", broadcast_id, " content ", content);
     var url = 'https://whinny-server.herokuapp.com/sendBroadcastMessage/' + broadcast_id + '/' + currentUser.user_id + '/' + content;
     return $http.get(url).then(function (res) {
+      return res;
+    })
+  }
+
+  function markChatMessagesAsRead(newlyReadMessages) {
+    console.log("marking messages as read");
+    console.log(newlyReadMessages);
+    var data = {
+      newlyReadMessages: newlyReadMessages
+    };
+    // var url = 'http://localhost:3000/markChatMessagesAsRead';
+    var url = 'https://whinny-server.herokuapp.com/markChatMessagesAsRead';
+    return $http.post(url, data).then(function (res) {
       return res;
     })
   }

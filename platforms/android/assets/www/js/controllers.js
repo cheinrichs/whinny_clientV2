@@ -341,7 +341,6 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
   //load all contacts for use with other pages in the app //TODO **__** CONTAX
   document.addEventListener("deviceready", onDeviceReady, false);
   function onDeviceReady() {
-    console.log("device is ready?");
     contactsFactory.updateContacts();
   }
 
@@ -351,8 +350,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     messageFactory.updateChatMessages().then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
       $scope.chatUsers = messageFactory.getUserObjects();
-
-      console.log($scope.chatMessages);
+      $scope.groups = messageFactory.getChatMessages();
     });
   // }
 
@@ -365,9 +363,9 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     });
   }, 10000);
 
-  $scope.goToChatWithUser = function(index){
-    console.log(index);
-    $state.go('individualChat', { index: index });
+  $scope.goToChatWithUser = function(convo){
+    console.log(convo);
+    $state.go('individualChat', { convo: convo });
   }
 
   $scope.toSettingsPage = function (){
@@ -646,39 +644,24 @@ function ($scope, $state, $stateParams, messageFactory) {
 
   $scope.currentUser = messageFactory.getCurrentUser();
 
-  $scope.showEmojiKeyboard = false;
-  $scope.chatMessages = messageFactory.getChatMessages();
-  $scope.chatUsers = messageFactory.getUserObjects();
-  $scope.convo = $scope.chatMessages[$stateParams.index];
+  $scope.convo = $stateParams.convo;
 
   //when we enter an individual chat, take the chat message ids of that specific
   //user and send the ids in an array in a post request to tell the server they
   //are all read
-  // console.log("********"); //TODO read messages
-  // console.log($scope.chatMessages[$stateParams.user_id].messages);
-  // var newlyReadMessages = [];
-  // for(key in $scope.chatMessages[$stateParams.user_id].messages){
-  //   console.log($scope.chatMessages[$stateParams.user_id].messages[key].read);
-  //   if(!$scope.chatMessages[$stateParams.user_id].messages[key].read){
-  //     newlyReadMessages.push($scope.chatMessages[$stateParams.user_id].messages[key].message_id);
-  //   }
-  // }
-  // console.log(newlyReadMessages);
-  //TODO messageFactory.markMessagesAsRead(newlyReadMessages);
+  var newlyReadMessages = [];
+  for (var i = 0; i < $scope.convo.messages.length; i++) {
+    if(!$scope.convo.messages[i].read) newlyReadMessages.push($scope.convo.messages[i].message_id);
+  }
+  messageFactory.markChatMessagesAsRead(newlyReadMessages);
 
-  console.log("chatting with ", $stateParams.user_id);
-  $scope.chatWithUser = $stateParams.user_id;
-  messageFactory.updateChatMessages().then(function (res) {
-    $scope.chatMessages = messageFactory.getChatMessages();
-    $scope.chatUsers = messageFactory.getUserObjects();
-  })
 
   var updateInterval = setInterval(function () {
     messageFactory.updateChatMessages().then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
       $scope.chatUsers = messageFactory.getUserObjects();
     });
-  }, 5000);
+  }, 10000);
 
   $scope.sendChatMessage = function () {
     console.log("controller) sending message to ", $stateParams.user_id, $scope.chatMessage);
@@ -707,10 +690,6 @@ function ($scope, $state, $stateParams, messageFactory) {
     $state.go('tabsController.chatPage');
   }
 
-  $scope.$onDestroy = function () {
-    console.log("individual chat controller destroyed");
-    clearInterval(updateInterval);
-  };
 }])
 
 .controller('individualGroupCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',

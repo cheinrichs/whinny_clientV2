@@ -121,8 +121,9 @@ angular.module('app.routes', [])
 
   .state('individualChat', {
     url: '/individualChat',
+    cache: false,
     params: {
-      index: {dynamic: true}
+      convo: {dynamic: true}
     },
     templateUrl: 'templates/individualChat.html'
   })
