@@ -142,6 +142,7 @@
 		B5AA99131F154FF0B7A8A1F8 /* libGTM_NSScannerJSON.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; name = libGTM_NSScannerJSON.a; path = "Whinny/Plugins/phonegap-plugin-push/GCM/Libraries/libGTM_NSScannerJSON.a"; sourceTree = "<group>"; };
 		B69AB3925A734CE8A2DABA3E /* libGIP_Reachability.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; name = libGIP_Reachability.a; path = "Whinny/Plugins/phonegap-plugin-push/GCM/Libraries/libGIP_Reachability.a"; sourceTree = "<group>"; };
 		B770EFEAB88B490EADCCEF63 /* libGGLCloudMessaging.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; name = libGGLCloudMessaging.a; path = "Whinny/Plugins/phonegap-plugin-push/GCM/Libraries/libGGLCloudMessaging.a"; sourceTree = "<group>"; };
+		BCD7AA561E12ED4800E405B0 /* Whinny.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Whinny.entitlements; path = Whinny/Whinny.entitlements; sourceTree = "<group>"; };
 		C0B70E15745B49998AE129AA /* libGTMSessionFetcher_full.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; name = libGTMSessionFetcher_full.a; path = "Whinny/Plugins/phonegap-plugin-push/GCM/Libraries/libGTMSessionFetcher_full.a"; sourceTree = "<group>"; };
 		D4CBE97127414FFC8AC079AB /* libGTMStackTrace.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; name = libGTMStackTrace.a; path = "Whinny/Plugins/phonegap-plugin-push/GCM/Libraries/libGTMStackTrace.a"; sourceTree = "<group>"; };
 		D6AF0A6199C144B1964A0533 /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; path = libz.tbd; sourceTree = "<group>"; };
@@ -228,6 +229,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				BCD7AA561E12ED4800E405B0 /* Whinny.entitlements */,
 				EB87FDF41871DAF40020F90C /* config.xml */,
 				EB87FDF31871DA8E0020F90C /* www */,
 				EB87FDF11871DA420020F90C /* Staging */,
@@ -403,6 +405,11 @@
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
 						DevelopmentTeam = L9A37RQX6D;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -512,6 +519,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = Whinny/Whinny.entitlements;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = L9A37RQX6D;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -564,6 +572,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = Whinny/Whinny.entitlements;
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = L9A37RQX6D;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

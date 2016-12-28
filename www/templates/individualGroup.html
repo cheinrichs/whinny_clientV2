@@ -13,13 +13,13 @@
       <div class="top-container" scroll-glue>
 
         <div ng-repeat="message in groupMessages" ng-show="message.to_group === group_id">
-          <div class="row">
+          <!-- <div class="row">
             <div class="col">
               <div class="timeSent">
                 {{message.group_message_created | date:'shortTime'}}
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="row">
             <div class="col col-80" ng-class="{ 'col-offset-20': message.from_user === currentUser.user_id }">
               <div ng-class="{ fromMessage : message.from_user != currentUser.user_id, toMessage : message.from_user === currentUser.user_id }">
@@ -29,6 +29,7 @@
                   </div>
                   <div class="col col-80">
                     <div ng-bind-html="message.group_message_content | emoji">{{message.group_message_content}}</div>
+                    <div class="date">{{message.group_message_created | date:'MMM d, y h:mm'}}</div>
                   </div>
                 </div>
               </div>

@@ -47,8 +47,10 @@ angular.module('app', ['ionic', 'ionic.cloud', 'app.controllers', 'app.routes', 
 .run(["$ionicPlatform", "$rootScope", "$ionicPush", "$localStorage", "$ionicNavBarDelegate", "$ionicPopup", "messageFactory",
 function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDelegate, $ionicPopup, messageFactory) {
   $ionicPlatform.ready(function() {
+    console.log("in run");
 
     $ionicPush.register().then(function (t) {
+      console.log("called register");
       var option = { ignore_user: true };
       return $ionicPush.saveToken(t, option);
     }).then(function (t) {

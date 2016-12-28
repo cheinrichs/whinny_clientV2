@@ -789,7 +789,6 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
 
 .controller('settingsCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPush', '$localStorage',
 function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFactory, $timeout, $ionicPush, $localStorage) {
-  console.log("settings controller!");
   $scope.data = {};
   $scope.data.currentUser = messageFactory.getCurrentUser();
 
@@ -844,7 +843,6 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
   }
 
   $scope.data.choosePhoto = function () {
-    console.log("choosing photo");
     var options = {
       quality: 75,
       destinationType: Camera.DestinationType.FILE_URI,

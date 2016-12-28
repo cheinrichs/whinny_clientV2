@@ -538,15 +538,13 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     var data = {};
     data.phone = phone;
 
-    console.log($localStorage);
-
     if($localStorage) console.log("localStorage is defined");
-    for (key in $localStorage){
-      console.log(key);
-      console.log($localStorage[key]);
-      console.log("=====");
-    }
-    // data.device_token = $localStorage.tokenObject.token;
+    // for (key in $localStorage){
+    //   console.log(key);
+    //   console.log($localStorage[key]);
+    //   console.log("=====");
+    // }
+    data.device_token = $localStorage.tokenObject.token;
     data.version = CLIENT_VERSION;
 
     var url = 'https://whinny-server.herokuapp.com/logIn';

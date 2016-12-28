@@ -48,6 +48,17 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 //   font-family: 'Didact Gothic' !important;
 // }
 
+
+.popup {
+  border-radius: 5px !important;
+}
+
+.date {
+  color: gray;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
 .errors {
   color: red;
   text-align: center;
@@ -241,6 +252,12 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   width: 35px;
 }
 
+.settingsProfilePic {
+  margin: 10px 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
 //used in create group
 .groupProfilePic {
   height: 300px;
@@ -248,7 +265,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 .profilePicBorder {
   margin: 10px 20px;
-  border: 1px solid #DDDDDD;
   border-radius: 5px;
   padding: 5px 0px 0px 0px;
   text-align: center;
@@ -472,7 +488,11 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 
 .emoji {
-  height: 50px;
+  height: 30px;
+  margin-top: 5px;
+  margin-bottom: -10px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .messageFooter {
