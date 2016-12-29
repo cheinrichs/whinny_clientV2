@@ -58,6 +58,14 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
       $localStorage.tokenObject = t;
     })
 
+    //All the possible strings for receiving a push notification button text
+    
+    var possibleButtonTexts = ['Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Great...', 'Cool', 'Ride\'em doggies', 'Affirmative', 'I tip my hat', 'Simply marvelous', 'Okey Dokey', 'Good', 'Super'];
+    //used to randomly choose text for the button
+    function getRandomArbitrary(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+    }
+
     $rootScope.$on('cloud:push:notification', function(event, data) {
       console.log(data.message);
       var msg = data.message;
@@ -67,18 +75,15 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
       messageFactory.updateGroupMessages();
       messageFactory.updateBroadcastMessages();
 
-      var confirmPopup = $ionicPopup.confirm({
+      var randomIndex = getRandomArbitrary(0, 21);
+
+      var alertPopup = $ionicPopup.alert({
         title: msg.title,
-        template: msg.text
+        template: msg.text,
+        okText: possibleButtonTexts[randomIndex],
+        okType: 'button-tangerine'
       });
 
-      confirmPopup.then(function(res) {
-        if(res) {
-          console.log('Check out the message');
-        } else {
-          console.log('Stay where you are');
-        }
-      });
     });
 
     $rootScope.$on('$ionicView.enter', function(e) {

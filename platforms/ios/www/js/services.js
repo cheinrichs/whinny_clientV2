@@ -533,17 +533,11 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     })
   }
 
-  function logIn(phone) { //TODO needs fixing.
+  function logIn(phone) {
     console.log("logging in");
     var data = {};
     data.phone = phone;
 
-    if($localStorage) console.log("localStorage is defined");
-    // for (key in $localStorage){
-    //   console.log(key);
-    //   console.log($localStorage[key]);
-    //   console.log("=====");
-    // }
     data.device_token = $localStorage.tokenObject.token;
     data.version = CLIENT_VERSION;
 

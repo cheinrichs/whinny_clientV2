@@ -16,6 +16,7 @@
             <div class="col col-80" ng-class="{ 'col-offset-20' : message.to_user != currentUser.user_id }">
               <div ng-class="{toMessage : message.to_user != currentUser.user_id, fromMessage : message.to_user == currentUser.user_id}">
                 <div ng-bind-html="message.content | emoji">{{message.content}}</div>
+                <div class="date">{{message.message_created | date:'MMM d, y h:mm'}}</div>
               </div>
             </div>
           </div>

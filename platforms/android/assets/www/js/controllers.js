@@ -324,16 +324,14 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
   }
 }])
 
-.controller('chatPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$localStorage',
-function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localStorage) {
+.controller('chatPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$localStorage', '$ionicPopup',
+function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localStorage, $ionicPopup) {
   $scope.currentUser = messageFactory.getCurrentUser();
   //Send users to log in if there is no user id
   if(!$scope.currentUser.user_id) $state.go('welcomePage');
 
   $scope.chatMessages = messageFactory.getChatMessages();
   $scope.chatUsers = messageFactory.getUserObjects();
-
-  $scope.unread = [false, true];
 
   $scope.local_storage = $localStorage;
 
@@ -344,6 +342,9 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     contactsFactory.updateContacts();
   }
 
+  //for better user experience, update the group and broadcast messages right when the user lands on chat
+  messageFactory.updateGroupMessages();
+  messageFactory.updateBroadcastMessages();
 
   // if($scope.chatMessages.length === 0){
   //TODO Once we have messages stored in a file on your phone turn on this if statement
@@ -363,8 +364,25 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     });
   }, 10000);
 
+  var possibleButtonTexts = ['Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Great...', 'Cool', 'Ride\'em doggies', 'Affirmative', 'I tip my hat', 'Simply marvelous', 'Okey Dokey', 'Good', 'Super'];
+
+  function getRandomArbitrary(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+  }
+
+  $scope.showAlert = function() {
+    var randomIndex = getRandomArbitrary(0, 21);
+
+    var alertPopup = $ionicPopup.alert({
+      title: 'Whinny Tips',
+      template: 'Click the Gear in the top left to edit your settings.',
+      okText: possibleButtonTexts[randomIndex],
+      okType: 'button-tangerine'
+    });
+ };
+
   $scope.goToChatWithUser = function(convo){
-    console.log(convo);
+    clearInterval(updateInterval);
     $state.go('individualChat', { convo: convo });
   }
 
@@ -378,6 +396,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
   }
 
   $scope.createNewChat = function () {
+    clearInterval(updateInterval);
     $state.go('newChatMessage');
   }
 
@@ -643,8 +662,12 @@ function ($scope, $state, $stateParams, messageFactory){
 function ($scope, $state, $stateParams, messageFactory) {
 
   $scope.currentUser = messageFactory.getCurrentUser();
+  $scope.chatMessages = messageFactory.getChatMessages();
 
-  $scope.convo = $stateParams.convo;
+  console.log($stateParams.convo);
+  for (var i = 0; i < $scope.chatMessages.length; i++) {
+    if($scope.chatMessages[i].convoUser.user_id === $stateParams.convo.convoUser.user_id) $scope.convo = $scope.chatMessages[i];
+  }
 
   //when we enter an individual chat, take the chat message ids of that specific
   //user and send the ids in an array in a post request to tell the server they
@@ -656,20 +679,24 @@ function ($scope, $state, $stateParams, messageFactory) {
   messageFactory.markChatMessagesAsRead(newlyReadMessages);
 
 
-  var updateInterval = setInterval(function () {
+  // var updateInterval = setInterval(function () {
     messageFactory.updateChatMessages().then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
       $scope.chatUsers = messageFactory.getUserObjects();
     });
-  }, 10000);
+  // }, 10000);
 
   $scope.sendChatMessage = function () {
-    console.log("controller) sending message to ", $stateParams.user_id, $scope.chatMessage);
-    messageFactory.sendChatMessage($stateParams.user_id, $scope.chatMessage).then(function () {
+    console.log("controller) sending message to ", $stateParams.convo.convoUser.user_id, $scope.chatMessage);
+    messageFactory.sendChatMessage($stateParams.convo.convoUser.user_id, $scope.chatMessage).then(function () {
       $scope.chatMessage = "";
       messageFactory.updateChatMessages().then(function (res) {
         $scope.chatMessages = messageFactory.getChatMessages();
         $scope.chatUsers = messageFactory.getUserObjects();
+
+        for (var i = 0; i < $scope.chatMessages.length; i++) {
+          if($scope.chatMessages[i].convoUser.user_id === $stateParams.convo.convoUser.user_id) $scope.convo = $scope.chatMessages[i];
+        }
         console.log("updated");
         console.log($scope.chatMessages);
       });
@@ -686,7 +713,7 @@ function ($scope, $state, $stateParams, messageFactory) {
   }
 
   $scope.backToChatPage = function (){
-    clearInterval(updateInterval);
+    // clearInterval(updateInterval);
     $state.go('tabsController.chatPage');
   }
 
@@ -897,8 +924,6 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
 
 .controller('newChatMessageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaContacts', 'contactsFactory',
 function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contactsFactory) {
-
-  console.log("create new chat message controller!");
 
   $scope.data = {};
   $scope.data.newChatRecipient = "";

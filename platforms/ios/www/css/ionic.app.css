@@ -9834,6 +9834,14 @@ a.button {
 * {
   font-family: 'Assistant Regular' !important; }
 
+.popup {
+  border-radius: 5px !important; }
+
+.date {
+  color: gray;
+  font-size: 12px;
+  margin-top: 5px; }
+
 .errors {
   color: red;
   text-align: center; }
@@ -9999,13 +10007,17 @@ a.button {
   height: 35px;
   width: 35px; }
 
+.settingsProfilePic {
+  margin: 10px 20px;
+  border-radius: 5px;
+  text-align: center; }
+
 .groupProfilePic {
   height: 300px;
   width: 300px; }
 
 .profilePicBorder {
   margin: 10px 20px;
-  border: 1px solid #DDDDDD;
   border-radius: 5px;
   padding: 5px 0px 0px 0px;
   text-align: center; }
@@ -10216,7 +10228,11 @@ a.button {
   margin: 0px 5px; }
 
 .emoji {
-  height: 50px; }
+  height: 30px;
+  margin-top: 5px;
+  margin-bottom: -10px;
+  margin-left: 5px;
+  margin-right: 5px; }
 
 .messageFooter {
   position: absolute;
