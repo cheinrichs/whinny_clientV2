@@ -22,12 +22,12 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, $localSt
         console.log(notification);
       }
     }).then(function (t) {
-      console.log("anythingz?");
+      console.log("token in welcome controlller");
       var option = { ignore_user: true };
       return $ionicPush.saveToken(t, option);
     }).then(function (t) {
       $localStorage.token = t;
-      console.log('Tokenz saved: ', t);
+      console.log('token in welcome controlller: ', t);
       for(key in t){
         console.log(key + ": " + t[key]);
       }
@@ -713,6 +713,11 @@ function ($scope, $state, $stateParams, messageFactory) {
   //get group objects
   $scope.userObjects = messageFactory.getGroupUserObjects();
 
+  $scope.individualGroupMessages = [];
+  for (var i = 0; i < $scope.groupMessages.length; i++) {
+    if($scope.groupMessages[i].to_group === $scope.group_id) $scope.individualGroupMessages.push($scope.groupMessages[i]);
+  }
+
   //update the group messages
   //and replace messages and objects
   messageFactory.updateGroupMessages().then(function(){
@@ -726,6 +731,11 @@ function ($scope, $state, $stateParams, messageFactory) {
       $scope.groupMessages = messageFactory.getGroupMessages();
       $scope.groupObjects = messageFactory.getGroupObjects();
       $scope.userObjects = messageFactory.getGroupUserObjects();
+
+      $scope.individualGroupMessages = [];
+      for (var i = 0; i < $scope.groupMessages.length; i++) {
+        if($scope.groupMessages[i].to_group === $scope.group_id) $scope.individualGroupMessages.push($scope.groupMessages[i]);
+      }
     })
   }, 1000);
 

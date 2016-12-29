@@ -28,7 +28,7 @@ angular.module('app', ['ionic', 'ionic.cloud', 'app.controllers', 'app.routes', 
 }])
 
 .config(["$cordovaInAppBrowserProvider", function($cordovaInAppBrowserProvider) {
-  console.log("inapp browser provider");
+
   var defaultOptions = {
     location: 'no',
     clearcache: 'no',
@@ -36,10 +36,7 @@ angular.module('app', ['ionic', 'ionic.cloud', 'app.controllers', 'app.routes', 
   };
 
   document.addEventListener("deviceready", function () {
-    console.log("hereee");
-
     $cordovaInAppBrowserProvider.setDefaultOptions(defaultOptions);
-
   }, false);
 
 }])
@@ -101,6 +98,5 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
 }])
 
 .config(["$ionicConfigProvider", function($ionicConfigProvider) {
-  console.log("config provider?");
   $ionicConfigProvider.views.swipeBackEnabled(false);
 }])
