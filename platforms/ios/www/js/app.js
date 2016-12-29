@@ -28,8 +28,7 @@ angular.module('app', ['ionic', 'ionic.cloud', 'app.controllers', 'app.routes', 
 }])
 
 .config(["$cordovaInAppBrowserProvider", function($cordovaInAppBrowserProvider) {
-
-
+  console.log("inapp browser provider");
   var defaultOptions = {
     location: 'no',
     clearcache: 'no',
@@ -37,6 +36,7 @@ angular.module('app', ['ionic', 'ionic.cloud', 'app.controllers', 'app.routes', 
   };
 
   document.addEventListener("deviceready", function () {
+    console.log("hereee");
 
     $cordovaInAppBrowserProvider.setDefaultOptions(defaultOptions);
 
@@ -47,7 +47,6 @@ angular.module('app', ['ionic', 'ionic.cloud', 'app.controllers', 'app.routes', 
 .run(["$ionicPlatform", "$rootScope", "$ionicPush", "$localStorage", "$ionicNavBarDelegate", "$ionicPopup", "messageFactory",
 function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDelegate, $ionicPopup, messageFactory) {
   $ionicPlatform.ready(function() {
-    console.log("in run");
 
     $ionicPush.register().then(function (t) {
       console.log("called register");
@@ -59,7 +58,7 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
     })
 
     //All the possible strings for receiving a push notification button text
-    
+
     var possibleButtonTexts = ['Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Great...', 'Cool', 'Ride\'em doggies', 'Affirmative', 'I tip my hat', 'Simply marvelous', 'Okey Dokey', 'Good', 'Super'];
     //used to randomly choose text for the button
     function getRandomArbitrary(min, max) {
@@ -102,5 +101,6 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
 }])
 
 .config(["$ionicConfigProvider", function($ionicConfigProvider) {
+  console.log("config provider?");
   $ionicConfigProvider.views.swipeBackEnabled(false);
 }])

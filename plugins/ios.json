@@ -32,6 +32,20 @@
         "cordova-plugin-contacts": {
             "CONTACTS_USAGE_DESCRIPTION": " ",
             "PACKAGE_NAME": "com.ionicframework.todo937652"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.whinny.appL9A37RQX6D"
+        },
+        "cordova-plugin-camera": {
+            "CAMERA_USAGE_DESCRIPTION": " ",
+            "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
+            "PACKAGE_NAME": "com.whinny.appL9A37RQX6D"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.whinny.appL9A37RQX6D"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.whinny.appL9A37RQX6D"
         }
     },
     "dependent_plugins": {

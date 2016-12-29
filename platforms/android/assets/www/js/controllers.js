@@ -364,23 +364,6 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     });
   }, 10000);
 
-  var possibleButtonTexts = ['Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Great...', 'Cool', 'Ride\'em doggies', 'Affirmative', 'I tip my hat', 'Simply marvelous', 'Okey Dokey', 'Good', 'Super'];
-
-  function getRandomArbitrary(min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
-  }
-
-  $scope.showAlert = function() {
-    var randomIndex = getRandomArbitrary(0, 21);
-
-    var alertPopup = $ionicPopup.alert({
-      title: 'Whinny Tips',
-      template: 'Click the Gear in the top left to edit your settings.',
-      okText: possibleButtonTexts[randomIndex],
-      okType: 'button-tangerine'
-    });
- };
-
   $scope.goToChatWithUser = function(convo){
     clearInterval(updateInterval);
     $state.go('individualChat', { convo: convo });
