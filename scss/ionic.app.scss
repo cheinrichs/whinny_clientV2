@@ -48,6 +48,151 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 //   font-family: 'Didact Gothic' !important;
 // }
 
+/* THE SPEECH BUBBLE
+------------------------------------------------------------------------------------------------------------------------------- */
+
+.triangle-border {
+  position:absolute;
+  left: 5px;
+  right: 5px;
+  padding:15px;
+  margin:1em 0 3em;
+  border: 5px solid #26A69A;
+  color: #333;
+  background:#fff;
+  /* css3 */
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  border-radius:10px;
+}
+
+/* Variant : for left positioned triangle
+------------------------------------------ */
+
+.triangle-border.left {
+  margin-left:30px;
+}
+
+/* Variant : for right positioned triangle
+------------------------------------------ */
+
+.triangle-border.right {
+  margin-right:30px;
+}
+
+/* THE TRIANGLE
+------------------------------------------------------------------------------------------------------------------------------- */
+
+.triangle-border:before {
+  content: "";
+  position: absolute;
+  bottom: -20px; /* value = - border-top-width - border-bottom-width */
+  left: 31px; /* controls horizontal position */
+  border-width: 20px 20px 0;
+  border-style: solid;
+  border-color: #26A69A transparent;
+  display: block;
+  width: 0;
+}
+
+/* creates the smaller  triangle */
+.triangle-border:after {
+  content:"";
+  position:absolute;
+  bottom:-13px; /* value = - border-top-width - border-bottom-width */
+  left:38px; /* value = (:before left) + (:before border-left) - (:after border-left) */
+  border-width:13px 13px 0;
+  border-style:solid;
+  border-color:#fff transparent;
+  display:block;
+  width:0;
+}
+
+/* Variant : top
+------------------------------------------ */
+
+/* creates the larger triangle */
+.triangle-border.top:before {
+  top: -20px; /* value = - border-top-width - border-bottom-width */
+  bottom: auto;
+  left: auto;
+  right: 40px; /* controls horizontal position */
+  border-width: 0 20px 20px;
+}
+
+/* creates the smaller  triangle */
+.triangle-border.top:after {
+  top: -13px; /* value = - border-top-width - border-bottom-width */
+  bottom: auto;
+  left: auto;
+  right: 47px; /* value = (:before right) + (:before border-right) - (:after border-right) */
+  border-width: 0 13px 13px;
+}
+
+
+.triangle-border.groupsTutorial:before {
+  content: "";
+  position: absolute;
+  bottom: -20px; /* value = - border-top-width - border-bottom-width */
+  left: 160px; /* controls horizontal position */
+  border-width: 20px 20px 0;
+  border-style: solid;
+  border-color: #26A69A transparent;
+  display: block;
+  width: 0;
+}
+
+.triangle-border.groupsTutorial:after {
+  content:"";
+  position:absolute;
+  bottom:-13px; /* value = - border-top-width - border-bottom-width */
+  left: 166px; /* value = (:before left) + (:before border-left) - (:after border-left) */
+  border-width:13px 13px 0;
+  border-style:solid;
+  border-color:#fff transparent;
+  display:block;
+  width:0;
+}
+
+.triangle-border.broadcastTutorial:before {
+  content: "";
+  position: absolute;
+  bottom: -20px; /* value = - border-top-width - border-bottom-width */
+  left: 285px; /* controls horizontal position */
+  border-width: 20px 20px 0;
+  border-style: solid;
+  border-color: #26A69A transparent;
+  display: block;
+  width: 0;
+}
+
+.triangle-border.broadcastTutorial:after {
+  content:"";
+  position:absolute;
+  bottom:-13px; /* value = - border-top-width - border-bottom-width */
+  left: 292px; /* value = (:before left) + (:before border-left) - (:after border-left) */
+  border-width:13px 13px 0;
+  border-style:solid;
+  border-color:#fff transparent;
+  display:block;
+  width:0;
+}
+
+.tutorialBubble {
+  position: absolute;
+  z-index: 100;
+}
+
+.broadcastTutorial {
+  top: 380px;
+}
+.groupsTutorial {
+  top: 392px;
+}
+
+.chatTutorial {
+  top: 400px;
+}
 
 .popup {
   border-radius: 5px !important;

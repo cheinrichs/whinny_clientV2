@@ -12,6 +12,15 @@
       </div>
     </ion-header-bar>
 
+    <p ng-if="broadcastTutorial" class="triangle-border broadcastTutorial tutorialBubble">
+      This is the Broadcasts page.
+      <br>
+      <br>
+      This is where you will find news, entertainment, education, and information from the horse world! Find new broadcasts by touching the magnifying glass.
+      <br>
+      <button class="button button-block button-energized" ng-click="acceptBroadcastTutorial()">Cool!</button>
+    </p>
+
     <ion-content padding="true" class="manual-ios-statusbar-padding">
 
       <ion-list>
