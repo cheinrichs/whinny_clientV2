@@ -330,6 +330,13 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
   //Send users to log in if there is no user id
   if(!$scope.currentUser.user_id) $state.go('welcomePage');
 
+  if($scope.currentUser.tutorial_1){
+    //show the tutorial on true
+    $scope.chatTutorial = true;
+  } else {
+    $scope.chatTutorial = false;
+  }
+
   $scope.chatMessages = messageFactory.getChatMessages();
   $scope.chatUsers = messageFactory.getUserObjects();
 
@@ -383,6 +390,11 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     $state.go('newChatMessage');
   }
 
+  $scope.acceptChatTutorial = function () {
+    $scope.chatTutorial = false;
+    messageFactory.markTutorialAsRead(1);
+  }
+
   $scope.$onDestroy = function () {
     clearInterval(updateInterval);
   };
@@ -394,6 +406,13 @@ function ($scope, $state, $stateParams, messageFactory) {
   $scope.currentUser = messageFactory.getCurrentUser();
   //Send users to log in if there is no user id
   if(!$scope.currentUser.user_id) $state.go('welcomePage');
+
+  if($scope.currentUser.tutorial_2){
+    //show the tutorial on true
+    $scope.groupsTutorial = true;
+  } else {
+    $scope.groupsTutorial = false;
+  }
 
   $scope.groupMessages = messageFactory.getGroupMessages();
   $scope.groupObjects = messageFactory.getGroupObjects();
@@ -485,6 +504,11 @@ function ($scope, $state, $stateParams, messageFactory) {
     $state.go('settingsPage', { context: 'groups'});
   }
 
+  $scope.acceptGroupsTutorial = function () {
+    $scope.groupsTutorial = false;
+    messageFactory.markTutorialAsRead(2);
+  }
+
   $scope.leaveGroup = function (group_id) {
     console.log("leaving group", group_id);
     messageFactory.leaveGroup(group_id).then(function () {
@@ -553,6 +577,14 @@ function ($scope, $state, $stateParams, messageFactory) {
   //Send users to log in if there is no user id
   if(!$scope.currentUser.user_id) $state.go('welcomePage');
 
+  if($scope.currentUser.tutorial_3){
+    //show the tutorial on true
+    $scope.broadcastTutorial = true;
+  } else {
+    $scope.broadcastTutorial = false;
+  }
+
+
   $scope.broadcastMessages = messageFactory.getBroadcastMessages();
   $scope.broadcastObjects = messageFactory.getBroadcastObjects();
   // if($scope.broadcastMessages.length === 0){
@@ -599,9 +631,12 @@ function ($scope, $state, $stateParams, messageFactory) {
     messageFactory.logout();
     $state.go('welcomePage');
   }
-  // $scope.$onDestroy = function () {
-  //   clearInterval(updateInterval);
-  // };
+
+  $scope.acceptBroadcastTutorial = function () {
+    $scope.broadcastTutorial = false;
+    messageFactory.markTutorialAsRead(3);
+  }
+
 }])
 
 .controller('broadcastSearchCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',

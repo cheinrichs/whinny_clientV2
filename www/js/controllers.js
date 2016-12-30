@@ -330,7 +330,12 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
   //Send users to log in if there is no user id
   if(!$scope.currentUser.user_id) $state.go('welcomePage');
 
-  $scope.chatTutorial = true;
+  if($scope.currentUser.tutorial_1){
+    //show the tutorial on true
+    $scope.chatTutorial = true;
+  } else {
+    $scope.chatTutorial = false;
+  }
 
   $scope.chatMessages = messageFactory.getChatMessages();
   $scope.chatUsers = messageFactory.getUserObjects();
@@ -387,6 +392,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
 
   $scope.acceptChatTutorial = function () {
     $scope.chatTutorial = false;
+    messageFactory.markTutorialAsRead(1);
   }
 
   $scope.$onDestroy = function () {
@@ -401,7 +407,12 @@ function ($scope, $state, $stateParams, messageFactory) {
   //Send users to log in if there is no user id
   if(!$scope.currentUser.user_id) $state.go('welcomePage');
 
-  $scope.groupsTutorial = true;
+  if($scope.currentUser.tutorial_2){
+    //show the tutorial on true
+    $scope.groupsTutorial = true;
+  } else {
+    $scope.groupsTutorial = false;
+  }
 
   $scope.groupMessages = messageFactory.getGroupMessages();
   $scope.groupObjects = messageFactory.getGroupObjects();
@@ -495,6 +506,7 @@ function ($scope, $state, $stateParams, messageFactory) {
 
   $scope.acceptGroupsTutorial = function () {
     $scope.groupsTutorial = false;
+    messageFactory.markTutorialAsRead(2);
   }
 
   $scope.leaveGroup = function (group_id) {
@@ -565,7 +577,13 @@ function ($scope, $state, $stateParams, messageFactory) {
   //Send users to log in if there is no user id
   if(!$scope.currentUser.user_id) $state.go('welcomePage');
 
-  $scope.broadcastTutorial = true;
+  if($scope.currentUser.tutorial_3){
+    //show the tutorial on true
+    $scope.broadcastTutorial = true;
+  } else {
+    $scope.broadcastTutorial = false;
+  }
+
 
   $scope.broadcastMessages = messageFactory.getBroadcastMessages();
   $scope.broadcastObjects = messageFactory.getBroadcastObjects();
@@ -616,6 +634,7 @@ function ($scope, $state, $stateParams, messageFactory) {
 
   $scope.acceptBroadcastTutorial = function () {
     $scope.broadcastTutorial = false;
+    messageFactory.markTutorialAsRead(3);
   }
 
 }])
@@ -678,12 +697,12 @@ function ($scope, $state, $stateParams, messageFactory) {
   messageFactory.markChatMessagesAsRead(newlyReadMessages);
 
 
-  // var updateInterval = setInterval(function () {
+  var updateInterval = setInterval(function () {
     messageFactory.updateChatMessages().then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
       $scope.chatUsers = messageFactory.getUserObjects();
     });
-  // }, 10000);
+  }, 10000);
 
   $scope.sendChatMessage = function () {
     console.log("controller) sending message to ", $stateParams.convo.convoUser.user_id, $scope.chatMessage);
@@ -712,7 +731,7 @@ function ($scope, $state, $stateParams, messageFactory) {
   }
 
   $scope.backToChatPage = function (){
-    // clearInterval(updateInterval);
+    clearInterval(updateInterval);
     $state.go('tabsController.chatPage');
   }
 
@@ -790,15 +809,29 @@ function ($scope, $state, $stateParams, messageFactory) {
 
 .controller('individualBroadcastCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$window', '$timeout', '$cordovaInAppBrowser',
 function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cordovaInAppBrowser) {
-  console.log("individual broadcasts controller");
   $scope.currentBroadcast_id = $stateParams.broadcast_id;
   $scope.broadcastObjects = messageFactory.getBroadcastObjects();
   $scope.broadcastObject = $scope.broadcastObjects[$stateParams.broadcast_id];
   $scope.broadcastMessages = messageFactory.getBroadcastMessages();
 
-  $scope.focusInput = false;
+  //Update on page open
+  messageFactory.updateBroadcastMessages().then(function (res) {
+    $scope.broadcastObjects = messageFactory.getBroadcastObjects();
+    $scope.broadcastObject = $scope.broadcastObjects[$stateParams.broadcast_id];
+    $scope.broadcastMessages = messageFactory.getBroadcastMessages();
+  });
+
+  //update every ten seconds
+  var updateInterval = setInterval(function () {
+    messageFactory.updateBroadcastMessages().then(function (res) {
+      $scope.broadcastObjects = messageFactory.getBroadcastObjects();
+      $scope.broadcastObject = $scope.broadcastObjects[$stateParams.broadcast_id];
+      $scope.broadcastMessages = messageFactory.getBroadcastMessages();
+    });
+  }, 10000);
 
   $scope.backToBroadcastsPage = function (){
+    clearInterval(updateInterval);
     $state.go('tabsController.broadcastsPage');
   }
 
@@ -919,6 +952,12 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
 
   $scope.goToDisciplines = function () {
     $state.go('disciplines', { returnPage: 'settingsPage' });
+  }
+
+  $scope.resetTutorials = function () {
+    messageFactory.resetTutorials().then(function (res) {
+      console.log(res);
+    })
   }
 
   $scope.logout = function () {

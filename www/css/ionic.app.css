@@ -9916,7 +9916,7 @@ a.button {
   position: absolute;
   bottom: -20px;
   /* value = - border-top-width - border-bottom-width */
-  left: 160px;
+  left: 159px;
   /* controls horizontal position */
   border-width: 20px 20px 0;
   border-style: solid;
@@ -9942,7 +9942,7 @@ a.button {
   position: absolute;
   bottom: -20px;
   /* value = - border-top-width - border-bottom-width */
-  left: 285px;
+  left: 283px;
   /* controls horizontal position */
   border-width: 20px 20px 0;
   border-style: solid;
@@ -9955,7 +9955,7 @@ a.button {
   position: absolute;
   bottom: -13px;
   /* value = - border-top-width - border-bottom-width */
-  left: 292px;
+  left: 290px;
   /* value = (:before left) + (:before border-left) - (:after border-left) */
   border-width: 13px 13px 0;
   border-style: solid;
@@ -9965,13 +9965,15 @@ a.button {
 
 .tutorialBubble {
   position: absolute;
-  z-index: 100; }
+  z-index: 100;
+  text-align: center;
+  font-size: 16px; }
 
 .broadcastTutorial {
-  top: 380px; }
+  top: 360px; }
 
 .groupsTutorial {
-  top: 392px; }
+  top: 380px; }
 
 .chatTutorial {
   top: 400px; }

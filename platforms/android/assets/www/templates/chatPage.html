@@ -11,6 +11,13 @@
       </div>
     </ion-header-bar>
 
+    <p ng-if="chatTutorial" class="triangle-border tutorialBubble chatTutorial">
+      This is the Messages page.
+      <br>
+      <br>
+      Here you can chat one-on-one with friends. To begin a new conversation click the pencil.
+      <button class="button button-block button-energized" ng-click="acceptChatTutorial()">Awesome!</button>
+    </p>
 
     <ion-content padding="true" class="manual-ios-statusbar-padding">
 
