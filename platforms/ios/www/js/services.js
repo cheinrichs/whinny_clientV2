@@ -37,6 +37,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
     markChatMessagesAsRead: markChatMessagesAsRead,
     markTutorialAsRead: markTutorialAsRead,
+    resetTutorials: resetTutorials,
 
     createNewChatMessage: createNewChatMessage,
     createNewGroup: createNewGroup,
@@ -273,10 +274,10 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     })
   }
 
-  function sendGroupMessage(group_id, content) {
-    console.log("sending group message with ", currentUser, " to group ", group_id, " content ", content);
+  function sendGroupMessage(group_id, groupName, content) {
 
     var data = {
+      groupName: groupName,
       to_group: group_id,
       from_user: currentUser.user_id,
       content: content,
@@ -284,6 +285,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     }
 
     var url = 'https://whinny-server.herokuapp.com/sendGroupMessage'
+    // var url = 'http://localhost:3000/sendGroupMessage';
     return $http.post(url, data).then(function (res) {
       return res;
     })
@@ -335,6 +337,19 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     // var url = 'http://localhost:3000/markTutorialAsRead';
     var url = 'https://whinny-server.herokuapp.com/markTutorialAsRead';
     return $http.post(url, data).then(function (res) {
+      return res;
+    })
+  }
+
+  function resetTutorials() {
+    var data = {
+      user_id: currentUser.user_id
+    }
+    // var url = 'http://localhost:3000/resetTutorials';
+    var url = 'https://whinny-server.herokuapp.com/resetTutorials';
+    return $http.post(url, data).then(function (res) {
+      console.log(res.data.updatedUser);
+      setCurrentUser(res.data.updatedUser);
       return res;
     })
   }

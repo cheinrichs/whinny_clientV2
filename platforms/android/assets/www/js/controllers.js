@@ -366,8 +366,6 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     messageFactory.updateChatMessages().then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
       $scope.chatUsers = messageFactory.getUserObjects();
-      console.log("updated");
-      console.log($scope.chatMessages);
     });
   }, 10000);
 
@@ -641,7 +639,6 @@ function ($scope, $state, $stateParams, messageFactory) {
 
 .controller('broadcastSearchCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
 function ($scope, $state, $stateParams, messageFactory){
-  console.log("b search ctrl");
   $scope.broadcastSearchObjects = messageFactory.getBroadcastSearchObjects();
 
   messageFactory.updateSearchBroadcastObjects().then(function (res) {
@@ -697,12 +694,12 @@ function ($scope, $state, $stateParams, messageFactory) {
   messageFactory.markChatMessagesAsRead(newlyReadMessages);
 
 
-  // var updateInterval = setInterval(function () {
+  var updateInterval = setInterval(function () {
     messageFactory.updateChatMessages().then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
       $scope.chatUsers = messageFactory.getUserObjects();
     });
-  // }, 10000);
+  }, 10000);
 
   $scope.sendChatMessage = function () {
     console.log("controller) sending message to ", $stateParams.convo.convoUser.user_id, $scope.chatMessage);
@@ -731,7 +728,7 @@ function ($scope, $state, $stateParams, messageFactory) {
   }
 
   $scope.backToChatPage = function (){
-    // clearInterval(updateInterval);
+    clearInterval(updateInterval);
     $state.go('tabsController.chatPage');
   }
 
@@ -786,7 +783,7 @@ function ($scope, $state, $stateParams, messageFactory) {
 
   $scope.sendGroupMessage = function () {
     if($scope.groupMessage.length > 0){
-      messageFactory.sendGroupMessage($stateParams.group_id, $scope.groupMessage).then(function () {
+      messageFactory.sendGroupMessage($stateParams.group_id, $scope.groupObjects[$scope.group_id].group_name, $scope.groupMessage).then(function () {
         $scope.groupMessage = "";
         messageFactory.updateGroupMessages().then(function(){
           $scope.groupMessages = messageFactory.getGroupMessages();
@@ -809,15 +806,29 @@ function ($scope, $state, $stateParams, messageFactory) {
 
 .controller('individualBroadcastCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$window', '$timeout', '$cordovaInAppBrowser',
 function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cordovaInAppBrowser) {
-  console.log("individual broadcasts controller");
   $scope.currentBroadcast_id = $stateParams.broadcast_id;
   $scope.broadcastObjects = messageFactory.getBroadcastObjects();
   $scope.broadcastObject = $scope.broadcastObjects[$stateParams.broadcast_id];
   $scope.broadcastMessages = messageFactory.getBroadcastMessages();
 
-  $scope.focusInput = false;
+  //Update on page open
+  messageFactory.updateBroadcastMessages().then(function (res) {
+    $scope.broadcastObjects = messageFactory.getBroadcastObjects();
+    $scope.broadcastObject = $scope.broadcastObjects[$stateParams.broadcast_id];
+    $scope.broadcastMessages = messageFactory.getBroadcastMessages();
+  });
+
+  //update every ten seconds
+  var updateInterval = setInterval(function () {
+    messageFactory.updateBroadcastMessages().then(function (res) {
+      $scope.broadcastObjects = messageFactory.getBroadcastObjects();
+      $scope.broadcastObject = $scope.broadcastObjects[$stateParams.broadcast_id];
+      $scope.broadcastMessages = messageFactory.getBroadcastMessages();
+    });
+  }, 10000);
 
   $scope.backToBroadcastsPage = function (){
+    clearInterval(updateInterval);
     $state.go('tabsController.broadcastsPage');
   }
 
@@ -938,6 +949,12 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
 
   $scope.goToDisciplines = function () {
     $state.go('disciplines', { returnPage: 'settingsPage' });
+  }
+
+  $scope.resetTutorials = function () {
+    messageFactory.resetTutorials().then(function (res) {
+      console.log(res);
+    })
   }
 
   $scope.logout = function () {

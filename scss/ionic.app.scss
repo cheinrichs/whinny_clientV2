@@ -185,6 +185,16 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   font-size: 16px;
 }
 
+.platform-android .broadcastTutorial {
+  top: 305px;
+}
+.platform-android .groupsTutorial {
+  top: 325px;
+}
+.platform-android .chatTutorial {
+  top: 345px;
+}
+
 .broadcastTutorial {
   top: 360px;
 }

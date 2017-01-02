@@ -52,6 +52,7 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
     }).then(function (t) {
       console.log('Token saved: ', t);
       $localStorage.tokenObject = t;
+      console.log($localStorage.tokenObject);
     })
 
     //All the possible strings for receiving a push notification button text

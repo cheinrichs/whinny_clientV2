@@ -366,8 +366,6 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     messageFactory.updateChatMessages().then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
       $scope.chatUsers = messageFactory.getUserObjects();
-      console.log("updated");
-      console.log($scope.chatMessages);
     });
   }, 10000);
 
@@ -641,7 +639,6 @@ function ($scope, $state, $stateParams, messageFactory) {
 
 .controller('broadcastSearchCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
 function ($scope, $state, $stateParams, messageFactory){
-  console.log("b search ctrl");
   $scope.broadcastSearchObjects = messageFactory.getBroadcastSearchObjects();
 
   messageFactory.updateSearchBroadcastObjects().then(function (res) {
@@ -786,7 +783,7 @@ function ($scope, $state, $stateParams, messageFactory) {
 
   $scope.sendGroupMessage = function () {
     if($scope.groupMessage.length > 0){
-      messageFactory.sendGroupMessage($stateParams.group_id, $scope.groupMessage).then(function () {
+      messageFactory.sendGroupMessage($stateParams.group_id, $scope.groupObjects[$scope.group_id].group_name, $scope.groupMessage).then(function () {
         $scope.groupMessage = "";
         messageFactory.updateGroupMessages().then(function(){
           $scope.groupMessages = messageFactory.getGroupMessages();
