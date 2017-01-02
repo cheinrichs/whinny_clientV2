@@ -43,6 +43,9 @@ angular.module('app', ['ionic', 'ionic.cloud', 'app.controllers', 'app.routes', 
 
 .run(["$ionicPlatform", "$rootScope", "$ionicPush", "$localStorage", "$ionicNavBarDelegate", "$ionicPopup", "messageFactory",
 function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDelegate, $ionicPopup, messageFactory) {
+
+  $rootScope.data = {};
+
   $ionicPlatform.ready(function() {
 
     $ionicPush.register().then(function (t) {
@@ -74,10 +77,13 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
 
       var randomIndex = getRandomArbitrary(0, 21);
 
+      $rootScope.data.message = msg;
+
       var alertPopup = $ionicPopup.alert({
         title: msg.title,
-        template: msg.text,
+        templateUrl: 'templates/popup.html',
         okText: possibleButtonTexts[randomIndex],
+        scope: $rootScope,
         okType: 'button-tangerine'
       });
 
