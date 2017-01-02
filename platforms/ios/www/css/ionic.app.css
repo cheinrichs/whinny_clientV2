@@ -9963,6 +9963,11 @@ a.button {
   display: block;
   width: 0; }
 
+.tutorialX {
+  position: absolute;
+  left: 0px;
+  top: 0px; }
+
 .tutorialBubble {
   position: absolute;
   z-index: 100;

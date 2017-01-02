@@ -929,6 +929,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
   }
 
   $scope.data.uploadUpdatedPhoto = function () {
+    if(!$scope.data.imgURI) return;
 
     var filename = $scope.data.currentUser.user_id + '_PersonalProfilePic.jpg'
     photoFactory.uploadPersonalProfilePhoto(filename, $scope.data.imgURI);

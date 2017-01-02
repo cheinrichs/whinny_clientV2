@@ -324,8 +324,8 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
   }
 }])
 
-.controller('chatPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$localStorage', '$ionicPopup',
-function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localStorage, $ionicPopup) {
+.controller('chatPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$localStorage', '$ionicPopup', '$rootScope',
+function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localStorage, $ionicPopup, $rootScope) {
   $scope.currentUser = messageFactory.getCurrentUser();
   //Send users to log in if there is no user id
   if(!$scope.currentUser.user_id) $state.go('welcomePage');
@@ -362,7 +362,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     });
   // }
 
-  var updateInterval = setInterval(function () {
+  $rootScope.chatPageUpdateInterval = setInterval(function () {
     messageFactory.updateChatMessages().then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
       $scope.chatUsers = messageFactory.getUserObjects();
@@ -370,7 +370,6 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
   }, 10000);
 
   $scope.goToChatWithUser = function(convo){
-    clearInterval(updateInterval);
     $state.go('individualChat', { convo: convo });
   }
 
@@ -384,7 +383,6 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
   }
 
   $scope.createNewChat = function () {
-    clearInterval(updateInterval);
     $state.go('newChatMessage');
   }
 
@@ -392,10 +390,6 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     $scope.chatTutorial = false;
     messageFactory.markTutorialAsRead(1);
   }
-
-  $scope.$onDestroy = function () {
-    clearInterval(updateInterval);
-  };
 
 }])
 
@@ -480,11 +474,6 @@ function ($scope, $state, $stateParams, messageFactory) {
       })
     })
   }
-
-
-  // var updateInterval = setInterval(function () {
-  //   $scope.groupMessages = messageFactory.updateGroupMessages();
-  // }, 1000);
 
   $scope.goToGroupMessage = function (group_id) {
     $state.go('groupMessagePage', { group_id: group_id });
@@ -673,8 +662,8 @@ function ($scope, $state, $stateParams, messageFactory){
   }
 }])
 
-.controller('individualChatCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
-function ($scope, $state, $stateParams, messageFactory) {
+.controller('individualChatCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope',
+function ($scope, $state, $stateParams, messageFactory, $rootScope) {
 
   $scope.currentUser = messageFactory.getCurrentUser();
   $scope.chatMessages = messageFactory.getChatMessages();
@@ -694,7 +683,7 @@ function ($scope, $state, $stateParams, messageFactory) {
   messageFactory.markChatMessagesAsRead(newlyReadMessages);
 
 
-  var updateInterval = setInterval(function () {
+  $rootScope.individualChatUpdateInterval = setInterval(function () {
     messageFactory.updateChatMessages().then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
       $scope.chatUsers = messageFactory.getUserObjects();
@@ -728,14 +717,13 @@ function ($scope, $state, $stateParams, messageFactory) {
   }
 
   $scope.backToChatPage = function (){
-    clearInterval(updateInterval);
     $state.go('tabsController.chatPage');
   }
 
 }])
 
-.controller('individualGroupCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
-function ($scope, $state, $stateParams, messageFactory) {
+.controller('individualGroupCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope',
+function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   $scope.currentUser = messageFactory.getCurrentUser();
   $scope.group_id = $stateParams.group_id;
   //get group messages
@@ -758,7 +746,7 @@ function ($scope, $state, $stateParams, messageFactory) {
     $scope.userObjects = messageFactory.getGroupUserObjects();
   })
 
-  var updateInterval = setInterval(function () {
+  $rootScope.individualGroupUpdateInterval = setInterval(function () {
     messageFactory.updateGroupMessages().then(function(){
       $scope.groupMessages = messageFactory.getGroupMessages();
       $scope.groupObjects = messageFactory.getGroupObjects();
@@ -798,14 +786,10 @@ function ($scope, $state, $stateParams, messageFactory) {
     $state.go('tabsController.groupsPage');
   }
 
-  $scope.$onDestroy = function () {
-    console.log("individual group controller destroyed");
-    clearInterval(updateInterval);
-  };
 }])
 
-.controller('individualBroadcastCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$window', '$timeout', '$cordovaInAppBrowser',
-function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cordovaInAppBrowser) {
+.controller('individualBroadcastCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$window', '$timeout', '$cordovaInAppBrowser', '$rootScope',
+function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cordovaInAppBrowser, $rootScope) {
   $scope.currentBroadcast_id = $stateParams.broadcast_id;
   $scope.broadcastObjects = messageFactory.getBroadcastObjects();
   $scope.broadcastObject = $scope.broadcastObjects[$stateParams.broadcast_id];
@@ -819,7 +803,7 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
   });
 
   //update every ten seconds
-  var updateInterval = setInterval(function () {
+  $rootScope.individualBroadcastUpdateInterval = setInterval(function () {
     messageFactory.updateBroadcastMessages().then(function (res) {
       $scope.broadcastObjects = messageFactory.getBroadcastObjects();
       $scope.broadcastObject = $scope.broadcastObjects[$stateParams.broadcast_id];
@@ -828,7 +812,6 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
   }, 10000);
 
   $scope.backToBroadcastsPage = function (){
-    clearInterval(updateInterval);
     $state.go('tabsController.broadcastsPage');
   }
 
@@ -853,8 +836,8 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
   }
 }])
 
-.controller('settingsCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPush', '$localStorage',
-function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFactory, $timeout, $ionicPush, $localStorage) {
+.controller('settingsCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPush', '$localStorage', '$rootScope',
+function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFactory, $timeout, $ionicPush, $localStorage, $rootScope) {
   $scope.data = {};
   $scope.data.currentUser = messageFactory.getCurrentUser();
 
@@ -961,6 +944,10 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
   $scope.logout = function () {
     $ionicPush.unregister();
     delete $localStorage.whinny_user;
+    clearInterval($rootScope.chatPageUpdateInterval);
+    clearInterval($rootScope.individualChatUpdateInterval);
+    clearInterval($rootScope.individualGroupUpdateInterval);
+    clearInterval($rootScope.individualBroadcastUpdateInterval);
     messageFactory.logout();
     $state.go('welcomePage');
   }

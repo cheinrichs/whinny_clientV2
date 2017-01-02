@@ -15,19 +15,19 @@
 
     <div class="row">
       <div class="col col-33">
-        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(1) }" ng-click="data.selectDiscipline(1)">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.indexOf(1) >= 0}" ng-click="data.selectDiscipline(1)">
           <img src="img/emoji/BarrelHorse.png" class="disciplinePic">
           Barrel Racing
         </div>
       </div>
       <div class="col col-33">
-        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(2) }" ng-click="data.selectDiscipline(2)">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.indexOf(2) >= 0}" ng-click="data.selectDiscipline(2)">
           <img src="img/emoji/JumpingHorse.png" class="disciplinePic">
           Jumper
         </div>
       </div>
       <div class="col col-33">
-        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(3) }" ng-click="data.selectDiscipline(3)">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.indexOf(3) >= 0}" ng-click="data.selectDiscipline(3)">
           <img src="img/emoji/DressageHorse.png" class="disciplinePic">
           Dressage
         </div>
@@ -37,19 +37,19 @@
 
     <div class="row">
       <div class="col col-33">
-        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(4) }" ng-click="data.selectDiscipline(4)">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.indexOf(4) >= 0}" ng-click="data.selectDiscipline(4)">
           <img src="img/emoji/HunterHorse.png" class="disciplinePic">
           Hunter
         </div>
       </div>
       <div class="col col-33">
-        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(5) }" ng-click="data.selectDiscipline(5)">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.indexOf(5) >= 0}" ng-click="data.selectDiscipline(5)">
           <img src="img/emoji/EventingHorse.png" class="disciplinePic">
           Eventing
         </div>
       </div>
       <div class="col col-33">
-        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(6) }" ng-click="data.selectDiscipline(6)">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.indexOf(6) >= 0}" ng-click="data.selectDiscipline(6)">
           <img src="img/emoji/ReiningHorse.png" class="disciplinePic">
           Reining
         </div>
@@ -58,19 +58,19 @@
 
     <div class="row">
       <div class="col col-33">
-        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(7) }" ng-click="data.selectDiscipline(7)">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.indexOf(7) >= 0}" ng-click="data.selectDiscipline(7)">
           <img src="img/emoji/ArabianHorse.png" class="disciplinePic">
           Arabian Horses
         </div>
       </div>
       <div class="col col-33">
-        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(8) }" ng-click="data.selectDiscipline(8)">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.indexOf(8) >= 0}" ng-click="data.selectDiscipline(8)">
           <img src="img/emoji/DrivingHorse.png" class="disciplinePic">
           Driving
         </div>
       </div>
       <div class="col col-33">
-        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(9) }" ng-click="data.selectDiscipline(9)">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.indexOf(9) >= 0}" ng-click="data.selectDiscipline(9)">
           <img src="img/emoji/RacingHorses.png" class="disciplinePic">
           Racing
         </div>
@@ -79,19 +79,19 @@
 
     <div class="row">
       <div class="col col-33">
-        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(10) }" ng-click="data.selectDiscipline(10)">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.indexOf(10) >= 0 }" ng-click="data.selectDiscipline(10)">
           <img src="img/emoji/TrailHorse.png" class="disciplinePic">
           Trail Riding
         </div>
       </div>
       <div class="col col-33">
-        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(11) }" ng-click="data.selectDiscipline(11)">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.indexOf(11) >= 0}" ng-click="data.selectDiscipline(11)">
           <img src="img/emoji/PoloPony.png" class="disciplinePic">
-          Polo
+          <Polo></Polo>
         </div>
       </div>
       <div class="col col-33">
-        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.includes(12) }" ng-click="data.selectDiscipline(12)">
+        <div class="discipline" ng-class="{ selectedDisciplineColor: data.selectedDisciplines.indexOf(12) >= 0}" ng-click="data.selectDiscipline(12)">
           <img src="img/emoji/VetSymbol.png" class="disciplinePic">
           Veterinary
         </div>
@@ -101,7 +101,7 @@
     <form ng-submit="data.submitDiscipline()">
       <div class="list">
         <label class="item item-input">
-          <input type="text" placeholder="if you would like another discipline, please enter it here:" ng-model="data.suggestedDiscipline">
+          <input type="text" placeholder="if you would like to see content for another discipline, please suggest it here:" ng-model="data.suggestedDiscipline">
         </label>
       </div>
 
