@@ -266,6 +266,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
   console.log("new User Phot CTRL");
   $scope.data = {};
   $scope.data.currentUser = messageFactory.getCurrentUser();
+  $scope.data.errors = [];
 
   $scope.data.takePhoto = function () {
     var options = {
@@ -310,17 +311,25 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
   }
 
   $scope.data.uploadUpdatedPhoto = function () {
+    if($scope.data.imgURI){
+      var filename = $scope.data.currentUser.user_id + '_PersonalProfilePic.jpg'
+      photoFactory.uploadPersonalProfilePhoto(filename, $scope.data.imgURI);
 
-    var filename = $scope.data.currentUser.user_id + '_PersonalProfilePic.jpg'
-    photoFactory.uploadPersonalProfilePhoto(filename, $scope.data.imgURI);
+      $timeout(function () {
+        messageFactory.markAccountAsSetUp($scope.data.currentUser.user_id).then(function () {
+          $state.go('tabsController.chatPage');
+        })
+      }, 1000);
 
-    $timeout(function () {
-      //Give it a second to upload and then redirect to tabs?
+    } else {
+      $scope.data.errors.push('Please take or choose a new photo!');
+    }
+  }
 
+  $scope.data.skipPhoto = function () {
+    messageFactory.markAccountAsSetUp($scope.data.currentUser.user_id).then(function () {
       $state.go('tabsController.chatPage');
-
-    }, 1000);
-
+    })
   }
 }])
 

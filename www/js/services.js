@@ -69,6 +69,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     updateGroupNotificationSettings: updateGroupNotificationSettings,
     updateBroadcastNotificationSettings: updateBroadcastNotificationSettings,
 
+    markAccountAsSetUp: markAccountAsSetUp,
+
     versionCheck: versionCheck,
 
     logIn: logIn,
@@ -567,6 +569,16 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     }
     return $http.post(url, data).then(function (res) {
       return res;
+    })
+  }
+
+  function markAccountAsSetUp(user_id) {
+    var url = 'http://whinny-server.herokuapp.com/markAccountAsSetUp' ;
+    var data = {
+      user_id: user_id
+    }
+    return $http.post(url, data).then(function (res) {
+      return res.data;
     })
   }
 

@@ -1,6 +1,5 @@
 <ion-view title="newUserPhoto" hide-nav-bar="true" id="newUserPhoto" class="nonTabPagePadding">
   <ion-content>
-    <h1>New User Photo!</h1>
     <ul>
       <li class="item">
 
@@ -8,16 +7,34 @@
         <div class="profilePicBorder">
           <img ng-hide="data.imgURI !== undefined" ng-src="{{data.currentUser.portrait_link}}" class="groupProfilePic" alt=""> <!--TODO show placeholder and format -->
           <img ng-hide="data.imgURI === undefined" ng-src="{{data.imgURI}}" class="groupProfilePic" alt=""> <!--TODO show placeholder and format -->
-
+          <br>
+          <br>
+          {{data.imgURI}}
         </div>
         <div class="row">
           <button class="col-50 button button-tangerine" ng-click="data.takePhoto()">Take New Photo</button>
           <button class="col-50 button button-tangerine" ng-click="data.choosePhoto()">Choose New Photo</button>
         </div>
-        <div class="row">
-          <button class="button button-outline button-energized button-block" ng-click="data.uploadUpdatedPhoto()">Submit</button>
-        </div>
       </li>
     </ul>
+
+    <div class="errors">
+      <div ng-repeat="error in data.errors">
+        <br>
+        {{error}}
+        <br>
+      </div>
+    </div>
+
+    <div class="row">
+      <button class="button button-outline button-energized button-block" ng-click="data.uploadUpdatedPhoto()">Upload Photo</button>
+    </div>
+
+    <span class="errors">
+      <div class="col col-offset-10 col-80 ">
+        <a ng-click="data.skipPhoto()">I'm a meadow muffin and I want to skip a new photo</a>
+      </div>
+    </span>
+
   </ion-content>
 </ion-view>

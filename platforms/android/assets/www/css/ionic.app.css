@@ -9965,6 +9965,7 @@ a.button {
 
 .tutorialX {
   position: absolute;
+  float: left;
   left: 0px;
   top: 0px; }
 
@@ -10003,6 +10004,10 @@ a.button {
 .errors {
   color: red;
   text-align: center; }
+
+.skipPhotoLink {
+  text-align: center !important;
+  color: red; }
 
 .createGroupSpinner {
   margin-left: auto;
