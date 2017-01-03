@@ -59,14 +59,35 @@
   </head>
   <body ng-app="app">
 
-    <div>
-      <div>
-        <ion-nav-bar class="bar-stable">
-          <ion-nav-back-button></ion-nav-back-button>
-        </ion-nav-bar>
-        <ion-nav-view></ion-nav-view>
+    <ion-header-bar align-title="center" class="bar-light" ng-controller="navbarCtrl">
+
+      <div class="buttons">
+        <button ng-if="showSettings" class="button button-energized icon-left ion-android-settings headerButton" ng-click="toSettingsPage()"></button>
+
+        <button ng-if="showBackToChat" class="button button-energized icon-left ion-arrow-left-c headerButton" ng-click="backToChat()"></button>
+
+        <button ng-if="showBackToGroups" class="button button-energized icon-left ion-arrow-left-c headerButton" ng-click="backToGroups()"></button>
+
+        <button ng-if="showBackToBroadcasts" class="button button-energized icon-left ion-arrow-left-c headerButton" ng-click="backToBroadcastsPage()"></button>
+
       </div>
-    </div>
+      
+      <h1 class="title whinnyHeader">{{pageTitle}}</h1>
+
+      <div class="buttons">
+        <button ng-if="!hideChatIcons" class="button button-energized icon-right ion-android-create" ng-click="createNewChat()"></button>
+
+        <button ng-if="!hideGroupIcons" class="button button-energized icon-right ion-android-search headerButton" ng-click="goToGroupSearchPage()"></button>
+
+        <button ng-if="!hideGroupIcons" class="button button-energized icon-right ion-android-create headerButton" ng-click="createNewGroup()"></button>
+
+        <button ng-if="!hideBroadcastIcons" class="button button-energized icon-right ion-android-search headerButton" ng-click="goToBroadcastSearchPage()"></button>
+      </div>
+
+    </ion-header-bar>
+
+
+    <ion-nav-view></ion-nav-view>
 
   </body>
 </html>
