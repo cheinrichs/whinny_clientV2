@@ -27,7 +27,7 @@ angular.module('app', ['ionic', 'ionic.cloud', 'app.controllers', 'app.routes', 
   });
 }])
 
-.config(["$cordovaInAppBrowserProvider", function($cordovaInAppBrowserProvider) {
+.config(['$cordovaInAppBrowserProvider', function($cordovaInAppBrowserProvider) {
 
   var defaultOptions = {
     location: 'no',
@@ -35,13 +35,13 @@ angular.module('app', ['ionic', 'ionic.cloud', 'app.controllers', 'app.routes', 
     toolbar: 'yes'
   };
 
-  document.addEventListener("deviceready", function () {
+  document.addEventListener('deviceready', function () {
     $cordovaInAppBrowserProvider.setDefaultOptions(defaultOptions);
   }, false);
 
 }])
 
-.run(["$ionicPlatform", "$rootScope", "$ionicPush", "$localStorage", "$ionicNavBarDelegate", "$ionicPopup", "messageFactory",
+.run(['$ionicPlatform', '$rootScope', '$ionicPush', '$localStorage', '$ionicNavBarDelegate', '$ionicPopup', 'messageFactory',
 function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDelegate, $ionicPopup, messageFactory) {
 
   $rootScope.data = {};
@@ -104,6 +104,6 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
   });
 }])
 
-.config(["$ionicConfigProvider", function($ionicConfigProvider) {
+.config(['$ionicConfigProvider', function($ionicConfigProvider) {
   $ionicConfigProvider.views.swipeBackEnabled(false);
 }])
