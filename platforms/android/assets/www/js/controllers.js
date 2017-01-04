@@ -673,6 +673,7 @@ function ($scope, $state, $stateParams, messageFactory) {
 
   $scope.requestToJoinGroup = function (group_id) {
     console.log("requesting join group");
+    //TODO
     $scope.data.requestSent = true;
   }
 
@@ -1126,11 +1127,21 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
     }
     var parsedPhone = $scope.data.chosenContact.phoneNumbers[0].value.replace(/[\s()-]/g, "");
     messageFactory.createNewChatMessage(parsedPhone, $scope.chatMessage).then(function (res) {
-      messageFactory.updateChatMessages().then(function () {
-        console.log(res);
+      messageFactory.updateChatMessages().then(function (convos) {
+        console.log("convos");
+        console.log(convos);
+        console.log("***");
         $scope.chatMessage = "";
         $scope.data.newChatRecipient = "";
-        $state.go('individualChat', { user_id: res.data.user_id });
+        var new_convo;
+        for (var i = 0; i < convos.length; i++) {
+          console.log(convos[i]);
+          if(convos[i].convoUser.user_id === res.data.user_id){
+            new_convo = convos[i];
+          }
+        }
+        // $stateParams.convo.convoUser.user_id
+        $state.go('individualChat', { convo: new_convo });
       });
     });
   }

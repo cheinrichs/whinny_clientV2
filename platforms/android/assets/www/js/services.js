@@ -140,6 +140,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     var url = 'https://whinny-server.herokuapp.com/chatMessages/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
       chatMessages = res.data;
+      return res.data;
     })
   }
 
