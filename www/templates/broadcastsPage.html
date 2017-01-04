@@ -13,19 +13,19 @@
 
     <ion-content padding="true" class="has-header">
 
-      <ion-list>
-        <ion-item ng-repeat="broadcast in broadcastObjects" class="item-thumbnail-left" ng-click="goToIndividualBroadcast(broadcast.broadcast_id)">
-          <img height="20px" width="20px" ng-src="{{broadcast.broadcast_photo}}">
-          {{message.content}}
-          <h3>{{broadcast.broadcast_name}}</h3>
-          <p>{{item.description}}</p>
-          <ion-option-button class="button-assertive"
-                             ng-click="unsubscribeFromBroadcast(broadcast.broadcast_id)">
-            Unsubscribe
-          </ion-option-button>
-          <i class="icon ion-chevron-right energized"></i>
-        </ion-item>
-      </ion-list>
+      <ion-item ng-repeat="broadcast in broadcastObjects" class="item-thumbnail-left" ng-click="goToIndividualBroadcast(broadcast.broadcast_id)">
+        <img height="20px" width="20px" ng-src="{{broadcast.broadcast_photo}}">
+        <i class="messageIcon broadcastMessageIcon icon ion-chevron-right energized"></i>
+        <!-- <i ng-if="convo.unread" class="messageIcon newMessageIcon icon ion-record energized"></i> -->
+        {{message.content}}
+        <span class="convoSubject">{{broadcast.broadcast_name}}</span>
+        <p></p>
+        <ion-option-button class="button-assertive"
+                           ng-click="unsubscribeFromBroadcast(broadcast.broadcast_id)">
+          Unsubscribe
+        </ion-option-button>
+        <!-- <i class="icon ion-chevron-right energized"></i> -->
+      </ion-item>
 
     </ion-content>
   </div>

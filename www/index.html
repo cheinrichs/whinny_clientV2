@@ -62,7 +62,7 @@
     <ion-header-bar ng-hide="hideNavBar" align-title="center" class="bar-light" ng-controller="navbarCtrl">
 
       <div class="buttons">
-        <button ng-if="showSettings" class="button button-energized icon-left ion-android-settings headerButton" ng-click="toSettingsPage()"></button>
+        <button ng-if="showSettings" class="button button-energized icon-left ion-gear-a headerButton" ng-click="toSettingsPage()"></button>
 
         <button ng-if="showBackToChat" class="button button-energized icon-left ion-chevron-left headerButton" ng-click="backToChat()"></button>
 
@@ -75,7 +75,7 @@
       <h1 class="title whinnyHeader">{{pageTitle}}</h1>
 
       <div class="buttons">
-        <button ng-if="!hideChatIcons" class="button button-energized icon-right ion-android-create" ng-click="createNewChat()"></button>
+        <button ng-if="!hideChatIcons" class="button button-energized icon-right ion-android-create headerButton" ng-click="createNewChat()"></button>
 
         <button ng-if="!hideGroupIcons" class="button button-energized icon-right ion-android-search headerButton" ng-click="goToGroupSearchPage()"></button>
 
