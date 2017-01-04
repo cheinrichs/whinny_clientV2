@@ -1,4 +1,4 @@
-<ion-view hide-nav-bar="true" on-swipe-left="backToChatPage()">
+<ion-view hide-nav-bar="true">
   <div ng-controller="individualChatCtrl">
 
     <div class="bar bar-header bar-energized">
@@ -7,7 +7,7 @@
       <img ng-src="{{convo.convoUser.portrait_link}}" class="individualChatPortrait" alt="">
     </div>
 
-    <ion-content class="has-header has-footer chatScreen" scroll='false' keyboard-attach>
+    <ion-content class="has-header has-footer chatScreen" scroll='false' keyboard-attach on-swipe-right="backToChatPage()">
 
       <div class="top-container" scroll-glue>
 

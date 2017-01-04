@@ -7,7 +7,7 @@
       <img ng-src="{{broadcastObject.broadcast_photo}}" class="individualBroadcastPortrait" alt="">
     </div>
 
-    <ion-content class="has-header has-footer chatScreen">
+    <ion-content class="has-header has-footer chatScreen" on-swipe-right="backToBroadcastsPage()">
 
       <div ng-repeat="message in broadcastMessages">
         <div ng-show="message.to_broadcast === currentBroadcast_id">

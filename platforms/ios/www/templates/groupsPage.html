@@ -20,11 +20,11 @@
         <div class="item item-button-right">
           {{app.first_name}} {{app.last_name}}
           <div class="buttons">
-            <button class="button button-positive" ng-click="acceptGroupApplication(app.user_id, app.group_id)">
+            <button class="button button-outline button-energized" ng-click="acceptGroupApplication(app.user_id, app.group_id)">
               Accept
             </button>
 
-            <button class="button button-assertive" ng-click="declineGroupApplication(app.application_id)">
+            <button class="button button-outline button-energized" ng-click="declineGroupApplication(app.application_id)">
               Decline
             </button>
           </div>
@@ -40,12 +40,12 @@
         <div class="item item-button-right">
           Join {{inv.group_name | nameShortener}}?
           <div class="buttons">
-            <button class="button button-positive" ng-click="acceptGroupInvitation(inv.user_id, inv.group_id)">
-              <i class="icon ion-checkmark"></i>
+            <button class="button button-outline button-energized" ng-click="acceptGroupInvitation(inv.user_id, inv.group_id)">
+              Join
             </button>
 
-            <button class="button button-assertive" ng-click="declineGroupInvitation(inv.invitation_id)">
-              <i class="icon ion-close"></i>
+            <button class="button button-outline button-energized" ng-click="declineGroupInvitation(inv.invitation_id)">
+              Ignore
             </button>
           </div>
         </div>
@@ -56,14 +56,15 @@
     <ion-list>
       <ion-item ng-repeat="group in groupObjects" class="item item-avatar" ng-click="goToGroupMessage(group.group_id)">
         <img ng-src="{{group.group_photo}}" alt="">
-        <h3>{{group.group_name}}</h3>
 
-        <ion-option-button class="button-assertive"
-                           ng-click="leaveGroup(group.group_id)">
+        <i class="messageIcon groupMessageIcon icon ion-chevron-right energized"></i>
+        <!-- <i ng-if="convo.unread" class="messageIcon newMessageIcon icon ion-record energized"></i> -->
+
+        <span class="convoSubject">{{group.group_name}}</span>
+
+        <ion-option-button class="button-assertive" ng-click="leaveGroup(group.group_id)">
           Leave Group
         </ion-option-button>
-
-        <i class="icon ion-chevron-right energized"></i>
 
       </ion-item>
     </ion-list>

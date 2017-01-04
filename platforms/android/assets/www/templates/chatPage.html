@@ -17,8 +17,8 @@
           <img ng-src="{{convo.convoUser.portrait_link}}" alt="">
           <i ng-if="!convo.unread" class="messageIcon icon ion-chevron-right energized"></i>
           <i ng-if="convo.unread" class="messageIcon newMessageIcon icon ion-record energized"></i>
-          <span ng-if="!convo.convoUser.first_name">{{convo.convoUser.phone}}</span>
-          <h3>{{convo.convoUser.first_name}} {{convo.convoUser.last_name}}</h3>
+          <span ng-if="!convo.convoUser.first_name" class="convoSubject">{{convo.convoUser.phone}}</span>
+          <span class="convoSubject">{{convo.convoUser.first_name}} {{convo.convoUser.last_name}}</span>
           <div ng-bind-html="convo.messages[convo.messages.length-1].content | messageShortener | emoji">{{convo.messages[convo.messages.length-1].content | messageShortener | emoji}}</div>
           <!-- {{convo.messages[convo.messages.length-1].content | messageShortener | emoji}} -->
         </ion-item>
