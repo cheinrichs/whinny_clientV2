@@ -48,6 +48,7 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <allow-navigation href="*" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-navigation href="file://*/*" />
     <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />

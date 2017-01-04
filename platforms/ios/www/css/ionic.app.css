@@ -10038,6 +10038,12 @@ a.button {
   margin-top: 10px;
   margin-bottom: 10px; }
 
+.ion-view {
+  transition-duration: 0ms; }
+
+.ion-view {
+  transition-duration: 0ms; }
+
 .tabs-energized > .tabs,
 .tabs.tabs-energized {
   border-color: #FFFFFF !important;
@@ -10224,7 +10230,7 @@ a.button {
   left: 0px;
   width: 100%;
   height: 3px;
-  background-color: #FFD8AD; }
+  background-color: #FDB55F; }
 
 .bar.bar-energized {
   border-color: #ffaa3b;
@@ -10243,7 +10249,7 @@ a.button {
   color: red; }
 
 .chatScreen {
-  padding: 30px 0px 60px 0px; }
+  padding: 40px 0px 60px 0px; }
 
 .footer-input {
   position: relative;
@@ -10262,15 +10268,20 @@ a.button {
   text-decoration: none; }
 
 .emojiButton {
-  height: 30px;
+  height: 35px;
   width: 35px !important;
-  margin: 0px; }
+  margin: 0px;
+  position: relative;
+  top: -3px; }
 
 .AngryFaceEButton {
   background-image: url("../img/emoji/AngryFace.png"); }
 
 .ArabianHorseEButton {
-  background-image: url("../img/emoji/ArabianHorse.png"); }
+  background-image: url("../img/emoji/ArabianHorse.png");
+  position: relative;
+  top: -3px;
+  height: 35px; }
 
 .BarrelHorseEButton {
   background-image: url("../img/emoji/BarrelHorse.png"); }
@@ -10290,8 +10301,8 @@ a.button {
 .CarrotEButton {
   background-image: url("../img/emoji/Carrot.png"); }
 
-.CorgiDogEButton {
-  background-image: url("../img/emoji/CorgiDog.png"); }
+.CorgiEButton {
+  background-image: url("../img/emoji/Corgi.png"); }
 
 .DressageHorseEButton {
   background-image: url("../img/emoji/DressageHorse.png"); }
@@ -10326,8 +10337,8 @@ a.button {
 .HoofPickEButton {
   background-image: url("../img/emoji/HoofPick.png"); }
 
-.HorsePaddockEButton {
-  background-image: url("../img/emoji/HorsePaddock.png"); }
+.PaddockHorseEButton {
+  background-image: url("../img/emoji/PaddockHorse.png"); }
 
 .HorseShoeEButton {
   background-image: url("../img/emoji/HorseShoe.png"); }
@@ -10335,8 +10346,8 @@ a.button {
 .HunterHorseEButton {
   background-image: url("../img/emoji/HunterHorse.png"); }
 
-.JackRussellDogEButton {
-  background-image: url("../img/emoji/JackRussellDog.png"); }
+.JackRussellEButton {
+  background-image: url("../img/emoji/JackRussell.png"); }
 
 .JumpingHorseEButton {
   background-image: url("../img/emoji/JumpingHorse.png"); }
@@ -10365,8 +10376,8 @@ a.button {
 .RibbonEButton {
   background-image: url("../img/emoji/Ribbon.png"); }
 
-.ShetlandPonyEButton {
-  background-image: url("../img/emoji/ShetlandPony.png"); }
+.PonyEButton {
+  background-image: url("../img/emoji/Pony.png"); }
 
 .TractorEButton {
   background-image: url("../img/emoji/Tractor.png"); }

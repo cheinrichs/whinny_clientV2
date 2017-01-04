@@ -1,5 +1,121 @@
 angular.module('app.controllers', ['app.services'])
 
+.controller('navbarCtrl', ['$rootScope', '$scope', '$state',
+function ($rootScope, $scope, $state) {
+  $scope.currentState = $state.current;
+
+  $scope.hideNavBar = false;
+
+  $scope.hideGroupIcons = true;
+  $scope.hideBroadcastIcons = true;
+  $scope.hideChatIcons = true;
+
+  $scope.showBackToChat = false;
+  $scope.showBackToBroadcasts = false;
+  $scope.showBackToGroups = false;
+
+  $scope.pageTitle = 'Whinny';
+
+  $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+    if(toState.url === "/chatTab"){
+      $scope.hideNavBar = false;
+      $scope.hideGroupIcons = true;
+      $scope.hideBroadcastIcons = true;
+      $scope.hideChatIcons = false;
+      $scope.showBackToChat = false;
+      $scope.showSettings = true;
+      $scope.pageTitle = 'Whinny';
+    }
+    if(toState.url === "/groupsTab"){
+      $scope.hideNavBar = false;
+      $scope.hideGroupIcons = false;
+      $scope.hideBroadcastIcons = true;
+      $scope.hideChatIcons = true;
+      $scope.showBackToGroups = false;
+
+      $scope.showSettings = true;
+      $scope.pageTitle = 'Whinny';
+    }
+    if(toState.url === "/broadcastTab"){
+      $scope.hideNavBar = false;
+      $scope.hideGroupIcons = true;
+      $scope.hideBroadcastIcons = false;
+      $scope.hideChatIcons = true;
+      $scope.showBackToBroadcasts = false;
+
+      $scope.showSettings = true;
+      $scope.pageTitle = 'Whinny';
+    }
+
+    if(toState.url === '/newChatMessage'){
+      $scope.hideChatIcons = true;
+      $scope.showBackToChat = true;
+      $scope.showSettings = false;
+      $scope.pageTitle = 'New Chat';
+    }
+    if(toState.url === '/createNewGroup'){
+      $scope.hideGroupIcons = true;
+      $scope.showBackToGroups = true;
+      $scope.showSettings = false;
+      $scope.pageTitle = 'New Group';
+    }
+    if(toState.url === '/groupSearch'){
+      $scope.hideGroupIcons = true;
+      $scope.showBackToGroups = true;
+      $scope.showSettings = false;
+      $scope.pageTitle = 'Groups';
+    }
+    if(toState.url === '/broadcastSearch'){
+      $scope.hideBroadcastIcons = true;
+      $scope.showBackToBroadcasts = true;
+      $scope.showSettings = false;
+      $scope.pageTitle = 'Broadcasts'
+    }
+
+    if(toState.url === '/settings'){
+      $scope.showSettings = false;
+      $scope.showBackToChat = true;
+      $scope.hideChatIcons = true;
+      $scope.hideGroupIcons = true;
+      $scope.hideBroadcastIcons = true;
+      $scope.pageTitle = 'Settings';
+    }
+
+    if(toState.url === '/individualChat') $scope.hideNavBar = true;
+
+    if(toState.url === '/groupMessagePage') $scope.hideNavBar = true;
+
+    if(toState.url === '/individualBroadcast') $scope.hideNavBar = true;
+  });
+
+  $scope.toSettingsPage = function () {
+    $state.go('settingsPage')
+  }
+  $scope.createNewChat = function () {
+    $state.go('newChatMessage');
+  }
+  $scope.goToGroupSearchPage = function () {
+    $state.go('groupSearch');
+  }
+  $scope.createNewGroup = function () {
+    $state.go('createNewGroup');
+  }
+  $scope.goToBroadcastSearchPage = function () {
+    $state.go('broadcastSearch');
+  }
+
+  $scope.backToChat = function () {
+    $state.go('tabsController.chatPage');
+  }
+  $scope.backToGroups = function () {
+    $state.go('tabsController.groupsPage');
+  }
+  $scope.backToBroadcastsPage = function () {
+    $state.go('tabsController.broadcastsPage');
+  }
+
+}])
+
 .controller('welcomePageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaCamera', '$localStorage', '$ionicPlatform', '$ionicPush',
 function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, $localStorage, $ionicPlatform, $ionicPush) {
   //read from file,
@@ -335,6 +451,9 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
 
 .controller('chatPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$localStorage', '$ionicPopup', '$rootScope',
 function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localStorage, $ionicPopup, $rootScope) {
+
+  console.log($state);
+  console.log($state.current);
   $scope.currentUser = messageFactory.getCurrentUser();
   //Send users to log in if there is no user id
   if(!$scope.currentUser.user_id) $state.go('welcomePage');

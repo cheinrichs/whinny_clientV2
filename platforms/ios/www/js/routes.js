@@ -166,9 +166,6 @@ angular.module('app.routes', [])
 
   .state('settingsPage', {
     url: '/settings',
-    params: {
-      returnPage: { dynamic: true }
-    },
     cache: false,
     templateUrl: 'templates/settingsPage.html'
   })

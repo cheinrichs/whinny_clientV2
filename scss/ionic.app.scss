@@ -527,9 +527,11 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 
 .emojiButton {
-  height: 30px;
+  height: 35px;
   width: 35px !important;
   margin: 0px;
+  position: relative;
+  top: -3px;
 }
 
 .AngryFaceEButton {
@@ -538,10 +540,14 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 .ArabianHorseEButton {
   background-image: url('../img/emoji/ArabianHorse.png');
+  position: relative;
+  top: -3px;
+  height: 35px;
 }
 
 .BarrelHorseEButton {
   background-image: url('../img/emoji/BarrelHorse.png');
+
 }
 
 .BlanketEButton {
@@ -559,8 +565,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 .CarrotEButton {
   background-image: url('../img/emoji/Carrot.png');
 }
-.CorgiDogEButton {
-  background-image: url('../img/emoji/CorgiDog.png');
+.CorgiEButton {
+  background-image: url('../img/emoji/Corgi.png');
 }
 .DressageHorseEButton {
   background-image: url('../img/emoji/DressageHorse.png');
@@ -595,8 +601,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 .HoofPickEButton {
   background-image: url('../img/emoji/HoofPick.png');
 }
-.HorsePaddockEButton {
-  background-image: url('../img/emoji/HorsePaddock.png');
+.PaddockHorseEButton {
+  background-image: url('../img/emoji/PaddockHorse.png');
 }
 .HorseShoeEButton {
   background-image: url('../img/emoji/HorseShoe.png');
@@ -604,8 +610,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 .HunterHorseEButton {
   background-image: url('../img/emoji/HunterHorse.png');
 }
-.JackRussellDogEButton {
-  background-image: url('../img/emoji/JackRussellDog.png');
+.JackRussellEButton {
+  background-image: url('../img/emoji/JackRussell.png');
 }
 .JumpingHorseEButton {
   background-image: url('../img/emoji/JumpingHorse.png');
@@ -634,8 +640,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 .RibbonEButton {
   background-image: url('../img/emoji/Ribbon.png');
 }
-.ShetlandPonyEButton {
-  background-image: url('../img/emoji/ShetlandPony.png');
+.PonyEButton {
+  background-image: url('../img/emoji/Pony.png');
 }
 .TractorEButton {
   background-image: url('../img/emoji/Tractor.png');

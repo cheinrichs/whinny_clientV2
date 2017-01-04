@@ -4,6 +4,8 @@ angular.module('app.controllers', ['app.services'])
 function ($rootScope, $scope, $state) {
   $scope.currentState = $state.current;
 
+  $scope.hideNavBar = false;
+
   $scope.hideGroupIcons = true;
   $scope.hideBroadcastIcons = true;
   $scope.hideChatIcons = true;
@@ -16,15 +18,16 @@ function ($rootScope, $scope, $state) {
 
   $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
     if(toState.url === "/chatTab"){
+      $scope.hideNavBar = false;
       $scope.hideGroupIcons = true;
       $scope.hideBroadcastIcons = true;
       $scope.hideChatIcons = false;
       $scope.showBackToChat = false;
-
       $scope.showSettings = true;
       $scope.pageTitle = 'Whinny';
     }
     if(toState.url === "/groupsTab"){
+      $scope.hideNavBar = false;
       $scope.hideGroupIcons = false;
       $scope.hideBroadcastIcons = true;
       $scope.hideChatIcons = true;
@@ -34,6 +37,7 @@ function ($rootScope, $scope, $state) {
       $scope.pageTitle = 'Whinny';
     }
     if(toState.url === "/broadcastTab"){
+      $scope.hideNavBar = false;
       $scope.hideGroupIcons = true;
       $scope.hideBroadcastIcons = false;
       $scope.hideChatIcons = true;
@@ -76,6 +80,12 @@ function ($rootScope, $scope, $state) {
       $scope.hideBroadcastIcons = true;
       $scope.pageTitle = 'Settings';
     }
+
+    if(toState.url === '/individualChat') $scope.hideNavBar = true;
+
+    if(toState.url === '/groupMessagePage') $scope.hideNavBar = true;
+
+    if(toState.url === '/individualBroadcast') $scope.hideNavBar = true;
   });
 
   $scope.toSettingsPage = function () {

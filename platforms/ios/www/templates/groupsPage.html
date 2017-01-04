@@ -1,16 +1,4 @@
-<ion-view title="GroupsPage" hide-nav-bar="true" id="page3">
-
-  <ion-header-bar align-title="center" class="bar-light">
-    <div class="buttons">
-      <button class="button button-energized icon-left ion-android-settings headerButton" ng-click="toSettingsPage()"></button>
-    </div>
-    <h1 class="title whinnyHeader">Whinny</h1>
-
-    <div class="buttons">
-      <button class="button button-energized icon-right ion-android-search headerButton" ng-click="goToGroupSearchPage()"></button>
-      <button class="button button-energized icon-right ion-android-create headerButton" ng-click="createNewGroup()"></button>
-    </div>
-  </ion-header-bar>
+<ion-view title="GroupsPage" hide-nav-bar="true" id="GroupsPage">
 
   <p ng-if="groupsTutorial" class="triangle-border tutorialBubble groupsTutorial">
     <button class="button button-energized ion-android-close tutorialX" ng-click="acceptGroupsTutorial()"></button>
@@ -22,8 +10,7 @@
     <button class="button button-block button-energized" ng-click="acceptGroupsTutorial()">Neat!</button>
   </p>
 
-  <ion-content padding="true" class="manual-ios-statusbar-padding">
-
+  <ion-content padding="true" class="has-header">
 
     <div ng-repeat="group in groupApplications"   ng-hide="groupApplications.noCurrentApplications">
       <ion-list ng-if="group.applications.length > 0">
