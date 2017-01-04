@@ -57,6 +57,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
     joinGroup: joinGroup,
     leaveGroup: leaveGroup,
+    applyToGroup: applyToGroup,
 
     getBroadcastSearchObjects: getBroadcastSearchObjects,
     updateSearchBroadcastObjects: updateSearchBroadcastObjects,
@@ -478,6 +479,17 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
   function leaveGroup(group_id) {
     var url = 'https://whinny-server.herokuapp.com/leaveGroup/';
+    var data = {
+      user_id: currentUser.user_id,
+      group_id: group_id
+    }
+    return $http.post(url, data).then(function (res) {
+      return res.data;
+    })
+  }
+
+  function applyToGroup(group_id) {
+    var url = 'https://whinny-server.herokuapp.com/applyToGroup/';
     var data = {
       user_id: currentUser.user_id,
       group_id: group_id
