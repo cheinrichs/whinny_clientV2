@@ -82,10 +82,15 @@ function ($rootScope, $scope, $state) {
     }
 
     if(toState.url === '/individualChat') $scope.hideNavBar = true;
-
     if(toState.url === '/groupMessagePage') $scope.hideNavBar = true;
-
     if(toState.url === '/individualBroadcast') $scope.hideNavBar = true;
+    if(toState.url === '/welcomePage') $scope.hideNavBar = true;
+    if(toState.url === '/disciplines') $scope.hideNavBar = true;
+    if(toState.url === '/termsPage') $scope.hideNavBar = true;
+    if(toState.url === '/newUserCreation') $scope.hideNavBar = true;
+    if(toState.url === '/confirmationPage') $scope.hideNavBar = true;
+    if(toState.url === '/loginPage') $scope.hideNavBar = true;
+    if(toState.url === '/newUserPhoto') $scope.hideNavBar = true;
   });
 
   $scope.toSettingsPage = function () {
