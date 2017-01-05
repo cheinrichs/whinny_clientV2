@@ -7,7 +7,7 @@
       <img ng-src="{{broadcastObject.broadcast_photo}}" class="individualBroadcastPortrait" alt="">
     </div>
 
-    <ion-content class="has-header has-footer chatScreen">
+    <ion-content class="has-header has-footer chatScreen" on-swipe-right="backToBroadcastsPage()">
 
       <div ng-repeat="message in broadcastMessages">
         <div ng-show="message.to_broadcast === currentBroadcast_id">
@@ -20,7 +20,7 @@
               <h2>{{message.broadcast_title}}</h2>
               <p>{{message.broadcast_message}}</p>
             </div>
-            <div class="item">
+            <div class="item" ng-if="message.link_text.length > 0">
               <a class="broadcastCardLink" ng-click="goToLink(message.link_url)">{{message.link_text}}</a>
             </div>
           </div>

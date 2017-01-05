@@ -1,12 +1,12 @@
 <ion-view title="DisciplineSelect" hide-nav-bar="true" id="disciplineSelect" class="nonTabPagePadding">
 
   <div class="bar bar-header bar-energized">
-    <a ng-hide="data.turnOffBackButton" class="button icon-left ion-arrow-left-c button-energized" ng-click="backToSettingsPage()"></a>
+    <a ng-hide="data.turnOffBackButton" class="button icon-left ion-chevron-left button-energized" ng-click="backToSettingsPage()"></a>
     <h1 class="title chatTitle">Interests</h1>
     <div class="chatSubheader"></div>
   </div>
 
-  <ion-content class="has-header">
+  <ion-content class="has-header" on-swipe-right="backToSettingsPage()">
     <div class="row">
       <div class="col">
         Please select your mane interests (see what we did there?)

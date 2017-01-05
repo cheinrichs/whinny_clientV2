@@ -10336,7 +10336,14 @@ a.button {
   background-image: url("../img/emoji/DressageHorse.png"); }
 
 .DrivingHorseEButton {
-  background-image: url("../img/emoji/DrivingHorse.png"); }
+  background-image: url("../img/emoji/DrivingHorse.png");
+  background-color: white;
+  background-size: 50px 50px !important;
+  width: 50px !important;
+  height: 45px !important;
+  background-repeat: no-repeat;
+  position: relative;
+  top: -15px; }
 
 .EnglishSaddleEButton {
   background-image: url("../img/emoji/EnglishSaddle.png"); }
@@ -10423,7 +10430,7 @@ a.button {
   background-image: url("../img/emoji/WesternSaddle.png"); }
 
 .WheelbarrowEButton {
-  background-image: url("../img/emoji/WheelBarrow.png"); }
+  background-image: url("../img/emoji/Wheelbarrow.png"); }
 
 .emojiButton {
   background-size: 35px 35px;

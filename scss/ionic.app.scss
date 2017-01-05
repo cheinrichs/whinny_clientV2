@@ -607,6 +607,13 @@ $tabs-height:                     56px;
 }
 .DrivingHorseEButton {
   background-image: url('../img/emoji/DrivingHorse.png');
+  background-color: white;
+  background-size: 50px 50px !important;
+  width: 50px !important;
+  height: 45px !important;
+  background-repeat: no-repeat;
+  position: relative;
+  top: -15px;
 }
 .EnglishSaddleEButton {
   background-image: url('../img/emoji/EnglishSaddle.png');
@@ -693,7 +700,7 @@ $tabs-height:                     56px;
   background-image: url('../img/emoji/WesternSaddle.png');
 }
 .WheelbarrowEButton {
-  background-image: url('../img/emoji/WheelBarrow.png');
+  background-image: url('../img/emoji/Wheelbarrow.png');
 }
 
 .emojiButton {

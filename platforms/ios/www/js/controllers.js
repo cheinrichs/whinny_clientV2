@@ -91,6 +91,7 @@ function ($rootScope, $scope, $state) {
     if(toState.url === '/confirmationPage') $scope.hideNavBar = true;
     if(toState.url === '/loginPage') $scope.hideNavBar = true;
     if(toState.url === '/newUserPhoto') $scope.hideNavBar = true;
+    if(toState.url === '/groupProfilePage') $scope.hideNavBar = true;
   });
 
   $scope.toSettingsPage = function () {
@@ -643,7 +644,6 @@ function ($scope, $state, $stateParams, messageFactory) {
 
 .controller('groupSearchCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
 function ($scope, $state, $stateParams, messageFactory) {
-  console.log("in group search");
   $scope.groupSearchObjects = messageFactory.getSearchGroupObjects();
 
   messageFactory.updateSearchGroupObjects().then(function (res) {
@@ -655,7 +655,6 @@ function ($scope, $state, $stateParams, messageFactory) {
   }
 
   $scope.goToGroupPage = function (group) {
-    console.log(group);
     $state.go('groupProfilePage', { group: group });
   }
 
@@ -680,6 +679,9 @@ function ($scope, $state, $stateParams, messageFactory) {
     console.log("requesting join group");
     //TODO
     $scope.data.requestSent = true;
+    messageFactory.applyToGroup(group_id).then(function (res) {
+      console.log(res);
+    })
   }
 
   $scope.backToGroupSearch = function () {
