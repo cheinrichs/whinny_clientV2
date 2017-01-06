@@ -92,6 +92,7 @@ function ($rootScope, $scope, $state) {
     if(toState.url === '/loginPage') $scope.hideNavBar = true;
     if(toState.url === '/newUserPhoto') $scope.hideNavBar = true;
     if(toState.url === '/groupProfilePage') $scope.hideNavBar = true;
+    if(toState.url === '/broadcastSearch') $scope.hideNavBar = true;
   });
 
   $scope.toSettingsPage = function () {

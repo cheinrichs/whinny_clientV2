@@ -20,7 +20,7 @@
           <!-- <i ng-if="convo.unread" class="messageIcon newMessageIcon icon ion-record energized"></i> -->
           {{message.content}}
           <span class="convoSubject">{{broadcast.broadcast_name}}</span>
-          <p></p>
+          <p>{{broadcast.broadcast_description}}</p>
           <ion-option-button class="button-assertive"
                              ng-click="unsubscribeFromBroadcast(broadcast.broadcast_id)">
             Unsubscribe

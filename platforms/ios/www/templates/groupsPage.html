@@ -14,7 +14,7 @@
 
     <div ng-repeat="group in groupApplications"   ng-hide="groupApplications.noCurrentApplications">
       <ion-list ng-if="group.applications.length > 0">
-        {{group.group_name | nameShortener}} Applications -
+        {{group.group_name}} Applications -
       </ion-list>
       <div ng-repeat="app in group.applications">
         <div class="item item-button-right">
@@ -37,16 +37,20 @@
         New Group Invitations -
       </ion-list>
       <div ng-repeat="inv in groupInvitations">
-        <div class="item item-button-right">
-          Join {{inv.group_name | nameShortener}}?
-          <div class="buttons">
-            <button class="button button-outline button-energized" ng-click="acceptGroupInvitation(inv.user_id, inv.group_id)">
-              Join
-            </button>
+        <div class="item item-text-wrap">
+          <div class="row groupInvitationsRow">
+            <div class="col col-50">
+              {{inv.group_name}}?
+            </div>
+            <div class="col col-50 groupInvitationsButtons">
+              <button class="button button-outline button-energized" ng-click="acceptGroupInvitation(inv.user_id, inv.group_id)">
+                Join
+              </button>
 
-            <button class="button button-outline button-energized" ng-click="declineGroupInvitation(inv.invitation_id)">
-              Ignore
-            </button>
+              <button class="button button-outline button-energized" ng-click="declineGroupInvitation(inv.invitation_id)">
+                Ignore
+              </button>
+            </div>
           </div>
         </div>
       </div>

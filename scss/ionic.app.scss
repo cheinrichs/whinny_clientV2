@@ -194,25 +194,25 @@ $tabs-height:                     56px;
   font-size: 16px;
 }
 
-.platform-android .broadcastTutorial {
-  top: 305px;
+.platform-android .chatTutorial {
+  top: 385px;
 }
 .platform-android .groupsTutorial {
-  top: 325px;
+  top: 365px;
 }
-.platform-android .chatTutorial {
+.platform-android .broadcastTutorial {
   top: 345px;
 }
 
 .broadcastTutorial {
-  top: 360px;
+  top: 350px;
 }
 .groupsTutorial {
-  top: 380px;
+  top: 370px;
 }
 
 .chatTutorial {
-  top: 400px;
+  top: 390px;
 }
 
 .popup {
@@ -528,7 +528,9 @@ $tabs-height:                     56px;
     background-image: linear-gradient(180deg, #ffaa3b, #ffaa3b 50%, transparent 50%); }
 
 .chatTitle{
-  font-size: 25px !important;
+  font-size: 16px !important;
+  position: relative;
+  left: -45px !important;
 }
 
 .convoSubject{
@@ -536,7 +538,13 @@ $tabs-height:                     56px;
   font-weight: bold;
 }
 
+.groupInvitationsRow {
+  margin: -10px;
+}
 
+.groupInvitationsButtons {
+  margin-left: 38px;
+}
 
 .chatScreen {
   padding: 40px 0px 60px 0px;

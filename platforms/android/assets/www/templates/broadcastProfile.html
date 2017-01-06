@@ -2,7 +2,7 @@
   <div class="content-container">
 
     <div class="bar bar-header bar-energized">
-      <a class="button icon-left ion-arrow-left-c button-energized" ng-click="backToBroadcastSearch()"></a>
+      <a class="button icon-left ion-chevron-left button-energized" ng-click="backToBroadcastSearch()"></a>
       <h1 class="title">{{data.broadcast.broadcast_name}}</h1>
       <div class="chatSubheader"></div>
     </div>
@@ -20,6 +20,7 @@
 
         <div class="item item-text-wrap">
           {{data.broadcast.broadcast_discipline}}
+          {{data.broadcast.broadcast_description}}
         </div>
 
         <a class="item item-icon-left energized" ng-click="subscribeToBroadcast(data.broadcast.broadcast_id)">
