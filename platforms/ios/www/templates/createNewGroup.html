@@ -94,12 +94,11 @@
       </div>
 
       <ul class="list" ng-show="groupData.memberSearch.length > 0">
-        <div ng-repeat="contact in groupData.contacts | filter:groupData.memberSearch">
-          <li ng-repeat="phone in contact.phoneNumbers" class="item" ng-click="groupData.inviteToGroup(contact.name.formatted, phone.value)">
+        <div ng-repeat="contact in groupData.contacts | filter:groupData.memberSearch | limitTo:4">
+          <li ng-repeat="phone in contact.phoneNumbers" class="item animated fadeInUp" ng-click="groupData.inviteToGroup(contact.name.formatted, phone.value)">
             {{contact.name.formatted}}: {{phone.value}}
           </li>
         </div>
-
       </ul>
 
       <div class="errors" ng-repeat="error in groupData.errors">

@@ -1098,18 +1098,18 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
 
   $scope.data = {};
   $scope.data.newChatRecipient = "";
-  $scope.data.contactsHidden = false;
+  $scope.data.contactsHidden = true;
 
   //Load all contacts into the contacts factory
   $scope.data.contacts = contactsFactory.getContacts();
 
-  $scope.data.chosenContact = {};
+  $scope.data.chosenPhone;
 
   $scope.data.errors = [];
 
-  $scope.data.chooseContact = function (contact) {
-    $scope.data.chosenContact = contact;
-    $scope.data.newChatRecipient = contact.name.formatted;
+  $scope.data.chooseContact = function (name, phone) {
+    $scope.data.chosenPhone = phone;
+    $scope.data.newChatRecipient = name;
     $scope.data.contactsHidden = true;
   }
 
@@ -1119,7 +1119,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
 
   $scope.createNewChatMessage = function () {
     // createNewChatMessage(to_phone, content)
-    if(Object.keys($scope.data.chosenContact).length === 0){
+    if(!$scope.data.chosenPhone){
       $scope.data.errors.push('Please enter a valid recipient!');
     } else {
       var i = $scope.data.errors.indexOf('Please enter a valid recipient!');
@@ -1134,7 +1134,9 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
     if($scope.data.errors.length > 0){
       return;
     }
-    var parsedPhone = $scope.data.chosenContact.phoneNumbers[0].value.replace(/[\s()-]/g, "");
+    var parsedPhone = $scope.data.chosenPhone.replace(/[\s()-]/g, "");
+    console.log("parsedPhone");
+    console.log(parsedPhone);
     messageFactory.createNewChatMessage(parsedPhone, $scope.chatMessage).then(function (res) {
       messageFactory.updateChatMessages().then(function (convos) {
         console.log("convos");
@@ -1279,21 +1281,17 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $cordov
     if($scope.groupData.errors.length === 0){
       //TODO refactor this
       if($scope.groupData.createGroupInfo.privacyStatus === 'Public'){
-        console.log("group is public");
         $scope.groupData.createGroupInfo.is_private = false;
         $scope.groupData.createGroupInfo.hidden = false;
       }
 
       if($scope.groupData.createGroupInfo.privacyStatus === 'Private'){
-        console.log("group is private");
         $scope.groupData.createGroupInfo.is_private = true;
         $scope.groupData.createGroupInfo.hidden = false;
       }
       if($scope.groupData.createGroupInfo.privacyStatus === 'Hidden'){
-        console.log("group is hidden ");
         $scope.groupData.createGroupInfo.is_private = false;
         $scope.groupData.createGroupInfo.hidden = true;
-        console.log($scope.groupData.createGroupInfo);
       }
 
       //Create group with placeholder link in profile pic
