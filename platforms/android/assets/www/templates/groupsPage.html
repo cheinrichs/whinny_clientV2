@@ -14,7 +14,7 @@
 
     <div ng-repeat="group in groupApplications"   ng-hide="groupApplications.noCurrentApplications">
       <ion-list ng-if="group.applications.length > 0">
-        {{group.group_name}} Applications -
+        {{group.group_name}} requests -
       </ion-list>
       <div ng-repeat="app in group.applications">
         <div class="item item-button-right">

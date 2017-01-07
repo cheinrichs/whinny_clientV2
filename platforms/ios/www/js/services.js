@@ -367,16 +367,9 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function createNewGroup(groupData) {
-    // messageFactory.createNewGroup(groupName, is_private, hidden, groupZip, description, imageLink, phoneNumbers);
-    console.log("creating new group with ");
-    for(var key in groupData){
-      console.log(groupData[key]);
-    }
     var url = 'https://whinny-server.herokuapp.com/createNewGroup';
-    console.log(currentUser);
     groupData.fromUser = currentUser
-    groupData.hidden = false;
-
+    console.log("creating new group with ", groupData);
     return $http.post(url, groupData).then(function (res) {
       console.log("got the res", res);
       return res;

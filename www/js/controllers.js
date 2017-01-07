@@ -1268,6 +1268,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $cordov
     } else if($scope.groupData.createGroupInfo.description.length === 0){
       $scope.groupData.errors.push('Please enter a description for your group');
     }
+    //TODO what?
     if(!$scope.groupData.createGroupInfo){
       $scope.groupData.errors.push('Please decide if your group will be private, public or hidden');
     }
@@ -1276,26 +1277,23 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $cordov
     }
 
     if($scope.groupData.errors.length === 0){
-      console.log($scope.groupData.errors);
-      $scope.hideCreateGroupButton = true;
-      console.log($scope.groupData.createGroupInfo);
-
       //TODO refactor this
       if($scope.groupData.createGroupInfo.privacyStatus === 'Public'){
+        console.log("group is public");
         $scope.groupData.createGroupInfo.is_private = false;
-        $scope.groupData.createGroupInfo.is_public = true;
         $scope.groupData.createGroupInfo.hidden = false;
       }
 
       if($scope.groupData.createGroupInfo.privacyStatus === 'Private'){
+        console.log("group is private");
         $scope.groupData.createGroupInfo.is_private = true;
-        $scope.groupData.createGroupInfo.is_public = false;
         $scope.groupData.createGroupInfo.hidden = false;
       }
       if($scope.groupData.createGroupInfo.privacyStatus === 'Hidden'){
+        console.log("group is hidden ");
         $scope.groupData.createGroupInfo.is_private = false;
-        $scope.groupData.createGroupInfo.is_public = false;
         $scope.groupData.createGroupInfo.hidden = true;
+        console.log($scope.groupData.createGroupInfo);
       }
 
       //Create group with placeholder link in profile pic
@@ -1306,7 +1304,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $cordov
         photoFactory.uploadGroupProfilePhoto(filename, $scope.groupData.imgURI);
         //update group pages
         messageFactory.updateGroupMessages().then(function () {
-          $scope.groupData.groupName = "";
+          $scope.groupData.createGroupInfo.groupName = "";
           $scope.groupData.createGroupInfo.is_private = false;
           $scope.groupData.createGroupInfo.is_public = false;
           $scope.groupData.createGroupInfo.hidden = false;

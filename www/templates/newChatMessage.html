@@ -24,6 +24,7 @@
         <ul class="list" ng-show="data.newChatRecipient.length > 0">
           <li ng-repeat="contact in data.contacts | filter:data.newChatRecipient" class="item" ng-click="data.chooseContact(contact)">
             {{contact.name.formatted}}
+            {{contact}}
           </li>
         </ul>
       </div>
