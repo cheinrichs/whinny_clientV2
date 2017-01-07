@@ -7,9 +7,6 @@
         <div class="profilePicBorder">
           <img ng-hide="data.imgURI !== undefined" ng-src="{{data.currentUser.portrait_link}}" class="groupProfilePic" alt=""> <!--TODO show placeholder and format -->
           <img ng-hide="data.imgURI === undefined" ng-src="{{data.imgURI}}" class="groupProfilePic" alt=""> <!--TODO show placeholder and format -->
-          <br>
-          <br>
-          {{data.imgURI}}
         </div>
         <div class="row">
           <button class="col-50 button button-tangerine" ng-click="data.takePhoto()">Take New Photo</button>
