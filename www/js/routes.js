@@ -133,6 +133,7 @@ angular.module('app.routes', [])
     params: {
       group_id: { dynamic: true }
     },
+    cache: false,
     templateUrl: 'templates/individualGroup.html'
   })
 
@@ -158,6 +159,7 @@ angular.module('app.routes', [])
 
   .state('individualBroadcast', {
     url: '/individualBroadcast',
+    cache: false,
     params: {
       broadcast_id: { dynamic: true }
     },
@@ -172,16 +174,19 @@ angular.module('app.routes', [])
 
   .state('newChatMessage', {
     url: '/newChatMessage',
+    cache: false,
     templateUrl: 'templates/newChatMessage.html'
   })
 
   .state('createNewGroup', {
     url: '/createNewGroup',
+    cache: false,
     templateUrl: 'templates/createNewGroup.html'
   })
 
   .state('createNewBroadcast', {
     url: '/createNewBroadcast',
+    cache: false,
     templateUrl: 'templates/createNewBroadcast.html'
   })
 

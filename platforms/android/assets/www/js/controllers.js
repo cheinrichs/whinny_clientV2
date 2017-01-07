@@ -17,6 +17,7 @@ function ($rootScope, $scope, $state) {
   $scope.pageTitle = 'Whinny';
 
   $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+    console.log(toState.url);
     if(toState.url === "/chatTab"){
       $scope.hideNavBar = false;
       $scope.hideGroupIcons = true;
@@ -1247,6 +1248,8 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $cordov
   }
 
   $scope.createGroup = function () {
+    console.log($scope.groupData.createGroupInfo);
+
     $scope.groupData.errors = [];
     if(!$scope.groupData.imgURI) $scope.groupData.errors.push('Please select a group Profile Image');
     if(!$scope.groupData.createGroupInfo.groupName){
@@ -1265,17 +1268,36 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $cordov
     } else if($scope.groupData.createGroupInfo.description.length === 0){
       $scope.groupData.errors.push('Please enter a description for your group');
     }
-    if(!$scope.groupData.createGroupInfo.is_private && !$scope.groupData.createGroupInfo.is_public && !$scope.groupData.createGroupInfo.hidden){
+    if(!$scope.groupData.createGroupInfo){
       $scope.groupData.errors.push('Please decide if your group will be private, public or hidden');
     }
     if(!$scope.groupData.createGroupInfo.discipline){
       $scope.groupData.errors.push('Please select a discipline for your group');
     }
 
-
     if($scope.groupData.errors.length === 0){
       console.log($scope.groupData.errors);
       $scope.hideCreateGroupButton = true;
+      console.log($scope.groupData.createGroupInfo);
+
+      //TODO refactor this
+      if($scope.groupData.createGroupInfo.privacyStatus === 'Public'){
+        $scope.groupData.createGroupInfo.is_private = false;
+        $scope.groupData.createGroupInfo.is_public = true;
+        $scope.groupData.createGroupInfo.hidden = false;
+      }
+
+      if($scope.groupData.createGroupInfo.privacyStatus === 'Private'){
+        $scope.groupData.createGroupInfo.is_private = true;
+        $scope.groupData.createGroupInfo.is_public = false;
+        $scope.groupData.createGroupInfo.hidden = false;
+      }
+      if($scope.groupData.createGroupInfo.privacyStatus === 'Hidden'){
+        $scope.groupData.createGroupInfo.is_private = false;
+        $scope.groupData.createGroupInfo.is_public = false;
+        $scope.groupData.createGroupInfo.hidden = true;
+      }
+
       //Create group with placeholder link in profile pic
       messageFactory.createNewGroup($scope.groupData.createGroupInfo).then(function (res) {
         console.log("attempting to upload photo");
@@ -1286,7 +1308,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $cordov
         messageFactory.updateGroupMessages().then(function () {
           $scope.groupData.groupName = "";
           $scope.groupData.createGroupInfo.is_private = false;
-          $scope.groupData.createGroupInfo.is_private = false;
+          $scope.groupData.createGroupInfo.is_public = false;
           $scope.groupData.createGroupInfo.hidden = false;
           $scope.groupData.createGroupInfo.zip = "";
           $scope.groupData.createGroupInfo.description = "";

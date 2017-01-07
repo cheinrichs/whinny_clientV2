@@ -9975,23 +9975,23 @@ a.button {
   text-align: center;
   font-size: 16px; }
 
-.platform-android .broadcastTutorial {
-  top: 305px; }
+.platform-android .chatTutorial {
+  top: 385px; }
 
 .platform-android .groupsTutorial {
-  top: 325px; }
+  top: 365px; }
 
-.platform-android .chatTutorial {
+.platform-android .broadcastTutorial {
   top: 345px; }
 
 .broadcastTutorial {
-  top: 370px; }
+  top: 350px; }
 
 .groupsTutorial {
-  top: 390px; }
+  top: 370px; }
 
 .chatTutorial {
-  top: 410px; }
+  top: 390px; }
 
 .popup {
   border-radius: 5px !important; }

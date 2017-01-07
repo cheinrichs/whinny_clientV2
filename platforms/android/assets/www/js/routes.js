@@ -158,6 +158,7 @@ angular.module('app.routes', [])
 
   .state('individualBroadcast', {
     url: '/individualBroadcast',
+    cache: false,
     params: {
       broadcast_id: { dynamic: true }
     },
