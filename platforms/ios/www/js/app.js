@@ -60,7 +60,7 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
 
     //All the possible strings for receiving a push notification button text
 
-    var possibleButtonTexts = ['Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Great...', 'Cool', 'Ride\'em doggies', 'Affirmative', 'I tip my hat', 'Simply marvelous', 'Okey Dokey', 'Good', 'Super', 'Dagnabbit!', 'Hot Diggity Dog!'];
+    var possibleButtonTexts = ['Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Great...', 'Cool', 'Affirmative', 'I tip my hat', 'Simply marvelous', 'Okey Dokey', 'Good', 'Super', 'Dagnabbit!', 'Hot Diggity Dog!'];
     //used to randomly choose text for the button
     function getRandomArbitrary(min, max) {
       return Math.floor(Math.random() * (max - min) + min);

@@ -829,20 +829,24 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   }, 10000);
 
   $scope.sendChatMessage = function () {
-    console.log("controller) sending message to ", $stateParams.convo.convoUser.user_id, $scope.chatMessage);
-    messageFactory.sendChatMessage($stateParams.convo.convoUser.user_id, $scope.chatMessage).then(function () {
-      $scope.chatMessage = "";
-      messageFactory.updateChatMessages().then(function (res) {
-        $scope.chatMessages = messageFactory.getChatMessages();
-        $scope.chatUsers = messageFactory.getUserObjects();
+    if($scope.chatMessage){
+      console.log("controller) sending message to ", $stateParams.convo.convoUser.user_id, $scope.chatMessage);
+      messageFactory.sendChatMessage($stateParams.convo.convoUser.user_id, $scope.chatMessage).then(function () {
+        $scope.chatMessage = "";
+        messageFactory.updateChatMessages().then(function (res) {
+          $scope.chatMessages = messageFactory.getChatMessages();
+          $scope.chatUsers = messageFactory.getUserObjects();
 
-        for (var i = 0; i < $scope.chatMessages.length; i++) {
-          if($scope.chatMessages[i].convoUser.user_id === $stateParams.convo.convoUser.user_id) $scope.convo = $scope.chatMessages[i];
-        }
-        console.log("updated");
-        console.log($scope.chatMessages);
-      });
-    })
+          for (var i = 0; i < $scope.chatMessages.length; i++) {
+            if($scope.chatMessages[i].convoUser.user_id === $stateParams.convo.convoUser.user_id) $scope.convo = $scope.chatMessages[i];
+          }
+          console.log("updated");
+          console.log($scope.chatMessages);
+        });
+      })
+    } else {
+      console.log("enter a message!");
+    }
   }
 
   $scope.addEmoji = function (emoji) {
@@ -908,15 +912,17 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   }
 
   $scope.sendGroupMessage = function () {
-    if($scope.groupMessage.length > 0){
-      messageFactory.sendGroupMessage($stateParams.group_id, $scope.groupObjects[$scope.group_id].group_name, $scope.groupMessage).then(function () {
-        $scope.groupMessage = "";
-        messageFactory.updateGroupMessages().then(function(){
-          $scope.groupMessages = messageFactory.getGroupMessages();
-          $scope.groupObjects = messageFactory.getGroupObjects();
-          $scope.userObjects = messageFactory.getGroupUserObjects();
+    if($scope.groupMessage){
+      if($scope.groupMessage.length > 0){
+        messageFactory.sendGroupMessage($stateParams.group_id, $scope.groupObjects[$scope.group_id].group_name, $scope.groupMessage).then(function () {
+          $scope.groupMessage = "";
+          messageFactory.updateGroupMessages().then(function(){
+            $scope.groupMessages = messageFactory.getGroupMessages();
+            $scope.groupObjects = messageFactory.getGroupObjects();
+            $scope.userObjects = messageFactory.getGroupUserObjects();
+          })
         })
-      })
+      }
     }
   }
 
