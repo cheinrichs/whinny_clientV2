@@ -235,6 +235,20 @@ $tabs-height:                     56px;
   margin-top: 5px;
 }
 
+.groupInfoTitle {
+  text-align: center;
+}
+.groupInfoDescription {
+  text-align: center;
+}
+.groupInfoPic {
+  margin: 10px 20px;
+  height: 300px;
+  width: 300px;
+  border-radius: 5px;
+  text-align: center;
+}
+
 .errors {
   color: red;
   text-align: center;

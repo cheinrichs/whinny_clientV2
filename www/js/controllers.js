@@ -696,6 +696,123 @@ function ($scope, $state, $stateParams, messageFactory) {
 
 }])
 
+.controller('groupInfoCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$ionicPopup',
+function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicPopup) {
+  console.log("group INFO CTRL");
+  console.log($stateParams.group_id);
+  $scope.admin = false;
+
+  $scope.currentUser = messageFactory.getCurrentUser();
+
+  messageFactory.getGroupMembers($stateParams.group_id).then(function (res) {
+    $scope.groupMembers = res;
+
+    for (var i = 0; i < $scope.groupMembers.length; i++) {
+      if($scope.groupMembers[i].user_id === $scope.currentUser.user_id){
+        if($scope.groupMembers[i].admin){
+          $scope.admin = true;
+          console.log("admin");
+        }
+      }
+    }
+  })
+
+  $scope.currentUser = messageFactory.getCurrentUser();
+  $scope.group_id = $stateParams.group_id;
+
+  $scope.groupMessages = messageFactory.getGroupMessages();
+  $scope.groupObjects = messageFactory.getGroupObjects();
+  $scope.userObjects = messageFactory.getGroupUserObjects();
+
+  $scope.data = {};
+  $scope.data.newChatRecipient = "";
+  $scope.data.contactsHidden = false;
+
+  //Load all contacts into the contacts factory
+  $scope.data.contacts = contactsFactory.getContacts();
+
+  $scope.data.chosenContact = {};
+
+  $scope.data.errors = [];
+
+  $scope.data.chooseContact = function (contact) {
+    $scope.data.chosenContact = contact;
+    $scope.data.newChatRecipient = contact.name.formatted;
+    $scope.data.contactsHidden = true;
+  }
+
+  $scope.data.showContacts = function () {
+    $scope.data.contactsHidden = false;
+  }
+
+  $scope.editGroupName = function () {
+    console.log("edit group name");
+    $ionicPopup.prompt({
+      title: 'Edit Group Name',
+      inputType: 'text',
+      inputPlaceholder: 'New Group Name',
+      okType: 'button-tangerine'
+    }).then(function(res) {
+      //Sets the current version in scope to the new name
+      $scope.groupObjects[$scope.group_id].group_name = res;
+      //Sets the current version on the server
+      messageFactory.updateGroupName($scope.group_id, res).then(function (res) {
+        console.log(res);
+        messageFactory.updateGroupMessages().then(function () {
+          console.log("updated group stuff");
+        })
+      })
+
+    });
+  }
+
+  $scope.editGroupDescription = function () {
+    console.log("edit group description");
+    $ionicPopup.prompt({
+      title: 'Edit Group Description',
+      inputType: 'text',
+      inputPlaceholder: 'New Group Description ',
+      okType: 'button-tangerine'
+    }).then(function(res) {
+      //Sets the current version in scope to the new name
+      $scope.groupObjects[$scope.group_id].description = res;
+      //Sets the current version on the server
+      messageFactory.updateGroupDescription($scope.group_id, res).then(function (res) {
+        console.log(res);
+      })
+    });
+  }
+
+  $scope.leaveGroup = function (group_name) {
+    console.log("leaving group", $stateParams.group_id);
+
+    var confirmPopup = $ionicPopup.confirm({
+     title: 'Are you sure you want to leave ' + group_name + '?',
+     cancelText: 'Don\'t Leave', // String (default: 'Cancel'). The text of the Cancel button.
+     okText: 'Leave', // String (default: 'OK'). The text of the OK button.
+     okType: 'button-tangerine', // String (default: 'button-positive'). The type of the OK button.
+    });
+
+    confirmPopup.then(function(res) {
+     if(res) {
+       console.log("leaving group");
+       messageFactory.leaveGroup($stateParams.group_id).then(function () {
+         $state.go('tabsController.groupsPage');
+       })
+     } else {
+       console.log('Not Leaving');
+     }
+    });
+
+  }
+
+  $scope.data.backToGroupPage = function () {
+    //return to the group messages page from whence you came
+    $state.go('groupMessagePage', { group_id: $stateParams.group_id });
+  }
+
+}])
+
 .controller('broadcastsPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
 function ($scope, $state, $stateParams, messageFactory) {
   $scope.currentUser = messageFactory.getCurrentUser();
@@ -868,11 +985,9 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
 function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   $scope.currentUser = messageFactory.getCurrentUser();
   $scope.group_id = $stateParams.group_id;
-  //get group messages
+
   $scope.groupMessages = messageFactory.getGroupMessages();
-  //get group userObjects
   $scope.groupObjects = messageFactory.getGroupObjects();
-  //get group objects
   $scope.userObjects = messageFactory.getGroupUserObjects();
 
   $scope.individualGroupMessages = [];
@@ -924,6 +1039,11 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
         })
       }
     }
+  }
+
+  $scope.goToGroupInfo = function () {
+    console.log($stateParams.group_id);
+    $state.go('groupInfo', { group_id: $stateParams.group_id });
   }
 
   $scope.backToGroupsPage = function (){

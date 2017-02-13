@@ -12,6 +12,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
     getGroupObjects: getGroupObjects,
     getGroupUserObjects: getGroupUserObjects,
+    getGroupMembers: getGroupMembers,
 
     getBroadcastObjects: getBroadcastObjects,
     getBroadcastObjectById: getBroadcastObjectById,
@@ -58,6 +59,9 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     joinGroup: joinGroup,
     leaveGroup: leaveGroup,
     applyToGroup: applyToGroup,
+
+    updateGroupName: updateGroupName,
+    updateGroupDescription: updateGroupDescription,
 
     getBroadcastSearchObjects: getBroadcastSearchObjects,
     updateSearchBroadcastObjects: updateSearchBroadcastObjects,
@@ -193,6 +197,13 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
   function getGroupUserObjects() {
     return groupUserObjects;
+  }
+
+  function getGroupMembers(group_id) {
+    var url = 'https://whinny-server.herokuapp.com/groupMembers/' + group_id;
+    return $http.get(url).then(function (res) {
+      return res.data;
+    })
   }
 
   function getBroadcastObjects() {
@@ -486,6 +497,28 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     var data = {
       user_id: currentUser.user_id,
       group_id: group_id
+    }
+    return $http.post(url, data).then(function (res) {
+      return res.data;
+    })
+  }
+
+  function updateGroupName(group_id, newGroupName) {
+    var url = 'https://whinny-server.herokuapp.com/updateGroupName';
+    var data = {
+      group_id: group_id,
+      groupName: newGroupName
+    }
+    return $http.post(url, data).then(function (res) {
+      return res.data;
+    })
+  }
+
+  function updateGroupDescription(group_id, newGroupDescription) {
+    var url = 'https://whinny-server.herokuapp.com/updateGroupDescription';
+    var data = {
+      group_id: group_id,
+      groupDescription: newGroupDescription
     }
     return $http.post(url, data).then(function (res) {
       return res.data;

@@ -190,6 +190,16 @@ angular.module('app.routes', [])
     templateUrl: 'templates/createNewBroadcast.html'
   })
 
+  .state('groupInfo', {
+    controller: 'groupInfoCtrl',
+    url: '/groupInfo',
+    cache: false,
+    params: {
+      group_id: { dynamic: true }
+    },
+    templateUrl: 'templates/groupInfo.html'
+  })
+
 
 $urlRouterProvider.otherwise('/welcomePage')
 

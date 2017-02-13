@@ -1,0 +1,64 @@
+<ion-view title="GroupsPage" hide-nav-bar="true" id="page3">
+
+  <div class="bar bar-header bar-energized">
+    <a class="button icon-left ion-arrow-left-c button-energized" ng-click="data.backToGroupPage()"></a>
+    <h1 class="title chatTitle">{{groupObjects[group_id].group_name | nameShortener}}</h1>
+  </div>
+
+  <ion-content padding="true" class="manual-ios-statusbar-padding has-header">
+
+    <img class="groupInfoPic" ng-src="{{groupObjects[group_id].group_photo}}" alt="">
+
+    <div class="row" ng-if="admin">
+      <button class="col-50 button button-tangerine" ng-click="data.takePhoto()">Take New Photo</button>
+      <button class="col-50 button button-tangerine" ng-click="data.choosePhoto()">Choose New Photo</button>
+    </div>
+
+    <h1 class="groupInfoTitle">{{groupObjects[group_id].group_name}} <a ng-if="admin" ng-click="editGroupName()" href="">Edit</a></h1>
+
+    <p class="groupInfoDescription">{{groupObjects[group_id].description}} <a ng-if="admin" ng-click="editGroupDescription()" href="">Edit</a></p>
+
+    Group Members
+    <ion-list>
+
+      <ion-item ng-repeat="member in groupMembers" class="item item-avatar" ng-click="newPersonalMessage()">
+        <img ng-src="{{member.portrait_link}}" alt="">
+        <h3>{{member.first_name}} {{member.last_name}}</h3>
+
+        <i class="icon ion-close-round energized" ng-if="admin"></i>
+
+        <i class="icon ion-ribbon-b energized" ng-if="member.admin"></i>
+
+        <i class="icon ion-ribbon-b" ng-if='!member.admin && admin'></i>
+
+      </ion-item>
+
+    </ion-list>
+
+    Invite New Members
+    <div class="list">
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Contact Name or (xxx) xxx-xxxx</span>
+        <input type="text" placeholder="To:" ng-model="data.newChatRecipient" ng-change="data.showContacts()">
+      </label>
+    </div>
+
+    <div ng-repeat="error in data.errors">
+      {{error}}
+    </div>
+
+    <div ng-hide="data.contactsHidden">
+      <ul class="list" ng-show="data.newChatRecipient.length > 0">
+        <li ng-repeat="contact in data.contacts | filter:data.newChatRecipient" class="item" ng-click="data.chooseContact(contact)">
+          {{contact.name.formatted}}
+        </li>
+      </ul>
+    </div>
+
+
+    <button class="button button-block button-assertive" ng-click="leaveGroup(groupObjects[group_id].group_name)">Leave Group</button>
+    <button class="button button-block button-assertive" ng-if="admin">Delete Group</button>
+
+
+  </ion-content>
+</ion-view>

@@ -5,7 +5,7 @@
     <div class="bar bar-header bar-energized">
       <a class="button icon-left ion-chevron-left button-energized" ng-click="backToGroupsPage()"></a>
       <h1 class="title chatTitle">{{groupObjects[group_id].group_name | nameShortener}}</h1>
-      <img ng-src="{{groupObjects[group_id].group_photo}}" class="individualGroupPortrait" alt="">
+      <img ng-src="{{groupObjects[group_id].group_photo}}" class="individualGroupPortrait" alt="" ng-click="goToGroupInfo()">
     </div>
 
     <ion-content class="has-header has-footer chatScreen" scroll="false" keyboard-attach on-swipe-right="backToGroupsPage()">
