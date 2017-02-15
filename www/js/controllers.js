@@ -696,37 +696,31 @@ function ($scope, $state, $stateParams, messageFactory) {
 
 }])
 
-.controller('groupInfoCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$ionicPopup',
-function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicPopup) {
-  console.log("group INFO CTRL");
-  console.log($stateParams.group_id);
-  $scope.admin = false;
+.controller('groupInfoCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$ionicPopup', '$cordovaCamera', 'photoFactory', '$timeout',
+function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicPopup, $cordovaCamera, photoFactory, $timeout) {
 
+  $scope.admin = false;
+  $scope.group_id = $stateParams.group_id;
   $scope.currentUser = messageFactory.getCurrentUser();
 
   messageFactory.getGroupMembers($stateParams.group_id).then(function (res) {
     $scope.groupMembers = res;
 
+    //look through the user objects and check to see if you're an admin for this specific group
     for (var i = 0; i < $scope.groupMembers.length; i++) {
       if($scope.groupMembers[i].user_id === $scope.currentUser.user_id){
-        if($scope.groupMembers[i].admin){
-          $scope.admin = true;
-          console.log("admin");
-        }
+        if($scope.groupMembers[i].admin) $scope.admin = true;
       }
     }
   })
 
-  $scope.currentUser = messageFactory.getCurrentUser();
-  $scope.group_id = $stateParams.group_id;
-
-  $scope.groupMessages = messageFactory.getGroupMessages();
   $scope.groupObjects = messageFactory.getGroupObjects();
   $scope.userObjects = messageFactory.getGroupUserObjects();
 
   $scope.data = {};
   $scope.data.newChatRecipient = "";
   $scope.data.contactsHidden = false;
+  $scope.data.invited = [];
 
   //Load all contacts into the contacts factory
   $scope.data.contacts = contactsFactory.getContacts();
@@ -735,14 +729,135 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
 
   $scope.data.errors = [];
 
-  $scope.data.chooseContact = function (contact) {
-    $scope.data.chosenContact = contact;
-    $scope.data.newChatRecipient = contact.name.formatted;
-    $scope.data.contactsHidden = true;
+  $scope.data.takePhoto = function () {
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.imgURI = imageData;
+
+      var filename = $scope.group_id + '_GroupProfilePic.jpg'
+      photoFactory.uploadGroupProfilePhoto(filename, $scope.imgURI);
+
+      $timeout(function () {
+        console.log("updating scope");
+        $scope.$apply();
+      }, 500);
+
+    }, function (err) {
+        console.log("error in take photo");
+    });
+  }
+
+  $scope.data.choosePhoto = function () {
+    console.log("choosing photo");
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    }
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.imgURI = imageData;
+
+      var filename = $scope.group_id + '_GroupProfilePic.jpg'
+      photoFactory.uploadGroupProfilePhoto(filename, $scope.imgURI);
+
+      $timeout(function () {
+        console.log("updating scope");
+        $scope.$apply();
+      }, 500);
+
+    }, function (err) {
+      console.log("error has occurred in get picture");
+    })
+  }
+
+  $scope.removeUserFromGroup = function (group_id, user_id, first_name, last_name, group_name) {
+    console.log("remove " + user_id + " from group " + group_id);
+    var confirmPopup = $ionicPopup.confirm({
+     title: 'Are you sure you want to remove ' + first_name + " " + last_name + ' from ' + group_name + "?",
+     cancelText: 'Don\'t Remove', // String (default: 'Cancel'). The text of the Cancel button.
+     okText: 'Remove', // String (default: 'OK'). The text of the OK button.
+     okType: 'button-tangerine', // String (default: 'button-positive'). The type of the OK button.
+    });
+
+    confirmPopup.then(function(res) {
+      if(res) {
+        messageFactory.removeUserFromGroup(group_id, user_id).then(function () {
+          messageFactory.getGroupMembers($stateParams.group_id).then(function (res) {
+            $scope.groupMembers = res;
+
+            for (var i = 0; i < $scope.groupMembers.length; i++) {
+              if($scope.groupMembers[i].user_id === $scope.currentUser.user_id){
+                if($scope.groupMembers[i].admin){
+                  $scope.admin = true;
+                  console.log("admin");
+                }
+              }
+            }
+          })
+        })
+      } else {
+       console.log('Not removing from');
+      }
+    });
+  }
+
+  $scope.makeUserAdmin = function (group_id, user_id) {
+    console.log("Make " + user_id + " an admin for group " + group_id);
+    messageFactory.makeUserAdmin(group_id, user_id).then(function () {
+      messageFactory.getGroupMembers($stateParams.group_id).then(function (res) {
+        $scope.groupMembers = res;
+
+        for (var i = 0; i < $scope.groupMembers.length; i++) {
+          if($scope.groupMembers[i].user_id === $scope.currentUser.user_id){
+            if($scope.groupMembers[i].admin){
+              $scope.admin = true;
+              console.log("admin");
+            }
+          }
+        }
+      })
+    });
   }
 
   $scope.data.showContacts = function () {
     $scope.data.contactsHidden = false;
+  }
+
+  $scope.data.inviteToGroup = function (contact_name, contact_phone) {
+    var contact = {
+      name: contact_name,
+      phone: contact_phone
+    }
+    $scope.data.invited.push(contact);
+    $scope.data.memberSearch = "";
+  }
+
+  $scope.data.removeInvitation = function (contact) {
+    var index = $scope.data.invited.indexOf(contact);
+    $scope.data.invited.splice(index, 1);
+  }
+
+  $scope.data.sendInvitations = function () {
+    console.log("sending invitations");
   }
 
   $scope.editGroupName = function () {
@@ -753,16 +868,15 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
       inputPlaceholder: 'New Group Name',
       okType: 'button-tangerine'
     }).then(function(res) {
-      //Sets the current version in scope to the new name
-      $scope.groupObjects[$scope.group_id].group_name = res;
-      //Sets the current version on the server
-      messageFactory.updateGroupName($scope.group_id, res).then(function (res) {
-        console.log(res);
-        messageFactory.updateGroupMessages().then(function () {
-          console.log("updated group stuff");
+      if(res.length > 0){
+        //Sets the current version in scope to the new name
+        $scope.groupObjects[$scope.group_id].group_name = res;
+        //Sets the current version on the server
+        messageFactory.updateGroupName($scope.group_id, res).then(function (res) {
+          messageFactory.updateGroupMessages().then(function () {
+          })
         })
-      })
-
+      }
     });
   }
 
@@ -774,12 +888,15 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
       inputPlaceholder: 'New Group Description ',
       okType: 'button-tangerine'
     }).then(function(res) {
-      //Sets the current version in scope to the new name
-      $scope.groupObjects[$scope.group_id].description = res;
-      //Sets the current version on the server
-      messageFactory.updateGroupDescription($scope.group_id, res).then(function (res) {
-        console.log(res);
-      })
+      if(res.length > 0){
+        //Sets the current version in scope to the new name
+        $scope.groupObjects[$scope.group_id].description = res;
+        //Sets the current version on the server
+        messageFactory.updateGroupDescription($scope.group_id, res).then(function (res) {
+          messageFactory.updateGroupMessages().then(function () {
+          })
+        })
+      }
     });
   }
 
@@ -804,6 +921,27 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
      }
     });
 
+  }
+
+  $scope.deleteGroup = function (group_id, group_name) {
+    var confirmPopup = $ionicPopup.confirm({
+     title: 'Are you sure you want to DELETE ' + group_name + '?',
+     template: 'WARNING! This action can not be undone. All group messages will be deleted FOREVER.',
+     cancelText: 'Don\'t Delete', // String (default: 'Cancel'). The text of the Cancel button.
+     okText: 'DELETE IT', // String (default: 'OK'). The text of the OK button.
+     okType: 'button-tangerine', // String (default: 'button-positive'). The type of the OK button.
+    });
+
+    confirmPopup.then(function(res) {
+     if(res) {
+       console.log("Deleting group");
+       messageFactory.deleteGroup($stateParams.group_id).then(function () {
+         $state.go('tabsController.groupsPage');
+       })
+     } else {
+       console.log('Not Deleting');
+     }
+    });
   }
 
   $scope.data.backToGroupPage = function () {
@@ -1014,7 +1152,7 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
         if($scope.groupMessages[i].to_group === $scope.group_id) $scope.individualGroupMessages.push($scope.groupMessages[i]);
       }
     })
-  }, 1000);
+  }, 10000);
 
   $scope.addEmoji = function (emoji) {
     console.log("adding emoji", emoji);
@@ -1300,7 +1438,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
 function ($scope, $state, $stateParams, messageFactory, contactsFactory, $cordovaCamera, Upload, photoFactory, $timeout) {
   console.log("create new group  controller!");
 
-  $scope.groupData = {}; //used to fix scoping issues
+  $scope.groupData = {};
   $scope.groupData.errors = [];
   $scope.groupData.contacts = contactsFactory.getContacts();
 

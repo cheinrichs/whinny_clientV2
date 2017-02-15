@@ -62,6 +62,9 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
     updateGroupName: updateGroupName,
     updateGroupDescription: updateGroupDescription,
+    removeUserFromGroup: removeUserFromGroup,
+    makeUserAdmin: makeUserAdmin,
+    deleteGroup: deleteGroup,
 
     getBroadcastSearchObjects: getBroadcastSearchObjects,
     updateSearchBroadcastObjects: updateSearchBroadcastObjects,
@@ -519,6 +522,39 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     var data = {
       group_id: group_id,
       groupDescription: newGroupDescription
+    }
+    return $http.post(url, data).then(function (res) {
+      return res.data;
+    })
+  }
+
+  function removeUserFromGroup(group_id, user_id) {
+    var url = 'https://whinny-server.herokuapp.com/removeUserFromGroup';
+    var data = {
+      group_id: group_id,
+      user_id: user_id
+    }
+    return $http.post(url, data).then(function (res) {
+      return res.data;
+    })
+
+  }
+
+  function makeUserAdmin(group_id, user_id) {
+    var url = 'https://whinny-server.herokuapp.com/makeUserAdmin';
+    var data = {
+      group_id: group_id,
+      user_id: user_id
+    }
+    return $http.post(url, data).then(function (res) {
+      return res.data;
+    })
+  }
+
+  function deleteGroup(group_id) {
+    var url = 'https://whinny-server.herokuapp.com/deleteGroup';
+    var data = {
+      group_id: group_id
     }
     return $http.post(url, data).then(function (res) {
       return res.data;
