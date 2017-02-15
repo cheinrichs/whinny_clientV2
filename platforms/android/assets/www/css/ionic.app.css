@@ -10017,11 +10017,12 @@ a.button {
   text-align: center; }
 
 .groupInfoPic {
-  margin: 10px 20px;
+  margin: auto;
   height: 300px;
   width: 300px;
-  border-radius: 5px;
-  text-align: center; }
+  border-radius: 20px;
+  text-align: center;
+  border: 5px solid #FFCE8F; }
 
 .invitedToGroup {
   background-color: #FFCE8F;

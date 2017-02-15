@@ -1,7 +1,7 @@
 <ion-view title="GroupsPage" hide-nav-bar="true" id="page3">
 
   <div class="bar bar-header bar-energized">
-    <a class="button icon-left ion-arrow-left-c button-energized" ng-click="data.backToGroupPage()"></a>
+    <a class="button icon-left ion-chevron-left button-energized" ng-click="data.backToGroupPage()"></a>
     <h1 class="title chatTitle">{{groupObjects[group_id].group_name | nameShortener}}</h1>
   </div>
 
@@ -38,7 +38,7 @@
 
     <li class="item item-text-wrap">
       Invite New Members
-      <br>
+
       <div class="list invitedList" ng-repeat="member in data.invited" ng-show="data.invited.length > 0">
         <span class="invitedToGroup" ng-click="data.removeInvitation(member)">{{member.name}} | X</span>
       </div>

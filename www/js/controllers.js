@@ -868,14 +868,16 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
       inputPlaceholder: 'New Group Name',
       okType: 'button-tangerine'
     }).then(function(res) {
-      if(res.length > 0){
-        //Sets the current version in scope to the new name
-        $scope.groupObjects[$scope.group_id].group_name = res;
-        //Sets the current version on the server
-        messageFactory.updateGroupName($scope.group_id, res).then(function (res) {
-          messageFactory.updateGroupMessages().then(function () {
+      if(res){
+        if(res.length > 0){
+          //Sets the current version in scope to the new name
+          $scope.groupObjects[$scope.group_id].group_name = res;
+          //Sets the current version on the server
+          messageFactory.updateGroupName($scope.group_id, res).then(function (res) {
+            messageFactory.updateGroupMessages().then(function () {
+            })
           })
-        })
+        }
       }
     });
   }
@@ -888,14 +890,16 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
       inputPlaceholder: 'New Group Description ',
       okType: 'button-tangerine'
     }).then(function(res) {
-      if(res.length > 0){
-        //Sets the current version in scope to the new name
-        $scope.groupObjects[$scope.group_id].description = res;
-        //Sets the current version on the server
-        messageFactory.updateGroupDescription($scope.group_id, res).then(function (res) {
-          messageFactory.updateGroupMessages().then(function () {
+      if(res){
+        if(res.length > 0){
+          //Sets the current version in scope to the new name
+          $scope.groupObjects[$scope.group_id].description = res;
+          //Sets the current version on the server
+          messageFactory.updateGroupDescription($scope.group_id, res).then(function (res) {
+            messageFactory.updateGroupMessages().then(function () {
+            })
           })
-        })
+        }
       }
     });
   }
