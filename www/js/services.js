@@ -64,6 +64,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     updateGroupDescription: updateGroupDescription,
     removeUserFromGroup: removeUserFromGroup,
     makeUserAdmin: makeUserAdmin,
+    sendInvitations: sendInvitations,
     deleteGroup: deleteGroup,
 
     getBroadcastSearchObjects: getBroadcastSearchObjects,
@@ -545,6 +546,18 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     var data = {
       group_id: group_id,
       user_id: user_id
+    }
+    return $http.post(url, data).then(function (res) {
+      return res.data;
+    })
+  }
+
+  function sendInvitations(group_id, invitations, user_id) {
+    var url = 'https://whinny-server.herokuapp.com/inviteToGroup';
+    var data = {
+      group_id: group_id,
+      invitations: invitations,
+      from_user_id: user_id
     }
     return $http.post(url, data).then(function (res) {
       return res.data;

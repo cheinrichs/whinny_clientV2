@@ -625,13 +625,13 @@ $tabs-height:                     56px;
 }
 
 .footer-input {
-  position: relative;
-  top: 1px;
+  // position: relative;
+  // top: 1px;
   border: 1px solid #c0c0c0 !important;
   border-radius: 10px;
   width: 100%;
   padding: 3px 5px;
-  height: 46px !important;
+  // height: 46px !important;
 }
 
 .footer-send {
@@ -803,7 +803,6 @@ $tabs-height:                     56px;
   bottom: 0px;
   width: 100%;
   background-color: white;
-  height: $bar-height + 65px;
   border-top: 1px solid #FFB554;
 }
 

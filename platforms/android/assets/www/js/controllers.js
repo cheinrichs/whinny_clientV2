@@ -820,21 +820,32 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
     });
   }
 
-  $scope.makeUserAdmin = function (group_id, user_id) {
-    console.log("Make " + user_id + " an admin for group " + group_id);
-    messageFactory.makeUserAdmin(group_id, user_id).then(function () {
-      messageFactory.getGroupMembers($stateParams.group_id).then(function (res) {
-        $scope.groupMembers = res;
+  $scope.makeUserAdmin = function (group_id, user_id, first_name, last_name) {
 
-        for (var i = 0; i < $scope.groupMembers.length; i++) {
-          if($scope.groupMembers[i].user_id === $scope.currentUser.user_id){
-            if($scope.groupMembers[i].admin){
-              $scope.admin = true;
-              console.log("admin");
+    var confirmPopup = $ionicPopup.confirm({
+     title: 'Are you sure you want to make ' + first_name + ' ' + last_name + ' an admin? You can\'t remove admin privleges once you grant them.',
+     cancelText: 'Don\'t Make Admin', // String (default: 'Cancel'). The text of the Cancel button.
+     okText: 'Make Admin', // String (default: 'OK'). The text of the OK button.
+     okType: 'button-tangerine', // String (default: 'button-positive'). The type of the OK button.
+    });
+
+    confirmPopup.then(function(res) {
+      if(res) {
+        console.log("Make " + user_id + " an admin for group " + group_id);
+        messageFactory.makeUserAdmin(group_id, user_id).then(function () {
+          messageFactory.getGroupMembers($stateParams.group_id).then(function (res) {
+           $scope.groupMembers = res;
+
+            for (var i = 0; i < $scope.groupMembers.length; i++) {
+              if($scope.groupMembers[i].user_id === $scope.currentUser.user_id){
+                if($scope.groupMembers[i].admin){
+                  $scope.admin = true;
+                }
+              }
             }
-          }
-        }
-      })
+          })
+        });
+      }
     });
   }
 
@@ -857,7 +868,19 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
   }
 
   $scope.data.sendInvitations = function () {
-    console.log("sending invitations");
+    if($scope.data.invited.length > 0){
+      var parsedinvitations = [];
+      for (var i = 0; i < $scope.data.invited.length; i++) {
+        $scope.data.invited[i].phone = $scope.data.invited[i].phone.replace(/[^\d]/g, '');
+        if($scope.data.invited[i].phone[0] === '1'){
+          $scope.data.invited[i].phone = $scope.data.invited[i].phone.substring(1);
+        }
+      }
+      console.log($scope.data.invited);
+      messageFactory.sendInvitations($scope.group_id, $scope.data.invited, $scope.currentUser.user_id).then(function () {
+        $scope.data.invited = [];
+      })
+    }
   }
 
   $scope.editGroupName = function () {
@@ -868,14 +891,16 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
       inputPlaceholder: 'New Group Name',
       okType: 'button-tangerine'
     }).then(function(res) {
-      if(res.length > 0){
-        //Sets the current version in scope to the new name
-        $scope.groupObjects[$scope.group_id].group_name = res;
-        //Sets the current version on the server
-        messageFactory.updateGroupName($scope.group_id, res).then(function (res) {
-          messageFactory.updateGroupMessages().then(function () {
+      if(res){
+        if(res.length > 0){
+          //Sets the current version in scope to the new name
+          $scope.groupObjects[$scope.group_id].group_name = res;
+          //Sets the current version on the server
+          messageFactory.updateGroupName($scope.group_id, res).then(function (res) {
+            messageFactory.updateGroupMessages().then(function () {
+            })
           })
-        })
+        }
       }
     });
   }
@@ -888,14 +913,16 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
       inputPlaceholder: 'New Group Description ',
       okType: 'button-tangerine'
     }).then(function(res) {
-      if(res.length > 0){
-        //Sets the current version in scope to the new name
-        $scope.groupObjects[$scope.group_id].description = res;
-        //Sets the current version on the server
-        messageFactory.updateGroupDescription($scope.group_id, res).then(function (res) {
-          messageFactory.updateGroupMessages().then(function () {
+      if(res){
+        if(res.length > 0){
+          //Sets the current version in scope to the new name
+          $scope.groupObjects[$scope.group_id].description = res;
+          //Sets the current version on the server
+          messageFactory.updateGroupDescription($scope.group_id, res).then(function (res) {
+            messageFactory.updateGroupMessages().then(function () {
+            })
           })
-        })
+        }
       }
     });
   }

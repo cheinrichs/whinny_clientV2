@@ -2,70 +2,78 @@
 
   <div class="bar bar-header bar-energized">
     <a class="button icon-left ion-chevron-left button-energized" ng-click="data.backToGroupPage()"></a>
-    <h1 class="title chatTitle">{{groupObjects[group_id].group_name | nameShortener}}</h1>
+    <h1 class="title">Group Info</h1>
   </div>
 
   <ion-content class="has-header" on-swipe-right="data.backToGroupPage()">
 
-    <img ng-hide="imgURI !== undefined" ng-src="{{groupObjects[group_id].group_photo}}" class="groupInfoPic" alt=""> <!--TODO show placeholder and format -->
-    <img ng-hide="imgURI === undefined" ng-src="{{imgURI}}" class="groupInfoPic" alt=""> <!--TODO show placeholder and format -->
+    <ul class="list">
 
-    <div class="row" ng-if="admin">
-      <button class="col-50 button button-tangerine" ng-click="data.takePhoto()">Take New Photo</button>
-      <button class="col-50 button button-tangerine" ng-click="data.choosePhoto()">Choose New Photo</button>
-    </div>
+      <li class="item groupInfoHeader item-text-wrap">
 
-    <h1 class="groupInfoTitle">{{groupObjects[group_id].group_name}} <a ng-if="admin" ng-click="editGroupName()" href="">Edit</a></h1>
+        <h2 class="groupInfoTitle">{{groupObjects[group_id].group_name}} </h2>
+        <a class="groupInfoEditTitle" ng-if="admin" ng-click="editGroupName()" href="">Edit Group Name</a>
 
-    <p class="groupInfoDescription">{{groupObjects[group_id].description}} <a ng-if="admin" ng-click="editGroupDescription()" href="">Edit</a></p>
+        <p class="groupInfoDescription">{{groupObjects[group_id].description}}</p>
+        <a class="groupInfoEditDescription" ng-if="admin" ng-click="editGroupDescription()" href="">Edit Group Description</a>
 
-    <li class="item">
-      Group Members
+        <img ng-hide="imgURI !== undefined" ng-src="{{groupObjects[group_id].group_photo}}" class="groupInfoPic" alt=""> <!--TODO show placeholder and format -->
+        <img ng-hide="imgURI === undefined" ng-src="{{imgURI}}" class="groupInfoPic" alt=""> <!--TODO show placeholder and format -->
 
-      <ion-item ng-repeat="member in groupMembers" class="item item-avatar" ng-click="newPersonalMessage()">
-        <img ng-src="{{member.portrait_link}}" alt="">
-        <h3>{{member.first_name}} {{member.last_name}}</h3>
-
-        <i class="icon ion-close-round removeGroupMember" ng-if="admin && !member.admin" ng-click="removeUserFromGroup(group_id, member.user_id, member.first_name, member.last_name, groupObjects[group_id].group_name)"></i>
-
-        <i class="icon ion-ribbon-b energized adminBadge" ng-if="member.admin"></i>
-
-        <i class="icon ion-ribbon-b makeGroupMemberAdmin" ng-if='!member.admin && admin' ng-click="makeUserAdmin(group_id, member.user_id)"></i>
-
-      </ion-item>
-
-    </li>
-
-    <li class="item item-text-wrap">
-      Invite New Members
-
-      <div class="list invitedList" ng-repeat="member in data.invited" ng-show="data.invited.length > 0">
-        <span class="invitedToGroup" ng-click="data.removeInvitation(member)">{{member.name}} | X</span>
-      </div>
-
-      <div class="list">
-        <label class="item item-input item-floating-label">
-          <span class="input-label">Contact Name or (xxx) xxx-xxxx</span>
-          <input type="text" placeholder="Enter Name Here" ng-model="data.memberSearch" ng-change="data.showContacts()">
-        </label>
-      </div>
-
-      <ul class="list" ng-show="data.memberSearch.length > 0">
-        <div ng-repeat="contact in data.contacts | filter:data.memberSearch | limitTo:4">
-          <li ng-repeat="phone in contact.phoneNumbers" class="item animated fadeInUp" ng-click="data.inviteToGroup(contact.name.formatted, phone.value)">
-            {{contact.name.formatted}}: {{phone.value}}
-          </li>
+        <div class="row" ng-if="admin">
+          <button class="col-50 button button-tangerine" ng-click="data.takePhoto()">Take New Photo</button>
+          <button class="col-50 button button-tangerine" ng-click="data.choosePhoto()">Choose New Photo</button>
         </div>
-      </ul>
+      </li>
 
-      <button class="button button-block button-tangerine" ng-click="data.sendInvitations()" ng-show="data.invited.length > 0">Send Invitations</button>
+      <li class="item">
+        Group Members
 
-    </li>
+        <ion-item ng-repeat="member in groupMembers" class="item item-avatar" ng-click="newPersonalMessage()">
+          <img ng-src="{{member.portrait_link}}" alt="">
+          <h3>{{member.first_name}} {{member.last_name}}</h3>
 
-    <li class="item">
-      <button class="button button-block button-assertive" ng-click="leaveGroup(groupObjects[group_id].group_name)">Leave Group</button>
-      <button class="button button-block button-assertive" ng-if="admin" ng-click="deleteGroup(group_id, groupObjects[group_id].group_name)">Delete Group</button>
-    </li>
+          <i class="icon ion-close-round removeGroupMember" ng-if="admin && !member.admin" ng-click="removeUserFromGroup(group_id, member.user_id, member.first_name, member.last_name, groupObjects[group_id].group_name)"></i>
+
+          <i class="icon ion-ribbon-b energized adminBadge" ng-if="member.admin"></i>
+
+          <i class="icon ion-ribbon-b makeGroupMemberAdmin" ng-if='!member.admin && admin' ng-click="makeUserAdmin(group_id, member.user_id)"></i>
+
+        </ion-item>
+
+      </li>
+
+      <li class="item item-text-wrap">
+        Invite New Members
+        <br>
+        <div class="list invitedList" ng-repeat="member in data.invited" ng-show="data.invited.length > 0">
+          <span class="invitedToGroup" ng-click="data.removeInvitation(member)">{{member.name}} | X</span>
+        </div>
+
+        <div class="list">
+          <label class="item item-input">
+            <input type="text" placeholder="Invite People to Join - Name or (xxx) xxx-xxxx" ng-model="data.memberSearch">
+          </label>
+        </div>
+
+        <ul class="list" ng-show="data.memberSearch.length > 0">
+          <div ng-repeat="contact in data.contacts | filter:data.memberSearch | limitTo:4">
+            <li ng-repeat="phone in contact.phoneNumbers" class="item animated fadeInUp" ng-click="data.inviteToGroup(contact.name.formatted, phone.value)">
+              {{contact.name.formatted}}: {{phone.value}}
+            </li>
+          </div>
+        </ul>
+
+        <button class="button button-block button-tangerine" ng-click="data.sendInvitations()" ng-show="data.invited.length > 0">Send Invitations</button>
+
+      </li>
+
+      <li class="item">
+        <button class="button button-block button-assertive" ng-click="leaveGroup(groupObjects[group_id].group_name)">Leave Group</button>
+        <button class="button button-block button-assertive" ng-if="admin" ng-click="deleteGroup(group_id, groupObjects[group_id].group_name)">Delete Group</button>
+      </li>
+
+    </ul>
 
   </ion-content>
 </ion-view>

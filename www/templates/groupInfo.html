@@ -2,7 +2,7 @@
 
   <div class="bar bar-header bar-energized">
     <a class="button icon-left ion-chevron-left button-energized" ng-click="data.backToGroupPage()"></a>
-    <h1 class="title">GROUP INFO</h1>
+    <h1 class="title">Group Info</h1>
   </div>
 
   <ion-content class="has-header" on-swipe-right="data.backToGroupPage()">
@@ -45,7 +45,7 @@
 
       <li class="item item-text-wrap">
         Invite New Members
-
+        <br>
         <div class="list invitedList" ng-repeat="member in data.invited" ng-show="data.invited.length > 0">
           <span class="invitedToGroup" ng-click="data.removeInvitation(member)">{{member.name}} | X</span>
         </div>
