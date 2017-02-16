@@ -565,6 +565,12 @@ function ($scope, $state, $stateParams, messageFactory) {
     $scope.groupApplications = res;
   });
 
+  $scope.viewGroup = function (group_id) {
+    console.log("view group " + group_id);
+    console.log($scope.groupObjects);
+    $state.go('groupProfilePage', { group: $scope.groupObjects[group_id] , returnPage: 'groupsPage'});
+  }
+
   $scope.acceptGroupApplication = function (user_id, group_id) {
     console.log("accepting ", user_id, group_id);
     messageFactory.acceptGroupApplication(user_id, group_id).then(function () {
@@ -657,7 +663,7 @@ function ($scope, $state, $stateParams, messageFactory) {
   }
 
   $scope.goToGroupPage = function (group) {
-    $state.go('groupProfilePage', { group: group });
+    $state.go('groupProfilePage', { group: group,  returnPage: 'groupSearch' });
   }
 
 }])
@@ -687,7 +693,12 @@ function ($scope, $state, $stateParams, messageFactory) {
   }
 
   $scope.backToGroupSearch = function () {
-    $state.go('groupSearch');
+    console.log($stateParams);
+    if($stateParams.returnPage == 'groupsPage'){
+      $state.go('tabsController.groupsPage');
+    } else if($stateParams.returnPage == 'groupSearch'){
+      $state.go('groupSearch');
+    }
   }
 
   $scope.$onDestroy = function () {
