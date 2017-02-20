@@ -40,7 +40,7 @@
         <div class="item item-text-wrap">
           <div class="row groupInvitationsRow">
             <div class="col col-50">
-              {{inv.group_name}}?
+              <a ng-click="viewGroup(inv.group_id)">{{inv.group_name}}</a>
             </div>
             <div class="col col-50 groupInvitationsButtons">
               <button class="button button-outline button-energized" ng-click="acceptGroupInvitation(inv.user_id, inv.group_id)">
@@ -50,6 +50,7 @@
               <button class="button button-outline button-energized" ng-click="declineGroupInvitation(inv.invitation_id)">
                 Ignore
               </button>
+
             </div>
           </div>
         </div>

@@ -10360,13 +10360,10 @@ a.button {
   padding: 40px 0px 60px 0px; }
 
 .footer-input {
-  position: relative;
-  top: 1px;
   border: 1px solid #c0c0c0 !important;
   border-radius: 10px;
   width: 100%;
-  padding: 3px 5px;
-  height: 46px !important; }
+  padding: 3px 5px; }
 
 .footer-send {
   border-color: transparent;
@@ -10528,7 +10525,6 @@ a.button {
   bottom: 0px;
   width: 100%;
   background-color: white;
-  height: 109px;
   border-top: 1px solid #FFB554; }
 
 .top-container {

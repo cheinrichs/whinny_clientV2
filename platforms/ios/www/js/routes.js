@@ -141,7 +141,8 @@ angular.module('app.routes', [])
     url: '/groupProfilePage',
     cache: false,
     params: {
-      group: { dynamic: true }
+      group: { dynamic: true },
+      returnPage: { dynamic: true }
     },
     controller: 'groupProfileCtrl',
     templateUrl: 'templates/groupProfile.html'
