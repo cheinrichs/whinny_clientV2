@@ -146,11 +146,11 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, $localSt
         console.log(notification);
       }
     }).then(function (t) {
-      console.log("token in welcome controlller");
+      console.log("token in welcome controlller", t);
       var option = { ignore_user: true };
       return $ionicPush.saveToken(t, option);
     }).then(function (t) {
-      $localStorage.token = t;
+      $localStorage.token = t; //Store the token in localStorage and retrieve it in
       console.log('token in welcome controlller: ', t);
       for(key in t){
         console.log(key + ": " + t[key]);
@@ -159,6 +159,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, $localSt
 
   })
 
+  //handle auto log in
   if($localStorage.whinny_user){
     if($localStorage.whinny_user.verified){
       console.log($localStorage.whinny_user);
@@ -167,14 +168,13 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, $localSt
           alert("Your Whinny app is now out of date! Please download the new version!");
           $scope.data.errors.push("Please download the new version of Whinny");
         } else {
+          //Set the current whinny_user to the user object stored in localStorage and go to the chat page.
           messageFactory.setCurrentUser($localStorage.whinny_user);
           $state.go('tabsController.chatPage');
         }
       })
     }
   }
-  // if(Object.keys(currentUser) > 0) $state.go('tabsController.chatPage');
-
 
   $scope.data.goToLogin = function () {
     $state.go('loginPage');
@@ -265,14 +265,18 @@ function ($scope, $state, $stateParams, messageFactory) {
 
 }])
 
-.controller('newUserCreationCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
-function ($scope, $state, $stateParams, messageFactory) {
-  console.log("params");
-  console.log($stateParams);
+.controller('newUserCreationCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$localStorage',
+function ($scope, $state, $stateParams, messageFactory, $localStorage) {
+  console.log("---");
+  console.log($localStorage);
+  console.log("---");
+
 
   console.log("newUserCreationCtrl");
   $scope.data = {};
   $scope.data.errors = [];
+
+  $scope.data.device_token = $localStorage.token.token;
 
   $scope.data.phone = $stateParams.phone;
 
