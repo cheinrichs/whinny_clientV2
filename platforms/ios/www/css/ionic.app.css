@@ -10304,6 +10304,10 @@ a.button {
   background-color: white;
   border: 2px solid #FDB55F; }
 
+.sendChatButton {
+  position: absolute;
+  bottom: 55px; }
+
 .individualBroadcastPortrait {
   position: absolute;
   top: 10px;

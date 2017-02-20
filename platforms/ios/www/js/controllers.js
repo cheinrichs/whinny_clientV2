@@ -1365,7 +1365,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
 
     $timeout(function () {
       $scope.data.uploadSuccessful = true;
-    }, 500);
+    }, 1000);
 
   }
   $scope.backToChatPage = function () {
