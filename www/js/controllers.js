@@ -1285,6 +1285,8 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
   $scope.data = {};
   $scope.data.currentUser = messageFactory.getCurrentUser();
 
+  $scope.data.uploadSuccessful = false;
+
   $scope.data.messageNotifications = $scope.data.currentUser.message_notifications;
   $scope.data.broadcastNotifications = $scope.data.currentUser.group_notifications;
   $scope.data.groupNotifications= $scope.data.currentUser.broadcast_notifications;
@@ -1362,12 +1364,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
     photoFactory.uploadPersonalProfilePhoto(filename, $scope.data.imgURI);
 
     $timeout(function () {
-      //TODO fix this bullshit
-      messageFactory.logIn($scope.data.currentUser.phone).then(function (res) {
-        console.log("in settings ctrl, received res after login");
-        console.log(res);
-        $scope.data.currentUser = messageFactory.getCurrentUser();
-      })
+      $scope.data.uploadSuccessful = true;
     }, 1000);
 
   }

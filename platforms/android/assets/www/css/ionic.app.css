@@ -10278,6 +10278,11 @@ a.button {
   border-radius: 5px;
   text-align: center; }
 
+.settingsDoneCheck {
+  color: #26A69A !important;
+  position: absolute;
+  left: 270px; }
+
 .groupProfilePic {
   height: 300px;
   width: 300px; }
