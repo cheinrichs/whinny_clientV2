@@ -1232,8 +1232,8 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
 
 }])
 
-.controller('individualBroadcastCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$window', '$timeout', '$cordovaInAppBrowser', '$rootScope',
-function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cordovaInAppBrowser, $rootScope) {
+.controller('individualBroadcastCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$window', '$timeout', '$cordovaInAppBrowser', '$rootScope', '$ionicModal',
+function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cordovaInAppBrowser, $rootScope, $ionicModal) {
   $scope.currentBroadcast_id = $stateParams.broadcast_id;
   $scope.broadcastObjects = messageFactory.getBroadcastObjects();
   $scope.broadcastObject = $scope.broadcastObjects[$stateParams.broadcast_id];
@@ -1254,6 +1254,15 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
       $scope.broadcastMessages = messageFactory.getBroadcastMessages();
     });
   }, 10000);
+
+  $scope.showModal = function () {
+    $ionicModal.fromTemplateUrl(templateUrl, {
+
+    }).then(function (modal) {
+      $scope.modal = modal;
+      $scope.modal.show();
+    })
+  }
 
   $scope.backToBroadcastsPage = function (){
     $state.go('tabsController.broadcastsPage');
