@@ -1255,13 +1255,22 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
     });
   }, 10000);
 
-  $scope.showModal = function () {
-    $ionicModal.fromTemplateUrl(templateUrl, {
+  $scope.zoomMin = 1;
 
+  $scope.showModal = function (imageUrl) {
+    $scope.imageUrl = imageUrl;
+    $ionicModal.fromTemplateUrl('templates/broadcastZoomView.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
     }).then(function (modal) {
       $scope.modal = modal;
       $scope.modal.show();
     })
+  }
+
+  $scope.closeModal = function () {
+    console.log("hiding modal");
+    $scope.modal.hide();
   }
 
   $scope.backToBroadcastsPage = function (){
