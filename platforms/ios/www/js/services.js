@@ -86,15 +86,15 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     logout: logout
   };
 
+  //TODO switch between databases when you push!!@?!@#!@#
+  //Production
+  // var API_URL = 'https://whinny-server.herokuapp.com';
+  //Staging
+  var API_URL = 'https://whinny-staging.herokuapp.com';
+
   var CLIENT_VERSION = '0.0.1';
   //holds all data for the current user. Used to send and parse messages
-  var currentUser = {};//TODO
-  // var currentUser = {
-  //   user_id: 1,
-  //   first_name: "Cooper",
-  //   last_name: "Heinrichs"
-  // };
-
+  var currentUser = {};
 
   //Contains all messages sent to this specific user.
   //This is used before the messages are all parse.
@@ -145,8 +145,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateChatMessages(){
-    // var url = 'http://localhost:3000/chatMessages/' + currentUser.user_id;
-    var url = 'https://whinny-server.herokuapp.com/chatMessages/' + currentUser.user_id;
+    var url = API_URL + '/chatMessages/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
       chatMessages = res.data;
       return res.data;
@@ -155,7 +154,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
   function updateGroupMessages(){
     // if(currentUser.user_id){
-      var url = 'https://whinny-server.herokuapp.com/groupMessages/' + currentUser.user_id;
+      var url = API_URL + '/groupMessages/' + currentUser.user_id;
       return $http.get(url).then(function (res) {
         //groupData = {}; //TODO
         //groupData.groupMessages = res.data.groupMessages;
@@ -175,7 +174,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
   function updateBroadcastMessages(){
     // if(currentUser.user_id){
-      var url = 'https://whinny-server.herokuapp.com/broadcastMessages/' + currentUser.user_id;
+      var url = API_URL + '/broadcastMessages/' + currentUser.user_id;
       return $http.get(url).then(function (res) {
         broadcastMessages = res.data.broadcastMessages;
         broadcastObjects = {};
@@ -204,7 +203,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function getGroupMembers(group_id) {
-    var url = 'https://whinny-server.herokuapp.com/groupMembers/' + group_id;
+    var url = API_URL + '/groupMembers/' + group_id;
     return $http.get(url).then(function (res) {
       return res.data;
     })
@@ -231,14 +230,14 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function joinWhinny(data) {
-    var url = 'https://whinny-server.herokuapp.com/joinWhinny/';
+    var url = API_URL + '/joinWhinny/';
     return $http.post(url, data).then(function (res) {
       return res.data;
     })
   }
 
   function addUserInterests(interests_array, suggested_interest) {
-    var url = 'https://whinny-server.herokuapp.com/addUserInterests';
+    var url = API_URL + '/addUserInterests';
     var data = {
       currentUser: currentUser.user_id,
       interests: interests_array,
@@ -254,14 +253,14 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function getUserInterests() {
-    var url = 'https://whinny-server.herokuapp.com/userInterests/' + currentUser.user_id;
+    var url = API_URL + '/userInterests/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
       return res.data;
     })
   }
 
   function submitConfirmationNumber(user_phone, givenConfirmationNumber) {
-    var url = 'https://whinny-server.herokuapp.com/confirmCode/' + user_phone + '/' + givenConfirmationNumber;
+    var url = API_URL + '/confirmCode/' + user_phone + '/' + givenConfirmationNumber;
     return $http.get(url).then(function (res) {
       setCurrentUser(res.data);
       console.log("logged in and set current user to");
@@ -287,7 +286,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       from_user: currentUser.user_id,
       content: content
     }
-    var url = 'https://whinny-server.herokuapp.com/sendChatMessage';
+    var url = API_URL + '/sendChatMessage';
     return $http.post(url, data).then(function (res) {
       return res;
     })
@@ -303,7 +302,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       senderName: currentUser.first_name + ' ' + currentUser.last_name
     }
 
-    var url = 'https://whinny-server.herokuapp.com/sendGroupMessage'
+    var url = API_URL + '/sendGroupMessage'
     // var url = 'http://localhost:3000/sendGroupMessage';
     return $http.post(url, data).then(function (res) {
       return res;
@@ -312,7 +311,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
   function sendBroadcastMessage(broadcast_id, content) {
     console.log("sending broadcast message with", currentUser, " to broadcast ", broadcast_id, " content ", content);
-    var url = 'https://whinny-server.herokuapp.com/sendBroadcastMessage/' + broadcast_id + '/' + currentUser.user_id + '/' + content;
+    var url = API_URL + '/sendBroadcastMessage/' + broadcast_id + '/' + currentUser.user_id + '/' + content;
     return $http.get(url).then(function (res) {
       return res;
     })
@@ -325,7 +324,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       newlyReadMessages: newlyReadMessages
     };
     // var url = 'http://localhost:3000/markChatMessagesAsRead';
-    var url = 'https://whinny-server.herokuapp.com/markChatMessagesAsRead';
+    var url = API_URL + '/markChatMessagesAsRead';
     return $http.post(url, data).then(function (res) {
       return res;
     })
@@ -354,7 +353,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       tutorial: tutorial
     }
     // var url = 'http://localhost:3000/markTutorialAsRead';
-    var url = 'https://whinny-server.herokuapp.com/markTutorialAsRead';
+    var url = API_URL + '/markTutorialAsRead';
     return $http.post(url, data).then(function (res) {
       return res;
     })
@@ -365,7 +364,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       user_id: currentUser.user_id
     }
     // var url = 'http://localhost:3000/resetTutorials';
-    var url = 'https://whinny-server.herokuapp.com/resetTutorials';
+    var url = API_URL + '/resetTutorials';
     return $http.post(url, data).then(function (res) {
       console.log(res.data.updatedUser);
       setCurrentUser(res.data.updatedUser);
@@ -375,14 +374,14 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
   function createNewChatMessage(to_phone, content) {
     console.log("creating new chat message with ", currentUser, " to phone ", to_phone, " content ", content);
-    var url = 'https://whinny-server.herokuapp.com/createNewChat/' + to_phone + '/' + currentUser.user_id + '/' + content;
+    var url = API_URL + '/createNewChat/' + to_phone + '/' + currentUser.user_id + '/' + content;
     return $http.get(url).then(function (res) {
       return res;
     });
   }
 
   function createNewGroup(groupData) {
-    var url = 'https://whinny-server.herokuapp.com/createNewGroup';
+    var url = API_URL + '/createNewGroup';
     groupData.fromUser = currentUser
     console.log("creating new group with ", groupData);
     return $http.post(url, groupData).then(function (res) {
@@ -396,7 +395,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateGroupInvitations() {
-    var url = 'https://whinny-server.herokuapp.com/groupInvitations/' + currentUser.user_id;
+    var url = API_URL + '/groupInvitations/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
       console.log("res in update group invitations in service", res);
       groupInvitations = res.data;
@@ -410,7 +409,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       user_id: user_id,
       group_id: group_id
     };
-    var url = 'https://whinny-server.herokuapp.com/acceptInvitation';
+    var url = API_URL + '/acceptInvitation';
     return $http.post(url, data).then(function (res) {
       return res.data;
     })
@@ -422,7 +421,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       user_id: currentUser.user_id,
       invitation_id: invitation_id
     };
-    var url = 'https://whinny-server.herokuapp.com/declineInvitation';
+    var url = API_URL + '/declineInvitation';
     return $http.post(url, data).then(function (res) {
       return res.data;
     })
@@ -433,7 +432,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateGroupApplications() {
-    var url = 'https://whinny-server.herokuapp.com/groupApplications/' + currentUser.user_id;
+    var url = API_URL + '/groupApplications/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
       groupApplications = res.data;
       return groupApplications;
@@ -441,7 +440,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function acceptGroupApplication(user_id, group_id) {
-    var url = 'https://whinny-server.herokuapp.com/acceptGroupApplication/';
+    var url = API_URL + '/acceptGroupApplication/';
     var data = {
       user_id: user_id,
       group_id: group_id
@@ -452,7 +451,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function declineGroupApplication(application_id) {
-    var url = 'https://whinny-server.herokuapp.com/declineGroupApplication/';
+    var url = API_URL + '/declineGroupApplication/';
     var data = {
       user_id: currentUser.user_id,
       application_id: application_id
@@ -467,7 +466,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateSearchGroupObjects() {
-    var url = 'https://whinny-server.herokuapp.com/groupSearch/' + currentUser.user_id;
+    var url = API_URL + '/groupSearch/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
       searchGroupObjects = res.data;
       return searchGroupObjects;
@@ -475,7 +474,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function joinGroup(group_id) {
-    var url = 'https://whinny-server.herokuapp.com/joinGroup/';
+    var url = API_URL + '/joinGroup/';
     var data = {
       user_id: currentUser.user_id,
       group_id: group_id
@@ -486,7 +485,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function leaveGroup(group_id) {
-    var url = 'https://whinny-server.herokuapp.com/leaveGroup/';
+    var url = API_URL + '/leaveGroup/';
     var data = {
       user_id: currentUser.user_id,
       group_id: group_id
@@ -497,7 +496,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function applyToGroup(group_id) {
-    var url = 'https://whinny-server.herokuapp.com/applyToGroup/';
+    var url = API_URL + '/applyToGroup/';
     var data = {
       user_id: currentUser.user_id,
       group_id: group_id
@@ -508,7 +507,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateGroupName(group_id, newGroupName) {
-    var url = 'https://whinny-server.herokuapp.com/updateGroupName';
+    var url = API_URL + '/updateGroupName';
     var data = {
       group_id: group_id,
       groupName: newGroupName
@@ -519,7 +518,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateGroupDescription(group_id, newGroupDescription) {
-    var url = 'https://whinny-server.herokuapp.com/updateGroupDescription';
+    var url = API_URL + '/updateGroupDescription';
     var data = {
       group_id: group_id,
       groupDescription: newGroupDescription
@@ -530,7 +529,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function removeUserFromGroup(group_id, user_id) {
-    var url = 'https://whinny-server.herokuapp.com/removeUserFromGroup';
+    var url = API_URL + '/removeUserFromGroup';
     var data = {
       group_id: group_id,
       user_id: user_id
@@ -542,7 +541,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function makeUserAdmin(group_id, user_id) {
-    var url = 'https://whinny-server.herokuapp.com/makeUserAdmin';
+    var url = API_URL + '/makeUserAdmin';
     var data = {
       group_id: group_id,
       user_id: user_id
@@ -553,7 +552,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function sendInvitations(group_id, invitations, user_id) {
-    var url = 'https://whinny-server.herokuapp.com/inviteToGroup';
+    var url = API_URL + '/inviteToGroup';
     var data = {
       group_id: group_id,
       invitations: invitations,
@@ -565,7 +564,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function deleteGroup(group_id) {
-    var url = 'https://whinny-server.herokuapp.com/deleteGroup';
+    var url = API_URL + '/deleteGroup';
     var data = {
       group_id: group_id
     }
@@ -581,7 +580,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
   function updateSearchBroadcastObjects() {
     console.log("updating search broadcast data start");
-    var url = 'https://whinny-server.herokuapp.com/broadcastSearch/' + currentUser.user_id;
+    var url = API_URL + '/broadcastSearch/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
       console.log("updated search broadcast data", res);
       searchBroadcastObjects = res.data;
@@ -590,7 +589,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function subscribeToBroadcast(broadcast_id) {
-    var url = 'https://whinny-server.herokuapp.com/subscribeToBroadcast';
+    var url = API_URL + '/subscribeToBroadcast';
     var data = {
       user_id: currentUser.user_id,
       broadcast_id: broadcast_id
@@ -601,7 +600,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function unsubscribeToBroadcast(broadcast_id) {
-    var url = 'https://whinny-server.herokuapp.com/unSubscribeFromBroadcast';
+    var url = API_URL + '/unSubscribeFromBroadcast';
     var data = {
       user_id: currentUser.user_id,
       broadcast_id: broadcast_id
@@ -615,7 +614,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     if(!messaging || !group || !broadcast){
       console.log("Error: invalid args in updateNotificationSettings.");
     }
-    var url = 'https://whinny-server.herokuapp.com/updateNotificationSettings';
+    var url = API_URL + '/updateNotificationSettings';
     var data = {
       user_id: currentUser.user_id,
       messaging: messaging,
@@ -628,7 +627,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateMessageNotificationSettings(messaging) {
-    var url = 'https://whinny-server.herokuapp.com/updateMessageNotificationSettings';
+    var url = API_URL + '/updateMessageNotificationSettings';
     var data = {
       user_id: currentUser.user_id,
       messaging: messaging
@@ -639,7 +638,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateGroupNotificationSettings(group) {
-    var url = 'https://whinny-server.herokuapp.com/updateGroupNotificationSettings';
+    var url = API_URL + '/updateGroupNotificationSettings';
     var data = {
       user_id: currentUser.user_id,
       group: group
@@ -650,7 +649,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateBroadcastNotificationSettings(broadcast) {
-    var url = 'https://whinny-server.herokuapp.com/updateBroadcastNotificationSettings';
+    var url = API_URL + '/updateBroadcastNotificationSettings';
     var data = {
       user_id: currentUser.user_id,
       broadcast: broadcast
@@ -686,7 +685,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     data.device_token = $localStorage.tokenObject.token;
     data.version = CLIENT_VERSION;
 
-    var url = 'https://whinny-server.herokuapp.com/logIn';
+    var url = API_URL + '/logIn';
     return $http.post(url, data).then(function (res) {
       // if(res.data.deprecatedClient) alert("Your Whinny app is now out of date! Please download the new version!");
       console.log("set current user to");
@@ -706,7 +705,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       user_id: currentUser.user_id
     }
     currentUser = {};
-    var url = 'https://whinny-server.herokuapp.com/logOut';
+    var url = API_URL + '/logOut';
     // var url = 'http://localhost:3000/logOut';
     return $http.post(url, data).then(function (res) {
       return res;
@@ -761,7 +760,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   return photoFactory;
 
   function uploadGroupProfilePhoto(fileName, fileURI) {
-    var uri = encodeURI('https://whinny-server.herokuapp.com/groupProfilePhotoUpload');
+    var uri = encodeURI(API_URL + '/groupProfilePhotoUpload');
     var options = new FileUploadOptions();
 
     options.fileKey = "file";
@@ -791,7 +790,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
   function uploadPersonalProfilePhoto(fileName, fileURI) {
     console.log("uploading personal photo in service");
-    var uri = encodeURI('https://whinny-server.herokuapp.com/personalProfilePhotoUpload');
+    var uri = encodeURI(API_URL + '/personalProfilePhotoUpload');
     var options = new FileUploadOptions();
 
     options.fileKey = "file";

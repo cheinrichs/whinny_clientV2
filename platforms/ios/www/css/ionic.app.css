@@ -10098,14 +10098,20 @@ a.button {
 
 .broadcastZoomedImage {
   overflow: hidden;
-  height: 100% !important;
-  width: 250px !important; }
+  height: 500px !important;
+  width: 100% !important;
+  background-size: 400px 500px;
+  background-repeat: no-repeat; }
 
 .broadcastModalButton {
   position: absolute;
   bottom: 0px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white; }
+  color: white;
+  background-color: transparent; }
+
+.button.broadcastModalButton.active, .button.broadcastModalButton.activated {
+  background-color: white;
+  color: black; }
 
 .discipline {
   height: 100px;

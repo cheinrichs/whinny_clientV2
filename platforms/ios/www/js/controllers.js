@@ -1255,8 +1255,6 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
     });
   }, 10000);
 
-  $scope.zoomMin = 1;
-
   $scope.showModal = function (imageUrl) {
     $scope.imageUrl = imageUrl;
     $ionicModal.fromTemplateUrl('templates/broadcastZoomView.html', {
@@ -1269,8 +1267,7 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
   }
 
   $scope.closeModal = function () {
-    console.log("hiding modal");
-    $scope.modal.hide();
+    $scope.modal.remove();
   }
 
   $scope.backToBroadcastsPage = function (){
