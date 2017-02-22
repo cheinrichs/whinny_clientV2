@@ -59,7 +59,7 @@
         </div>
 
         <ul class="list" ng-show="data.memberSearch.length > 0">
-          <div ng-repeat="contact in data.contacts | filter:data.memberSearch | limitTo:4">
+          <div ng-repeat="contact in data.contacts | filter:data.memberSearch | limitTo:5">
             <li ng-repeat="phone in contact.phoneNumbers" class="item animated fadeInUp" ng-click="data.inviteToGroup(contact.name.formatted, phone.value)">
               {{contact.name.formatted}}: {{phone.value}}
             </li>

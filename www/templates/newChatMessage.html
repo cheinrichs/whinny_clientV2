@@ -23,21 +23,13 @@
 
       <div ng-hide="data.contactsHidden">
         <ul class="list" ng-show="data.newChatRecipient.length > 0">
-          <div ng-repeat="contact in data.contacts | filter:data.newChatRecipient | limitTo:4">
+          <div ng-repeat="contact in data.contacts | filter:data.newChatRecipient | limitTo:5">
             <li ng-repeat="phone in contact.phoneNumbers" class="item animated fadeInUp" ng-click="data.chooseContact(contact.name.formatted, phone.value)">
               {{contact.name.formatted}}: {{phone.value}}
             </li>
           </div>
         </ul>
       </div>
-
-      <!-- <div ng-hide="data.contactsHidden">
-        <ul class="list" ng-show="data.newChatRecipient.length > 0">
-          <li ng-repeat="contact in data.contacts | filter:data.newChatRecipient" class="item" ng-click="data.chooseContact(contact)">
-            {{contact.name.formatted}}
-          </li>
-        </ul>
-      </div> -->
 
     </ion-content>
 
