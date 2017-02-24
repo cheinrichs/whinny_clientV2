@@ -6,7 +6,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
     updateChatMessages: updateChatMessages,
     updateGroupMessages: updateGroupMessages,
-    updateBroadcastMessages: updateBroadcastMessages,
+    updateBroadcastData: updateBroadcastData,
 
     getUserObjects: getUserObjects,
 
@@ -14,8 +14,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     getGroupUserObjects: getGroupUserObjects,
     getGroupMembers: getGroupMembers,
 
-    getBroadcastObjects: getBroadcastObjects,
-    getBroadcastObjectById: getBroadcastObjectById,
+    getBroadcastData: getBroadcastData,
 
     getChatMessages: getChatMessages,
     getGroupMessages: getGroupMessages,
@@ -125,6 +124,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   //including name, description, and photo link
   var broadcastObjects = [];
 
+  var broadcastData;
+
   //contains all currently open group invitations for the current user
   var  groupInvitations = [];
 
@@ -173,22 +174,46 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     // }
   }
 
-  function updateBroadcastMessages(){
+  function updateBroadcastData(){
     // if(currentUser.user_id){
       var url = API_URL + '/broadcastMessages/' + currentUser.user_id;
       return $http.get(url).then(function (res) {
-        broadcastMessages = res.data.broadcastMessages;
-        broadcastObjects = {};
+        var broadcastDataUnparsed = res.data;
+        var unreadBroadcasts = [];
+        var unreadMessages = [];
 
-        for (var i = 0; i < res.data.broadcastObjects.length; i++) {
-          broadcastObjects[res.data.broadcastObjects[i].broadcast_id] = res.data.broadcastObjects[i];
+        for (var i = 0; i < broadcastDataUnparsed.unread.length; i++) {
+          unreadBroadcasts.push(broadcastDataUnparsed.unread[i].broadcast_id);
+          unreadMessages.push(broadcastDataUnparsed.unread[i].broadcast_message_id);
+        }
+        for (var i = 0; i < broadcastDataUnparsed.broadcasts.length; i++) {
+          broadcastDataUnparsed.broadcasts[i].unread = false;
+          if(unreadBroadcasts.indexOf(broadcastDataUnparsed.broadcasts[i].broadcast_id) >= 0){
+            broadcastDataUnparsed.broadcasts[i].unread = true;
+          }
         }
 
+        for (var i = 0; i < broadcastDataUnparsed.messages.length; i++) {
+          broadcastDataUnparsed.messages[i].unread = false;
+          if(unreadMessages.indexOf(broadcastDataUnparsed.messages[i].broadcast_message_id) >= 0){
+            broadcastDataUnparsed.messages[i].unread = true;
+          }
+        }
+
+        broadcastData = broadcastDataUnparsed;
+
+        console.log(broadcastData);
+
+        return broadcastData;
+        //TODO
+        // broadcastMessages = res.data.broadcastMessages;
+        // broadcastObjects = {};
+        //
+        // for (var i = 0; i < res.data.broadcastObjects.length; i++) {
+        //   broadcastObjects[res.data.broadcastObjects[i].broadcast_id] = res.data.broadcastObjects[i];
+        // }
+
       })
-    // } else {
-    //   console.log("current user user id is not defined");
-    //   return;
-    // }
   }
 
   function getUserObjects() {
@@ -210,12 +235,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     })
   }
 
-  function getBroadcastObjects() {
-    return broadcastObjects;
-  }
-
-  function getBroadcastObjectById(broadcast_id) {
-    return broadcastObjects[broadcast_id];
+  function getBroadcastData() {
+    return broadcastData;
   }
 
   function getChatMessages() {
