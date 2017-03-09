@@ -79,8 +79,11 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
 
       $rootScope.data.message = msg;
 
+      var pushTitle = "You've received a new message";
+      if(msg.title) pushTitle = msg.title;
+
       var alertPopup = $ionicPopup.alert({
-        title: msg.title,
+        title: pushTitle,
         templateUrl: 'templates/popup.html',
         okText: possibleButtonTexts[randomIndex],
         scope: $rootScope,

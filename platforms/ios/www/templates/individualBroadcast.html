@@ -3,13 +3,13 @@
 
     <div class="bar bar-header bar-energized">
       <a class="button icon-left ion-chevron-left button-energized" ng-click="backToBroadcastsPage()"></a>
-      <h1 class="title chatTitle">{{broadcastObject.broadcast_name }}</h1>
-      <img ng-src="{{broadcastObject.broadcast_photo}}" class="individualBroadcastPortrait" alt="">
+      <h1 class="title chatTitle">{{currentBroadcast.broadcast_name }}</h1>
+      <img ng-src="{{currentBroadcast.broadcast_photo}}" class="individualBroadcastPortrait" alt="">
     </div>
 
     <ion-content class="has-header has-footer chatScreen" on-swipe-right="backToBroadcastsPage()">
 
-      <div ng-repeat="message in broadcastMessages">
+      <div ng-repeat="message in currentBroadcastMessages | orderBy:'-broadcast_message_id'">
         <div ng-show="message.to_broadcast === currentBroadcast_id">
 
           <div class="list card">

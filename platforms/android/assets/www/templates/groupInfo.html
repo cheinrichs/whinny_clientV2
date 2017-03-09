@@ -35,9 +35,11 @@
 
           <i class="icon ion-close-round removeGroupMember" ng-if="admin && !member.admin" ng-click="removeUserFromGroup(group_id, member.user_id, member.first_name, member.last_name, groupObjects[group_id].group_name)"></i>
 
-          <i class="icon ion-ribbon-b energized adminBadge" ng-if="member.admin"></i>
+          <i class="icon ion-ribbon-b energized adminBadge" ng-if="member.admin && !member.owner" ng-click="removeUserAdmin(group_id, member.user_id, member.first_name, member.last_name)"></i>
 
-          <i class="icon ion-ribbon-b makeGroupMemberAdmin" ng-if='!member.admin && admin' ng-click="makeUserAdmin(group_id, member.user_id)"></i>
+          <i class="icon ion-magnet energized adminBadge" ng-if="member.owner"></i>
+
+          <i class="icon ion-ribbon-b makeGroupMemberAdmin" ng-if='!member.admin && admin || !member.admin && member.owner' ng-click="makeUserAdmin(group_id, member.user_id)"></i>
 
         </ion-item>
 
@@ -57,7 +59,7 @@
         </div>
 
         <ul class="list" ng-show="data.memberSearch.length > 0">
-          <div ng-repeat="contact in data.contacts | filter:data.memberSearch | limitTo:4">
+          <div ng-repeat="contact in data.contacts | filter:data.memberSearch | limitTo:5">
             <li ng-repeat="phone in contact.phoneNumbers" class="item animated fadeInUp" ng-click="data.inviteToGroup(contact.name.formatted, phone.value)">
               {{contact.name.formatted}}: {{phone.value}}
             </li>

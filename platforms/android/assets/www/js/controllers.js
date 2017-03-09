@@ -491,7 +491,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
 
   //for better user experience, update the group and broadcast messages right when the user lands on chat
   messageFactory.updateGroupMessages();
-  messageFactory.updateBroadcastMessages();
+  messageFactory.updateBroadcastData();
 
   // if($scope.chatMessages.length === 0){
   //TODO Once we have messages stored in a file on your phone turn on this if statement
@@ -715,6 +715,7 @@ function ($scope, $state, $stateParams, messageFactory) {
 function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicPopup, $cordovaCamera, photoFactory, $timeout) {
 
   $scope.admin = false;
+  $scope.owner = false;
   $scope.group_id = $stateParams.group_id;
   $scope.currentUser = messageFactory.getCurrentUser();
 
@@ -725,6 +726,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
     for (var i = 0; i < $scope.groupMembers.length; i++) {
       if($scope.groupMembers[i].user_id === $scope.currentUser.user_id){
         if($scope.groupMembers[i].admin) $scope.admin = true;
+        if($scope.groupMembers[i].owner) $scope.owner = true;
       }
     }
   })
@@ -838,7 +840,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
   $scope.makeUserAdmin = function (group_id, user_id, first_name, last_name) {
 
     var confirmPopup = $ionicPopup.confirm({
-     title: 'Are you sure you want to make ' + first_name + ' ' + last_name + ' an admin? You can\'t remove admin privleges once you grant them.',
+     title: 'Are you sure you want to make ' + first_name + ' ' + last_name + ' an admin? Only the group owner can remove admin privleges once you grant them.',
      cancelText: 'Don\'t Make Admin', // String (default: 'Cancel'). The text of the Cancel button.
      okText: 'Make Admin', // String (default: 'OK'). The text of the OK button.
      okType: 'button-tangerine', // String (default: 'button-positive'). The type of the OK button.
@@ -862,6 +864,37 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
         });
       }
     });
+  }
+
+  $scope.removeUserAdmin = function (group_id, user_id, first_name, last_name) {
+    if($scope.owner){
+
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Are you sure you want to remove admin priveledges from ' + first_name + ' ' + last_name + '?',
+        cancelText: 'Don\'t Remove Admin', // String (default: 'Cancel'). The text of the Cancel button.
+        okText: 'Remove Admin', // String (default: 'OK'). The text of the OK button.
+        okType: 'button-tangerine', // String (default: 'button-positive'). The type of the OK button.
+      });
+
+      confirmPopup.then(function(res) {
+        if(res) {
+          console.log("Remove " + user_id + " as an admin for group " + group_id);
+          messageFactory.removeUserAdmin(group_id, user_id).then(function () {
+            messageFactory.getGroupMembers($stateParams.group_id).then(function (res) {
+              $scope.groupMembers = res;
+
+              for (var i = 0; i < $scope.groupMembers.length; i++) {
+                if($scope.groupMembers[i].user_id === $scope.currentUser.user_id){
+                  if($scope.groupMembers[i].admin){
+                    $scope.admin = true;
+                  }
+                }
+              }
+            })
+          });
+        }
+      });
+    }
   }
 
   $scope.data.showContacts = function () {
@@ -1006,13 +1039,9 @@ function ($scope, $state, $stateParams, messageFactory) {
     $scope.broadcastTutorial = false;
   }
 
-
-  $scope.broadcastMessages = messageFactory.getBroadcastMessages();
-  $scope.broadcastObjects = messageFactory.getBroadcastObjects();
   // if($scope.broadcastMessages.length === 0){
-    messageFactory.updateBroadcastMessages().then(function (res) {
-      $scope.broadcastMessages = messageFactory.getBroadcastMessages();
-      $scope.broadcastObjects = messageFactory.getBroadcastObjects();
+    messageFactory.updateBroadcastData().then(function (res) {
+      $scope.broadcastData = res;
     });
   // }
 
@@ -1033,7 +1062,7 @@ function ($scope, $state, $stateParams, messageFactory) {
     console.log("unsubscribe from ", broadcast_id);
     messageFactory.unsubscribeToBroadcast(broadcast_id).then(function () {
       console.log("unsubscribed from ", broadcast_id);
-      messageFactory.updateBroadcastMessages().then(function (res) {
+      messageFactory.updateBroadcastData().then(function (res) {
         $scope.broadcastMessages = messageFactory.getBroadcastMessages();
         $scope.broadcastObjects = messageFactory.getBroadcastObjects();
       });
@@ -1235,23 +1264,27 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
 .controller('individualBroadcastCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$window', '$timeout', '$cordovaInAppBrowser', '$rootScope', '$ionicModal',
 function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cordovaInAppBrowser, $rootScope, $ionicModal) {
   $scope.currentBroadcast_id = $stateParams.broadcast_id;
-  $scope.broadcastObjects = messageFactory.getBroadcastObjects();
-  $scope.broadcastObject = $scope.broadcastObjects[$stateParams.broadcast_id];
-  $scope.broadcastMessages = messageFactory.getBroadcastMessages();
+
+
+  $scope.broadcastData = messageFactory.getBroadcastData();
+
+  for (var i = 0; i < $scope.broadcastData.broadcasts.length; i++) {
+    if($scope.broadcastData.broadcasts[i].broadcast_id === $stateParams.broadcast_id) $scope.currentBroadcast = $scope.broadcastData.broadcasts[i];
+  }
+
+  // for (var i = 0; i < $scope.broadcastData.messages.length; i++) {
+    $scope.currentBroadcastMessages = $scope.broadcastData.messages;
+  // }
 
   //Update on page open
-  messageFactory.updateBroadcastMessages().then(function (res) {
-    $scope.broadcastObjects = messageFactory.getBroadcastObjects();
-    $scope.broadcastObject = $scope.broadcastObjects[$stateParams.broadcast_id];
-    $scope.broadcastMessages = messageFactory.getBroadcastMessages();
+  messageFactory.updateBroadcastData().then(function (res) {
+    $scope.broadcastData = messageFactory.getBroadcastData();
   });
 
   //update every ten seconds
   $rootScope.individualBroadcastUpdateInterval = setInterval(function () {
-    messageFactory.updateBroadcastMessages().then(function (res) {
-      $scope.broadcastObjects = messageFactory.getBroadcastObjects();
-      $scope.broadcastObject = $scope.broadcastObjects[$stateParams.broadcast_id];
-      $scope.broadcastMessages = messageFactory.getBroadcastMessages();
+    messageFactory.updateBroadcastData().then(function (res) {
+      $scope.broadcastData = messageFactory.getBroadcastData();
     });
   }, 10000);
 
