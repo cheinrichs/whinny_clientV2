@@ -29,7 +29,7 @@
       <li class="item">
         Group Members
 
-        <ion-item ng-repeat="member in groupMembers" class="item item-avatar" ng-click="newPersonalMessage()">
+        <ion-item ng-repeat="member in groupMembers" class="item item-avatar" ng-click="newPersonalMessage(member)">
           <img ng-src="{{member.portrait_link}}" alt="">
           <h3>{{member.first_name}} {{member.last_name}}</h3>
 

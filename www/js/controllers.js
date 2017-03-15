@@ -749,6 +749,50 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
 
   $scope.data.errors = [];
 
+  $scope.editGroupName = function () {
+    console.log("edit group name");
+    $ionicPopup.prompt({
+      title: 'Edit Group Name',
+      inputType: 'text',
+      inputPlaceholder: 'New Group Name',
+      okType: 'button-tangerine'
+    }).then(function(res) {
+      if(res){
+        if(res.length > 0){
+          //Sets the current version in scope to the new name
+          $scope.groupObjects[$scope.group_id].group_name = res;
+          //Sets the current version on the server
+          messageFactory.updateGroupName($scope.group_id, res).then(function (res) {
+            messageFactory.updateGroupData().then(function () {
+            })
+          })
+        }
+      }
+    });
+  }
+
+  $scope.editGroupDescription = function () {
+    console.log("edit group description");
+    $ionicPopup.prompt({
+      title: 'Edit Group Description',
+      inputType: 'text',
+      inputPlaceholder: 'New Group Description ',
+      okType: 'button-tangerine'
+    }).then(function(res) {
+      if(res){
+        if(res.length > 0){
+          //Sets the current version in scope to the new name
+          $scope.groupObjects[$scope.group_id].description = res;
+          //Sets the current version on the server
+          messageFactory.updateGroupDescription($scope.group_id, res).then(function (res) {
+            messageFactory.updateGroupData().then(function () {
+            })
+          })
+        }
+      }
+    });
+  }
+
   $scope.data.takePhoto = function () {
     var options = {
       quality: 75,
@@ -900,6 +944,11 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
     }
   }
 
+  $scope.newPersonalMessage = function (member) {
+    console.log("new personal message");
+    console.log(member);
+  }
+
   $scope.data.showContacts = function () {
     $scope.data.contactsHidden = false;
   }
@@ -932,50 +981,6 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
         $scope.data.invited = [];
       })
     }
-  }
-
-  $scope.editGroupName = function () {
-    console.log("edit group name");
-    $ionicPopup.prompt({
-      title: 'Edit Group Name',
-      inputType: 'text',
-      inputPlaceholder: 'New Group Name',
-      okType: 'button-tangerine'
-    }).then(function(res) {
-      if(res){
-        if(res.length > 0){
-          //Sets the current version in scope to the new name
-          $scope.groupObjects[$scope.group_id].group_name = res;
-          //Sets the current version on the server
-          messageFactory.updateGroupName($scope.group_id, res).then(function (res) {
-            messageFactory.updateGroupData().then(function () {
-            })
-          })
-        }
-      }
-    });
-  }
-
-  $scope.editGroupDescription = function () {
-    console.log("edit group description");
-    $ionicPopup.prompt({
-      title: 'Edit Group Description',
-      inputType: 'text',
-      inputPlaceholder: 'New Group Description ',
-      okType: 'button-tangerine'
-    }).then(function(res) {
-      if(res){
-        if(res.length > 0){
-          //Sets the current version in scope to the new name
-          $scope.groupObjects[$scope.group_id].description = res;
-          //Sets the current version on the server
-          messageFactory.updateGroupDescription($scope.group_id, res).then(function (res) {
-            messageFactory.updateGroupData().then(function () {
-            })
-          })
-        }
-      }
-    });
   }
 
   $scope.leaveGroup = function (group_name) {
