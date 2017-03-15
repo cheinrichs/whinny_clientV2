@@ -490,7 +490,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
   }
 
   //for better user experience, update the group and broadcast messages right when the user lands on chat
-  messageFactory.updateGroupMessages();
+  messageFactory.updateGroupData();
   messageFactory.updateBroadcastData();
 
   // if($scope.chatMessages.length === 0){
@@ -546,15 +546,10 @@ function ($scope, $state, $stateParams, messageFactory) {
     $scope.groupsTutorial = false;
   }
 
-  $scope.groupMessages = messageFactory.getGroupMessages();
-  $scope.groupObjects = messageFactory.getGroupObjects();
 
-  // if($scope.groupMessages.length === 0){ //TODO
-    messageFactory.updateGroupMessages().then(function (res) {
-      $scope.groupMessages = messageFactory.getGroupMessages();
-      $scope.groupObjects = messageFactory.getGroupObjects();
-    });
-  // }
+  messageFactory.updateGroupData().then(function (res) {
+    $scope.groupData = res;
+  });
 
   $scope.groupInvitations = messageFactory.getGroupInvitations();
   console.log("initial group invitations", $scope.groupInvitations);
@@ -570,9 +565,14 @@ function ($scope, $state, $stateParams, messageFactory) {
   });
 
   $scope.viewGroup = function (group_id) {
-    console.log("view group " + group_id);
-    console.log($scope.groupObjects);
-    $state.go('groupProfilePage', { group: $scope.groupObjects[group_id] , returnPage: 'groupsPage'});
+    console.log("view group" + group_id);
+    console.log($scope.groupData.invitedGroupObjects);
+    for (var i = 0; i < $scope.groupData.invitedGroupObjects.length; i++) {
+      console.log($scope.groupData.invitedGroupObjects[i]);
+      if($scope.groupData.invitedGroupObjects[i].group_id === group_id){
+        $state.go('groupProfilePage', { group: $scope.groupData.invitedGroupObjects[i], returnPage: 'groupsPage'});
+      }
+    }
   }
 
   $scope.acceptGroupApplication = function (user_id, group_id) {
@@ -580,9 +580,8 @@ function ($scope, $state, $stateParams, messageFactory) {
     messageFactory.acceptGroupApplication(user_id, group_id).then(function () {
       messageFactory.updateGroupApplications().then(function (apps) {
         $scope.groupApplications = apps;
-        messageFactory.updateGroupMessages().then(function (res) {
-          $scope.groupMessages = messageFactory.getGroupMessages();
-          $scope.groupObjects = messageFactory.getGroupObjects();
+        messageFactory.updateGroupData().then(function (res) {
+          $scope.groupApplications = res;
         });
       });
     });
@@ -592,9 +591,8 @@ function ($scope, $state, $stateParams, messageFactory) {
     messageFactory.declineGroupApplication(application_id).then(function () {
       messageFactory.updateGroupApplications().then(function (apps) {
         $scope.groupApplications = apps;
-        messageFactory.updateGroupMessages().then(function (res) {
-          $scope.groupMessages = messageFactory.getGroupMessages();
-          $scope.groupObjects = messageFactory.getGroupObjects();
+        messageFactory.updateGroupData().then(function (res) {
+          $scope.groupApplications = res;
         });
       });
     });
@@ -604,9 +602,8 @@ function ($scope, $state, $stateParams, messageFactory) {
     messageFactory.acceptGroupInvitation(user_id, group_id).then(function () {
       messageFactory.updateGroupInvitations().then(function (res) {
         $scope.groupInvitations = res;
-        messageFactory.updateGroupMessages().then(function (res) {
-          $scope.groupMessages = messageFactory.getGroupMessages();
-          $scope.groupObjects = messageFactory.getGroupObjects();
+        messageFactory.updateGroupData().then(function (res) {
+          $scope.groupApplications = res;
         });
       })
     });
@@ -645,9 +642,8 @@ function ($scope, $state, $stateParams, messageFactory) {
   $scope.leaveGroup = function (group_id) {
     console.log("leaving group", group_id);
     messageFactory.leaveGroup(group_id).then(function () {
-      messageFactory.updateGroupMessages().then(function (res) {
-        $scope.groupMessages = messageFactory.getGroupMessages();
-        $scope.groupObjects = messageFactory.getGroupObjects();
+      messageFactory.updateGroupData().then(function (res) {
+        $scope.groupApplications = res;
       });
     })
   }
@@ -945,7 +941,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
           $scope.groupObjects[$scope.group_id].group_name = res;
           //Sets the current version on the server
           messageFactory.updateGroupName($scope.group_id, res).then(function (res) {
-            messageFactory.updateGroupMessages().then(function () {
+            messageFactory.updateGroupData().then(function () {
             })
           })
         }
@@ -967,7 +963,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
           $scope.groupObjects[$scope.group_id].description = res;
           //Sets the current version on the server
           messageFactory.updateGroupDescription($scope.group_id, res).then(function (res) {
-            messageFactory.updateGroupMessages().then(function () {
+            messageFactory.updateGroupData().then(function () {
             })
           })
         }
@@ -1039,11 +1035,11 @@ function ($scope, $state, $stateParams, messageFactory) {
     $scope.broadcastTutorial = false;
   }
 
-  // if($scope.broadcastMessages.length === 0){
-    messageFactory.updateBroadcastData().then(function (res) {
-      $scope.broadcastData = res;
-    });
-  // }
+  //TODO local storage all the chat data? Refresh on only pushes?
+
+  messageFactory.updateBroadcastData().then(function (res) {
+    $scope.broadcastData = res;
+  });
 
   $scope.goToIndividualBroadcast = function (broadcast_id) {
     console.log('go to broadcast' + broadcast_id);
@@ -1195,33 +1191,32 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   $scope.currentUser = messageFactory.getCurrentUser();
   $scope.group_id = $stateParams.group_id;
 
-  $scope.groupMessages = messageFactory.getGroupMessages();
-  $scope.groupObjects = messageFactory.getGroupObjects();
-  $scope.userObjects = messageFactory.getGroupUserObjects();
+  $scope.groupData = messageFactory.getGroupData();
 
-  $scope.individualGroupMessages = [];
-  for (var i = 0; i < $scope.groupMessages.length; i++) {
-    if($scope.groupMessages[i].to_group === $scope.group_id) $scope.individualGroupMessages.push($scope.groupMessages[i]);
+  for (var i = 0; i < $scope.groupData.groupObjects.length; i++) {
+    //Set the current broadcast to match the one in the passed in group id
+    if($scope.groupData.groupObjects[i].group_id === $scope.group_id) $scope.currentGroup = $scope.groupData.groupObjects[i];
   }
 
   //update the group messages
   //and replace messages and objects
-  messageFactory.updateGroupMessages().then(function(){
-    $scope.groupMessages = messageFactory.getGroupMessages();
-    $scope.groupObjects = messageFactory.getGroupObjects();
-    $scope.userObjects = messageFactory.getGroupUserObjects();
+  messageFactory.updateGroupData().then(function(res){
+    $scope.groupData = res;
   })
 
-  $rootScope.individualGroupUpdateInterval = setInterval(function () {
-    messageFactory.updateGroupMessages().then(function(){
-      $scope.groupMessages = messageFactory.getGroupMessages();
-      $scope.groupObjects = messageFactory.getGroupObjects();
-      $scope.userObjects = messageFactory.getGroupUserObjects();
+  var messagesRead = [];
+  for (var i = 0; i < $scope.groupData.groupMessages.length; i++) {
+    if($scope.groupData.groupMessages[i].unread && $scope.groupData.groupMessages[i].to_group === $scope.group_id){
+      messagesRead.push($scope.groupData.groupMessages[i].group_message_id);
+    }
+  }
+  console.log(messagesRead);
 
-      $scope.individualGroupMessages = [];
-      for (var i = 0; i < $scope.groupMessages.length; i++) {
-        if($scope.groupMessages[i].to_group === $scope.group_id) $scope.individualGroupMessages.push($scope.groupMessages[i]);
-      }
+  messageFactory.markGroupMessagesAsRead(messagesRead);
+
+  $rootScope.individualGroupUpdateInterval = setInterval(function () {
+    messageFactory.updateGroupData().then(function(res){
+      $scope.groupData = res;
     })
   }, 10000);
 
@@ -1240,7 +1235,7 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
       if($scope.groupMessage.length > 0){
         messageFactory.sendGroupMessage($stateParams.group_id, $scope.groupObjects[$scope.group_id].group_name, $scope.groupMessage).then(function () {
           $scope.groupMessage = "";
-          messageFactory.updateGroupMessages().then(function(){
+          messageFactory.updateGroupData().then(function(){
             $scope.groupMessages = messageFactory.getGroupMessages();
             $scope.groupObjects = messageFactory.getGroupObjects();
             $scope.userObjects = messageFactory.getGroupUserObjects();
@@ -1272,9 +1267,7 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
     if($scope.broadcastData.broadcasts[i].broadcast_id === $stateParams.broadcast_id) $scope.currentBroadcast = $scope.broadcastData.broadcasts[i];
   }
 
-  // for (var i = 0; i < $scope.broadcastData.messages.length; i++) {
-    $scope.currentBroadcastMessages = $scope.broadcastData.messages;
-  // }
+  $scope.currentBroadcastMessages = $scope.broadcastData.messages;
 
   //Update on page open
   messageFactory.updateBroadcastData().then(function (res) {
@@ -1287,6 +1280,14 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
       $scope.broadcastData = messageFactory.getBroadcastData();
     });
   }, 10000);
+
+  var messagesRead = [];
+  for (var i = 0; i < $scope.currentBroadcastMessages.length; i++) {
+    if($scope.currentBroadcastMessages[i].unread && $scope.currentBroadcastMessages[i].to_broadcast === $scope.currentBroadcast_id){
+      messagesRead.push($scope.currentBroadcastMessages[i].broadcast_message_id);
+    }
+  }
+  messageFactory.markBroadcastMessagesAsRead(messagesRead);
 
   $scope.showModal = function (imageUrl) {
     $scope.imageUrl = imageUrl;
@@ -1313,19 +1314,13 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
         clearcache: 'yes',
         toolbar: 'yes'
      };
-    // window.open(url, '_blank');
 
     $cordovaInAppBrowser.open(url, '_blank', options)
-
-      .then(function(event) {
-         // success
-      })
-
-      .catch(function(event) {
-         // error
-      });
-
+      .then(function(event) {})
+      .catch(function(event) {});
   }
+
+
 }])
 
 .controller('settingsCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPush', '$localStorage', '$rootScope',
@@ -1652,7 +1647,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $cordov
         console.log("filename: ", filename);
         photoFactory.uploadGroupProfilePhoto(filename, $scope.groupData.imgURI);
         //update group pages
-        messageFactory.updateGroupMessages().then(function () {
+        messageFactory.updateGroupData().then(function () {
           $scope.groupData.createGroupInfo.groupName = "";
           $scope.groupData.createGroupInfo.is_private = false;
           $scope.groupData.createGroupInfo.is_public = false;

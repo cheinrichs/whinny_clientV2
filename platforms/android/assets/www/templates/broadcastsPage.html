@@ -23,11 +23,8 @@
           <i ng-if="!broadcast.unread" class="broadcastMessageIcon icon ion-chevron-right"></i>
           <i ng-if="broadcast.unread" class="broadcastMessageIcon newMessageIcon icon ion-record energized"></i>
 
-          <ion-option-button class="button-assertive"
-                             ng-click="unsubscribeFromBroadcast(broadcast.broadcast_id)">
-            Unsubscribe
-          </ion-option-button>
-          <!-- <i class="icon ion-chevron-right energized"></i> -->
+          <ion-option-button class="button-assertive"ng-click="unsubscribeFromBroadcast(broadcast.broadcast_id)">Unsubscribe</ion-option-button>
+
         </ion-item>
       </ion-list>
 

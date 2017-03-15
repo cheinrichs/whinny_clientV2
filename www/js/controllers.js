@@ -727,8 +727,15 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
     }
   })
 
-  $scope.groupObjects = messageFactory.getGroupObjects();
-  $scope.userObjects = messageFactory.getGroupUserObjects();
+  $scope.groupData = messageFactory.getGroupData();
+
+  for (var i = 0; i < $scope.groupData.groupObjects.length; i++) {
+    if($scope.groupData.groupObjects[i].group_id === $scope.group_id){
+      $scope.group = $scope.groupData.groupObjects[i];
+    }
+  }
+  // $scope.groupObjects = messageFactory.getGroupObjects();
+  // $scope.userObjects = messageFactory.getGroupUserObjects();
 
   $scope.data = {};
   $scope.data.newChatRecipient = "";
@@ -1194,7 +1201,7 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   $scope.groupData = messageFactory.getGroupData();
 
   for (var i = 0; i < $scope.groupData.groupObjects.length; i++) {
-    //Set the current broadcast to match the one in the passed in group id
+    //Set the current group to match the one in the passed in group id
     if($scope.groupData.groupObjects[i].group_id === $scope.group_id) $scope.currentGroup = $scope.groupData.groupObjects[i];
   }
 
@@ -1221,8 +1228,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   }, 10000);
 
   $scope.addEmoji = function (emoji) {
-    console.log("adding emoji", emoji);
-    // $('#groupInput').focus();
     if($scope.groupMessage){
       $scope.groupMessage += emoji;
     } else {
@@ -1236,9 +1241,7 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
         messageFactory.sendGroupMessage($stateParams.group_id, $scope.groupObjects[$scope.group_id].group_name, $scope.groupMessage).then(function () {
           $scope.groupMessage = "";
           messageFactory.updateGroupData().then(function(){
-            $scope.groupMessages = messageFactory.getGroupMessages();
-            $scope.groupObjects = messageFactory.getGroupObjects();
-            $scope.userObjects = messageFactory.getGroupUserObjects();
+            $scope.getGroupData();
           })
         })
       }
@@ -1246,7 +1249,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   }
 
   $scope.goToGroupInfo = function () {
-    console.log($stateParams.group_id);
     $state.go('groupInfo', { group_id: $stateParams.group_id });
   }
 

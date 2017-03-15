@@ -13,19 +13,19 @@
       <div class="top-container" scroll-glue>
 
         <div ng-repeat="message in groupData.groupMessages" ng-show="message.to_group === group_id" ng-cloak>
-          <!-- <div class="row">
+          <div class="row">
             <div class="col">
               <div class="timeSent">
                 {{message.group_message_created | date:'shortTime'}}
               </div>
             </div>
-          </div> -->
+          </div>
           <div class="row">
             <div class="col col-80" ng-class="{ 'col-offset-20': message.from_user === currentUser.user_id }">
               <div ng-class="{ fromMessage : message.from_user != currentUser.user_id, toMessage : message.from_user === currentUser.user_id }">
                 <div class="row">
                   <div class="col col-20">
-                    <img class="groupChatPortrait" ng-src="{{ userObjects[message.from_user].portrait_link }}" alt="" ng-show="message.from_user != currentUser.user_id">
+                    <img class="groupChatPortrait" ng-src="{{ groupData.groupMembersById[message.from_user].portrait_link }}" alt="" ng-show="message.from_user != currentUser.user_id">
                   </div>
                   <div class="col col-80">
                     <div ng-bind-html="message.group_message_content | emoji">{{message.group_message_content}}</div>

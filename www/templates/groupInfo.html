@@ -11,13 +11,13 @@
 
       <li class="item groupInfoHeader item-text-wrap">
 
-        <h2 class="groupInfoTitle">{{groupObjects[group_id].group_name}} </h2>
+        <h2 class="groupInfoTitle">{{group.group_name}} </h2>
         <a class="groupInfoEditTitle" ng-if="admin" ng-click="editGroupName()" href="">Edit Group Name</a>
 
-        <p class="groupInfoDescription">{{groupObjects[group_id].description}}</p>
+        <p class="groupInfoDescription">{{group.description}}</p>
         <a class="groupInfoEditDescription" ng-if="admin" ng-click="editGroupDescription()" href="">Edit Group Description</a>
 
-        <img ng-hide="imgURI !== undefined" ng-src="{{groupObjects[group_id].group_photo}}" class="groupInfoPic" alt=""> <!--TODO show placeholder and format -->
+        <img ng-hide="imgURI !== undefined" ng-src="{{group.group_photo}}" class="groupInfoPic" alt=""> <!--TODO show placeholder and format -->
         <img ng-hide="imgURI === undefined" ng-src="{{imgURI}}" class="groupInfoPic" alt=""> <!--TODO show placeholder and format -->
 
         <div class="row" ng-if="admin">
@@ -33,7 +33,7 @@
           <img ng-src="{{member.portrait_link}}" alt="">
           <h3>{{member.first_name}} {{member.last_name}}</h3>
 
-          <i class="icon ion-close-round removeGroupMember" ng-if="admin && !member.admin" ng-click="removeUserFromGroup(group_id, member.user_id, member.first_name, member.last_name, groupObjects[group_id].group_name)"></i>
+          <i class="icon ion-close-round removeGroupMember" ng-if="admin && !member.admin" ng-click="removeUserFromGroup(group_id, member.user_id, member.first_name, member.last_name, group.group_name)"></i>
 
           <i class="icon ion-ribbon-b energized adminBadge" ng-if="member.admin && !member.owner" ng-click="removeUserAdmin(group_id, member.user_id, member.first_name, member.last_name)"></i>
 
@@ -71,8 +71,8 @@
       </li>
 
       <li class="item">
-        <button class="button button-block button-assertive" ng-click="leaveGroup(groupObjects[group_id].group_name)">Leave Group</button>
-        <button class="button button-block button-assertive" ng-if="admin" ng-click="deleteGroup(group_id, groupObjects[group_id].group_name)">Delete Group</button>
+        <button class="button button-block button-assertive" ng-click="leaveGroup(group.group_name)">Leave Group</button>
+        <button class="button button-block button-assertive" ng-if="admin" ng-click="deleteGroup(group_id, group.group_name)">Delete Group</button>
       </li>
 
     </ul>

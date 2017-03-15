@@ -5,7 +5,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     getMessages: getMessages,
 
     updateChatMessages: updateChatMessages,
-    updateGroupMessages: updateGroupMessages,
+    updateGroupData: updateGroupData,
     updateBroadcastData: updateBroadcastData,
 
     getUserObjects: getUserObjects,
@@ -13,6 +13,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     getGroupObjects: getGroupObjects,
     getGroupUserObjects: getGroupUserObjects,
     getGroupMembers: getGroupMembers,
+
+    getGroupData: getGroupData,
 
     getBroadcastData: getBroadcastData,
 
@@ -36,6 +38,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     sendBroadcastMessage: sendBroadcastMessage,
 
     markChatMessagesAsRead: markChatMessagesAsRead,
+    markGroupMessagesAsRead: markGroupMessagesAsRead,
+    markBroadcastMessagesAsRead: markBroadcastMessagesAsRead,
     markTutorialAsRead: markTutorialAsRead,
     resetTutorials: resetTutorials,
 
@@ -110,13 +114,15 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   //Each object in this array has each users name, profile picture
   var userObjects = [];
 
+  var groupData;
+
   //Contains all messages for each group the current is user is part of.
-  var groupMessages = {};
-  //Contains name and profile picture for each user associated with a group the
+  // var groupMessages = {};
+  // Contains name and profile picture for each user associated with a group the
   //the current user is a part of
-  var groupObjects = [];
+  // var groupObjects = [];
   //Contains objects for each user for group chat
-  var groupUserObjects = {};
+  // var groupUserObjects = {};
 
   //Contains all messages for each broadcast
   var broadcastMessages = [];
@@ -154,66 +160,82 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     })
   }
 
-  function updateGroupMessages(){
-    // if(currentUser.user_id){
-      var url = API_URL + '/groupMessages/' + currentUser.user_id;
-      return $http.get(url).then(function (res) {
-        //groupData = {}; //TODO
-        //groupData.groupMessages = res.data.groupMessages;
-        groupMessages = res.data.groupMessages;
-        groupObjects = res.data.groupObjects;
+  function updateGroupData(){
+    var url = API_URL + '/groupMessages/' + currentUser.user_id;
+    return $http.get(url).then(function (res) {
 
-        for (var i = 0; i < res.data.userObjects.length; i++){
-          groupUserObjects[res.data.userObjects[i].user_id] = res.data.userObjects[i];
+
+      var groupDataUnparsed = res.data;
+      var unreadGroups = [];
+      var unreadGroupMessages = [];
+
+      //loop through the unread messages and push those into their own array
+      for (var i = 0; i < groupDataUnparsed.unread.length; i++) {
+        unreadGroups.push(groupDataUnparsed.unread[i].group_id);
+        unreadGroupMessages.push(groupDataUnparsed.unread[i].group_message_read_id)
+      }
+
+      //mark each broadcast with an unread message with unread = true
+      for (var i = 0; i < groupDataUnparsed.groupObjects.length; i++) {
+        groupDataUnparsed.groupObjects[i].unread = false;
+        if(unreadGroups.indexOf(groupDataUnparsed.groupObjects[i].group_id) >= 0){
+          groupDataUnparsed.groupObjects[i].unread = true;
         }
-        return;
-      })
-    // } else {
-    //   console.log("current user user id is not defined");
-    //   return;
-    // }
+      }
+
+      //mark each unread message with unread = true
+      //this will be used to mark the message as read
+      for (var i = 0; i < groupDataUnparsed.groupMessages.length; i++) {
+        groupDataUnparsed.groupMessages[i].unread = false;
+        if(unreadGroupMessages.indexOf(groupDataUnparsed.groupMessages[i].group_message_id) >= 0){
+          groupDataUnparsed.groupMessages[i].unread = true;
+        }
+      }
+
+      groupData = groupDataUnparsed;
+
+      console.log(groupData);
+
+      return groupData;
+    })
   }
 
   function updateBroadcastData(){
-    // if(currentUser.user_id){
-      var url = API_URL + '/broadcastMessages/' + currentUser.user_id;
-      return $http.get(url).then(function (res) {
-        var broadcastDataUnparsed = res.data;
-        var unreadBroadcasts = [];
-        var unreadMessages = [];
+    var url = API_URL + '/broadcastMessages/' + currentUser.user_id;
+    return $http.get(url).then(function (res) {
+      var broadcastDataUnparsed = res.data;
+      var unreadBroadcasts = [];
+      var unreadMessages = [];
 
-        for (var i = 0; i < broadcastDataUnparsed.unread.length; i++) {
-          unreadBroadcasts.push(broadcastDataUnparsed.unread[i].broadcast_id);
-          unreadMessages.push(broadcastDataUnparsed.unread[i].broadcast_message_id);
+      //loop through the unread messages and push those into their own array
+      for (var i = 0; i < broadcastDataUnparsed.unread.length; i++) {
+        unreadBroadcasts.push(broadcastDataUnparsed.unread[i].broadcast_id);
+        unreadMessages.push(broadcastDataUnparsed.unread[i].broadcast_message_id);
+      }
+
+      //mark each broadcast with an unread message with unread = true
+      for (var i = 0; i < broadcastDataUnparsed.broadcasts.length; i++) {
+        broadcastDataUnparsed.broadcasts[i].unread = false;
+        if(unreadBroadcasts.indexOf(broadcastDataUnparsed.broadcasts[i].broadcast_id) >= 0){
+          broadcastDataUnparsed.broadcasts[i].unread = true;
         }
-        for (var i = 0; i < broadcastDataUnparsed.broadcasts.length; i++) {
-          broadcastDataUnparsed.broadcasts[i].unread = false;
-          if(unreadBroadcasts.indexOf(broadcastDataUnparsed.broadcasts[i].broadcast_id) >= 0){
-            broadcastDataUnparsed.broadcasts[i].unread = true;
-          }
+      }
+
+      //mark each unread message with unread = true
+      //this will be used to mark the message as read
+      for (var i = 0; i < broadcastDataUnparsed.messages.length; i++) {
+        broadcastDataUnparsed.messages[i].unread = false;
+        if(unreadMessages.indexOf(broadcastDataUnparsed.messages[i].broadcast_message_id) >= 0){
+          broadcastDataUnparsed.messages[i].unread = true;
         }
+      }
 
-        for (var i = 0; i < broadcastDataUnparsed.messages.length; i++) {
-          broadcastDataUnparsed.messages[i].unread = false;
-          if(unreadMessages.indexOf(broadcastDataUnparsed.messages[i].broadcast_message_id) >= 0){
-            broadcastDataUnparsed.messages[i].unread = true;
-          }
-        }
+      broadcastData = broadcastDataUnparsed;
 
-        broadcastData = broadcastDataUnparsed;
+      console.log(broadcastData);
 
-        console.log(broadcastData);
-
-        return broadcastData;
-        //TODO
-        // broadcastMessages = res.data.broadcastMessages;
-        // broadcastObjects = {};
-        //
-        // for (var i = 0; i < res.data.broadcastObjects.length; i++) {
-        //   broadcastObjects[res.data.broadcastObjects[i].broadcast_id] = res.data.broadcastObjects[i];
-        // }
-
-      })
+      return broadcastData;
+    })
   }
 
   function getUserObjects() {
@@ -237,6 +259,10 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
   function getBroadcastData() {
     return broadcastData;
+  }
+
+  function getGroupData() {
+    return groupData;
   }
 
   function getChatMessages() {
@@ -340,8 +366,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function markChatMessagesAsRead(newlyReadMessages) {
-    console.log("marking messages as read");
-    console.log(newlyReadMessages);
     var data = {
       newlyReadMessages: newlyReadMessages
     };
@@ -349,7 +373,29 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     var url = API_URL + '/markChatMessagesAsRead';
     return $http.post(url, data).then(function (res) {
       return res;
+    });
+  }
+
+  function markGroupMessagesAsRead(newlyReadMessages) {
+    var data = {
+      user_id: currentUser.user_id,
+      newlyReadMessages: newlyReadMessages
+    };
+    var url = API_URL + '/markGroupMessagesAsRead';
+    return $http.post(url, data).then(function (res) {
+      return res;
     })
+  }
+
+  function markBroadcastMessagesAsRead(newlyReadMessages) {
+    var data = {
+      user_id: currentUser.user_id,
+      newlyReadMessages: newlyReadMessages
+    }
+    var url = API_URL + '/markBroadcastMessagesAsRead';
+    return $http.post(url, data).then(function (res) {
+      return res;
+    });
   }
 
   function markTutorialAsRead(tutorial) {
