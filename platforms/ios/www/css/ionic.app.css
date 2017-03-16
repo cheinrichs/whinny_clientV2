@@ -10289,6 +10289,12 @@ a.button {
   font-size: 10px;
   margin: 0px; }
 
+.tab-padding {
+  bottom: 55px !important; }
+
+.platform-android .tab-padding {
+  bottom: 65px !important; }
+
 .groupChatPortrait {
   border: 1px solid white;
   border-radius: 50%;

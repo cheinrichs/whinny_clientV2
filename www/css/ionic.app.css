@@ -10295,6 +10295,10 @@ a.button {
 .platform-android .tab-padding {
   bottom: 65px !important; }
 
+.rotate-90 {
+  transform: rotate(180deg);
+  display: inline-block; }
+
 .groupChatPortrait {
   border: 1px solid white;
   border-radius: 50%;

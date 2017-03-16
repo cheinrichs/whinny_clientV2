@@ -192,6 +192,12 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
         }
       }
 
+      groupDataUnparsed.groupMembersById = {};
+
+      for (var i = 0; i < groupDataUnparsed.userObjects.length; i++) {
+        groupDataUnparsed.groupMembersById[groupDataUnparsed.userObjects[i].user_id] = groupDataUnparsed.userObjects[i];
+      }
+
       groupData = groupDataUnparsed;
 
       console.log(groupData);
