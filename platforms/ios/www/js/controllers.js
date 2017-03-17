@@ -1140,6 +1140,8 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   $scope.currentUser = messageFactory.getCurrentUser();
   $scope.chatMessages = messageFactory.getChatMessages();
 
+  $scope.hideInput = false;
+
   console.log($stateParams.convo);
   for (var i = 0; i < $scope.chatMessages.length; i++) {
     if($scope.chatMessages[i].convoUser.user_id === $stateParams.convo.convoUser.user_id) $scope.convo = $scope.chatMessages[i];
@@ -1181,6 +1183,34 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
     } else {
       console.log("enter a message!");
     }
+  }
+
+  $scope.hideChatBox = function () {
+    console.log("hide box");
+    $scope.hideInput = !$scope.hideInput;
+  }
+
+  var previousChatMessage = '';
+
+  $scope.textChecker = function () {
+    if(previousChatMessage == ''){
+      previousChatMessage = $scope.chatMessage;
+    }
+    // console.log("check the text!");
+    // console.log($scope.chatMessage);
+    //
+    console.log("prev" + previousChatMessage.length);
+
+    console.log("new" + $scope.chatMessage.length);
+
+    // if($scope.chatMessage.length < previousChatMessage.length){
+      // if(previousChatMessage[$scope.chatMessage.length] === '\`'){
+        console.log("deleted a thingy");
+        var newString = $scope.chatMessage + '';
+        $scope.chatMessage = newString.replace('午\`\`', '');
+      // }
+    // }
+    previousChatMessage = $scope.chatMessage;
   }
 
   $scope.addEmoji = function (emoji) {

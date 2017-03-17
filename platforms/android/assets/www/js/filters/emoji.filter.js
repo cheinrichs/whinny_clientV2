@@ -2,7 +2,7 @@
   'use strict';
 
   var emojis = [
-    'HappyFace',
+    '午```',
     'LayingHorse',
     'AngryFace',
     'BuckingHorse',
@@ -44,13 +44,16 @@
     'Carrot'
   ];
 
-  var emojiRegex = new RegExp(':(' + emojis.join('|') + '):', 'g');
+  // var emojiRegex = new RegExp(':(' + emojis.join('|') + '):', 'g');
+  var emojiRegex = new RegExp(emojis.join('|'), 'g');
 
   angular.module('app').filter('emoji', ['$filter', function ($filter) {
     return function (input) {
-      return input.replace(emojiRegex, function (match, text) {
-        return '<img class="emoji" src="img/emoji/'+ text + '.png">';
-      });
+      if(input){
+        return input.replace(emojiRegex, function (match, text) {
+          return '<img class="emoji" src="img/emoji/'+ match[0] + '.png">';
+        });
+      }
     };
   }]);
 }());

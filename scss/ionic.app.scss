@@ -561,6 +561,22 @@ $tabs-height:                     56px;
   display: inline-block;
 }
 
+.hidden {
+  color: red !important;
+}
+.shown {
+  color: white !important;
+  border: 0px;
+}
+
+.visibleTextBox{
+  position: relative;
+  top: -10px;
+}
+.invisibleTextBox{
+  border-color: white !important;
+}
+
 .groupChatPortrait {
   border: 1px solid white;
   border-radius: 50%;
@@ -763,7 +779,7 @@ $tabs-height:                     56px;
   background-image: url('../img/emoji/GrazingHorse.png');
 }
 .HappyFaceEButton {
-  background-image: url('../img/emoji/HappyFace.png');
+  background-image: url('../img/emoji/午.png');
 }
 .HarrowEButton {
   background-image: url('../img/emoji/Harrow.png');

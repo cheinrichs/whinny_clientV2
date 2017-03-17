@@ -37,7 +37,7 @@
 
           <i class="icon ion-ribbon-b energized adminBadge" ng-if="member.admin && !member.owner" ng-click="removeUserAdmin(group_id, member.user_id, member.first_name, member.last_name)"></i>
 
-          <i class="icon ion-magnet energized adminBadge" ng-if="member.owner"></i>
+          <i class="icon ion-magnet energized adminBadge rotate-90" ng-if="member.owner"></i>
 
           <i class="icon ion-ribbon-b makeGroupMemberAdmin" ng-if='!member.admin && admin || !member.admin && member.owner' ng-click="makeUserAdmin(group_id, member.user_id)"></i>
 

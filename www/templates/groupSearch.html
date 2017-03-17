@@ -15,7 +15,7 @@
       </label>
 
       <ion-item ng-repeat="group in groupSearchObjects | filter:data.searchInput" class="item item-avatar" ng-click="goToGroupPage(group)">
-        <img ng-src="{{group.group_photo}}" alt="">
+        <img preload-image ng-src="{{group.group_photo}}" alt="">
         {{group.group_name}}
         <br>
         {{group.description}}
