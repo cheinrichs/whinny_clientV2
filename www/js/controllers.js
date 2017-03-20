@@ -945,8 +945,9 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
   }
 
   $scope.newPersonalMessage = function (member) {
-    console.log("new personal message");
-    console.log(member);
+    if(member.user_id !== $scope.currentUser.user_id){
+      $state.go('newChatMessage', { groupMember: member, returnPage: $stateParams.group_id });
+    }
   }
 
   $scope.data.showContacts = function () {
@@ -1481,8 +1482,15 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
 function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contactsFactory) {
 
   $scope.data = {};
-  $scope.data.newChatRecipient = "";
   $scope.data.contactsHidden = true;
+  $scope.data.isWhinnyUser = false;
+  $scope.data.newChatRecipient = "";
+
+  if($stateParams.groupMember.first_name){
+    console.log($stateParams.groupMember);
+    $scope.data.isWhinnyUser = true;
+    $scope.data.newChatRecipient = $stateParams.groupMember.first_name + ' ' + $stateParams.groupMember.last_name + '';
+  }
 
   //Load all contacts into the contacts factory
   $scope.data.contacts = contactsFactory.getContacts();
@@ -1502,43 +1510,55 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
   }
 
   $scope.createNewChatMessage = function () {
-    // createNewChatMessage(to_phone, content)
-    if(!$scope.data.chosenPhone){
-      $scope.data.errors.push('Please enter a valid recipient!');
-    } else {
-      var i = $scope.data.errors.indexOf('Please enter a valid recipient!');
-      if(i != -1) $scope.data.errors.splice(i, 1);
-    }
-    if(!$scope.chatMessage){
-      $scope.data.errors.push('Please enter a message!');
-    } else {
-      var i = $scope.data.errors.indexOf('Please enter a message!');
-      if(i != -1) $scope.data.errors.splice(i, 1);
-    }
-    if($scope.data.errors.length > 0){
-      return;
-    }
-    var parsedPhone = $scope.data.chosenPhone.replace(/[\s()-]/g, "");
-    console.log("parsedPhone");
-    console.log(parsedPhone);
-    messageFactory.createNewChatMessage(parsedPhone, $scope.chatMessage).then(function (res) {
-      messageFactory.updateChatMessages().then(function (convos) {
-        console.log("convos");
-        console.log(convos);
-        console.log("***");
-        $scope.chatMessage = "";
-        $scope.data.newChatRecipient = "";
-        var new_convo;
-        for (var i = 0; i < convos.length; i++) {
-          console.log(convos[i]);
-          if(convos[i].convoUser.user_id === res.data.user_id){
-            new_convo = convos[i];
+    //if you're speaking to another whinny user, send the chat the easy way
+    if($scope.data.isWhinnyUser){
+      messageFactory.sendChatMessage($stateParams.groupMember.user_id, $scope.chatMessage).then(function (res) {
+        messageFactory.updateChatMessages().then(function (convos) {
+          $scope.chatMessage = "";
+          $scope.data.newChatRecipient = "";
+          var new_convo;
+          for (var i = 0; i < convos.length; i++) {
+            if(convos[i].convoUser.user_id === $stateParams.groupMember.user_id){
+              new_convo = convos[i];
+            }
           }
-        }
-        // $stateParams.convo.convoUser.user_id
-        $state.go('individualChat', { convo: new_convo });
+          console.log(new_convo);
+          $state.go('individualChat', { convo: new_convo });
+        })
+      })
+
+    //If you're not speaking to a whinny user, we have to make sure the phone number is valid
+    } else {
+      if(!$scope.data.chosenPhone){
+        $scope.data.errors.push('Please enter a valid recipient!');
+      } else {
+        var i = $scope.data.errors.indexOf('Please enter a valid recipient!');
+        if(i != -1) $scope.data.errors.splice(i, 1);
+      }
+      if(!$scope.chatMessage){
+        $scope.data.errors.push('Please enter a message!');
+      } else {
+        var i = $scope.data.errors.indexOf('Please enter a message!');
+        if(i != -1) $scope.data.errors.splice(i, 1);
+      }
+      if($scope.data.errors.length > 0){
+        return;
+      }
+      var parsedPhone = $scope.data.chosenPhone.replace(/[\s()-]/g, "");
+      messageFactory.createNewChatMessage(parsedPhone, $scope.chatMessage).then(function (res) {
+        messageFactory.updateChatMessages().then(function (convos) {
+          $scope.chatMessage = "";
+          $scope.data.newChatRecipient = "";
+          var new_convo;
+          for (var i = 0; i < convos.length; i++) {
+            if(convos[i].convoUser.user_id === res.data.user_id){
+              new_convo = convos[i];
+            }
+          }
+          $state.go('individualChat', { convo: new_convo });
+        });
       });
-    });
+    }
   }
 
   $scope.addEmoji = function (emoji) {
@@ -1550,7 +1570,11 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
   }
 
   $scope.backToChatPage = function () {
-    $state.go('tabsController.chatPage');
+    if($stateParams.returnPage){
+      $state.go('groupInfo', { group_id: $stateParams.returnPage });
+    } else {
+      $state.go('tabsController.chatPage');
+    }
   }
 }])
 
