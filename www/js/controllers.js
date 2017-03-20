@@ -1190,27 +1190,27 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
     $scope.hideInput = !$scope.hideInput;
   }
 
-  var previousChatMessage = '';
+  // var previousChatMessage = '';
 
   $scope.textChecker = function () {
-    if(previousChatMessage == ''){
-      previousChatMessage = $scope.chatMessage;
-    }
+    // if(previousChatMessage == ''){
+    //   previousChatMessage = $scope.chatMessage;
+    // }
     // console.log("check the text!");
     // console.log($scope.chatMessage);
     //
-    console.log("prev" + previousChatMessage.length);
+    // console.log("prev" + previousChatMessage.length);
 
-    console.log("new" + $scope.chatMessage.length);
+    // console.log("new" + $scope.chatMessage.length);
 
     // if($scope.chatMessage.length < previousChatMessage.length){
       // if(previousChatMessage[$scope.chatMessage.length] === '\`'){
-        console.log("deleted a thingy");
-        var newString = $scope.chatMessage + '';
-        $scope.chatMessage = newString.replace('午\`\`', '');
+        // console.log("deleted a thingy");
+        // var newString = $scope.chatMessage + '';
+        // $scope.chatMessage = newString.replace('午\`\`', '');
       // }
     // }
-    previousChatMessage = $scope.chatMessage;
+    // previousChatMessage = $scope.chatMessage;
   }
 
   $scope.addEmoji = function (emoji) {
@@ -1273,10 +1273,11 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   $scope.sendGroupMessage = function () {
     if($scope.groupMessage){
       if($scope.groupMessage.length > 0){
-        messageFactory.sendGroupMessage($stateParams.group_id, $scope.groupObjects[$scope.group_id].group_name, $scope.groupMessage).then(function () {
+        messageFactory.sendGroupMessage($stateParams.group_id, $scope.currentGroup.group_name, $scope.groupMessage).then(function () {
           $scope.groupMessage = "";
+          console.log($scope.groupData);
           messageFactory.updateGroupData().then(function(){
-            $scope.getGroupData();
+            $scope.groupData = messageFactory.getGroupData();
           })
         })
       }

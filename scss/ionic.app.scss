@@ -562,19 +562,20 @@ $tabs-height:                     56px;
 }
 
 .hidden {
-  color: red !important;
+  // color: red !important;
 }
 .shown {
-  color: white !important;
-  border: 0px;
+  // color: white !important;
+  // border: 0px;
 }
 
 .visibleTextBox{
-  position: relative;
-  top: -10px;
+  position: absolute;
+  top: 12px;
+  left: 15px;
 }
 .invisibleTextBox{
-  border-color: white !important;
+  // border-color: white !important;
 }
 
 .groupChatPortrait {
@@ -687,7 +688,7 @@ $tabs-height:                     56px;
 }
 
 .chatScreen {
-  padding: 40px 0px 60px 0px;
+  padding: 40px 0px 80px 0px;
 }
 
 .footer-input {
@@ -779,7 +780,7 @@ $tabs-height:                     56px;
   background-image: url('../img/emoji/GrazingHorse.png');
 }
 .HappyFaceEButton {
-  background-image: url('../img/emoji/午.png');
+  background-image: url('../img/emoji/HappyFace.png');
 }
 .HarrowEButton {
   background-image: url('../img/emoji/Harrow.png');
