@@ -12,7 +12,7 @@
 
   <ion-content padding="true" class="has-header tab-padding">
 
-    <div ng-repeat="group in groupApplications"   ng-hide="groupApplications.noCurrentApplications">
+    <div ng-repeat="group in groupApplications" ng-if="!groupApplications.noCurrentApplications">
       <ion-list ng-if="group.applications.length > 0">
         {{group.group_name}} requests -
       </ion-list>
@@ -30,10 +30,10 @@
           </div>
         </div>
       </div>
+      <br>
     </div>
-    <br>
 
-    <span ng-show="groupInvitations.length > 0">
+    <span ng-if="groupInvitations.length > 0">
       <ion-list>
         New Group Invitations -
       </ion-list>
@@ -60,7 +60,7 @@
     </span>
 
     <ion-list>
-      <ion-item ng-repeat="group in groupData.groupObjects | orderBy:'-unread'" class="item item-avatar" ng-click="goToGroupMessage(group.group_id)">
+      <ion-item ng-repeat="group in groupData.groupObjects | orderBy:'-unread' track by $index" class="item item-avatar" ng-click="goToGroupMessage(group.group_id)">
         <img preload-image ng-src="{{group.group_photo_small}}" alt="">
 
         <i ng-if="!group.unread" class="messageIcon groupMessageIcon icon ion-chevron-right"></i>

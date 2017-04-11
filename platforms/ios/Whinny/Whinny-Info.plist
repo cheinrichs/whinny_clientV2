@@ -26,34 +26,34 @@
     <string>????</string>
     <key>CFBundleVersion</key>
     <string>0.0.1</string>
-    <key>LSRequiresIPhoneOS</key>
+    <key>GCM_SENDER_ID</key>
+    <string>464237360777</string>
+    <key>IS_GCM_ENABLED</key>
     <true/>
-    <key>NSMainNibFile</key>
-    <string/>
-    <key>NSMainNibFile~ipad</key>
-    <string/>
-    <key>UIRequiresFullScreen</key>
+    <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>
     <dict>
       <key>NSAllowsArbitraryLoads</key>
       <true/>
     </dict>
+    <key>NSCameraUsageDescription</key>
+    <string/>
+    <key>NSContactsUsageDescription</key>
+    <string/>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string/>
+    <key>NSMainNibFile</key>
+    <string/>
+    <key>NSMainNibFile~ipad</key>
+    <string/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string/>
     <key>UIBackgroundModes</key>
     <array>
       <string>remote-notification</string>
     </array>
-    <key>GCM_SENDER_ID</key>
-    <string>464237360777</string>
-    <key>IS_GCM_ENABLED</key>
+    <key>UIRequiresFullScreen</key>
     <true/>
-    <key>NSContactsUsageDescription</key>
-    <string/>
-    <key>NSCameraUsageDescription</key>
-    <string/>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string/>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string/>
   </dict>
 </plist>

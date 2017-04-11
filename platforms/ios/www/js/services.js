@@ -91,6 +91,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   };
 
   //TODO switch between databases when you push!!@?!@#!@#
+  //Remember to switch in the photo upload factory as well
   //Production
   // var API_URL = 'https://whinny-server.herokuapp.com';
   //Staging
@@ -153,6 +154,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateChatMessages(){
+
     var url = API_URL + '/chatMessages/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
       chatMessages = res.data;
@@ -170,9 +172,11 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       var unreadGroupMessages = [];
 
       //loop through the unread messages and push those into their own array
-      for (var i = 0; i < groupDataUnparsed.unread.length; i++) {
-        unreadGroups.push(groupDataUnparsed.unread[i].group_id);
-        unreadGroupMessages.push(groupDataUnparsed.unread[i].group_message_read_id)
+      if(groupDataUnparsed.unread){
+        for (var i = 0; i < groupDataUnparsed.unread.length; i++) {
+          unreadGroups.push(groupDataUnparsed.unread[i].group_id);
+          unreadGroupMessages.push(groupDataUnparsed.unread[i].group_message_read_id)
+        }
       }
 
       //mark each broadcast with an unread message with unread = true
@@ -548,12 +552,14 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function joinGroup(group_id) {
+    console.log("trying to join ", group_id);
     var url = API_URL + '/joinGroup/';
     var data = {
       user_id: currentUser.user_id,
       group_id: group_id
     }
     return $http.post(url, data).then(function (res) {
+      console.log("res in join group");
       return res.data;
     })
   }
@@ -841,6 +847,11 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     uploadPersonalProfilePhoto: uploadPersonalProfilePhoto,
     uploadGroupProfilePhoto: uploadGroupProfilePhoto
   }
+
+  //Production
+  // var API_URL = 'https://whinny-server.herokuapp.com';
+  //Staging
+  var API_URL = 'https://whinny-staging.herokuapp.com';
 
   return photoFactory;
 

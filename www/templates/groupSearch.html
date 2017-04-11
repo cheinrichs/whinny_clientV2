@@ -7,7 +7,7 @@
       <div class="chatSubheader"></div>
     </div>
 
-    <ion-content padding="true" class="has-header" on-swipe-right="backToGroupsPage()">
+    <ion-content padding="true" class="has-header groupSearchPadding" on-swipe-right="backToGroupsPage()">
 
       <label class="item item-input item-floating-label">
         <span class="input-label">Group Name</span>
@@ -15,7 +15,7 @@
       </label>
 
       <ion-item ng-repeat="group in groupSearchObjects | filter:data.searchInput" class="item item-avatar" ng-click="goToGroupPage(group)">
-        <img preload-image ng-src="{{group.group_photo}}" alt="">
+        <img preload-image ng-src="{{group.group_photo_small}}" alt="">
         {{group.group_name}}
         <br>
         {{group.description}}

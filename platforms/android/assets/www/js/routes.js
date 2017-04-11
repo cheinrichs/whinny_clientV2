@@ -176,6 +176,10 @@ angular.module('app.routes', [])
   .state('newChatMessage', {
     url: '/newChatMessage',
     cache: false,
+    params: {
+      groupMember: { dynamic: true },
+      returnPage: { dynamic: true }
+    },
     templateUrl: 'templates/newChatMessage.html'
   })
 

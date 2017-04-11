@@ -12,7 +12,7 @@
 
       <div class="top-container" scroll-glue>
 
-        <div ng-repeat="message in groupData.groupMessages" ng-show="message.to_group === group_id" ng-cloak>
+        <div ng-repeat="message in groupData.groupMessages track by $index" ng-show="message.to_group === group_id" ng-cloak>
           <div class="row">
             <div class="col">
               <div class="timeSent">

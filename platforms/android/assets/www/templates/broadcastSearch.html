@@ -16,7 +16,7 @@
       <br>
 
       <ion-item ng-repeat="broadcast in broadcastSearchObjects | filter:data.searchInput" class="item item-avatar" ng-click="goToBroadcastProfilePage(broadcast)">
-        <img ng-src="{{broadcast.broadcast_photo}}" alt="">
+        <img preload-image ng-src="{{broadcast.broadcast_photo}}" alt="">
         {{broadcast.broadcast_name}}
         <br>
         {{broadcast.broadcast_description}}

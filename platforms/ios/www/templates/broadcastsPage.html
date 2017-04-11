@@ -14,8 +14,8 @@
     <ion-content padding="true" class="has-header">
 
       <ion-list>
-        <ion-item ng-repeat="broadcast in broadcastData.broadcasts | orderBy:'-unread'" class="item-thumbnail-left" ng-cloak ng-click="goToIndividualBroadcast(broadcast.broadcast_id)">
-          <img height="20px" width="20px" ng-src="{{broadcast.broadcast_photo}}">
+        <ion-item ng-repeat="broadcast in broadcastData.broadcasts | orderBy:'-unread' track by $index" class="item-thumbnail-left" ng-cloak ng-click="goToIndividualBroadcast(broadcast.broadcast_id)">
+          <img preload-image height="20px" width="20px" ng-src="{{broadcast.broadcast_photo_small}}">
 
           {{message.content}}
           <span class="convoSubject">{{broadcast.broadcast_name}}</span>

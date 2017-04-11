@@ -267,12 +267,6 @@ function ($scope, $state, $stateParams, messageFactory) {
 
 .controller('newUserCreationCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$localStorage',
 function ($scope, $state, $stateParams, messageFactory, $localStorage) {
-  console.log("---");
-  console.log($localStorage);
-  console.log("---");
-
-
-  console.log("newUserCreationCtrl");
   $scope.data = {};
   $scope.data.errors = [];
 
@@ -464,8 +458,6 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
 .controller('chatPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$localStorage', '$ionicPopup', '$rootScope',
 function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localStorage, $ionicPopup, $rootScope) {
 
-  console.log($state);
-  console.log($state.current);
   $scope.currentUser = messageFactory.getCurrentUser();
   //Send users to log in if there is no user id
   if(!$scope.currentUser.user_id) $state.go('welcomePage');
@@ -475,6 +467,11 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     $scope.chatTutorial = true;
   } else {
     $scope.chatTutorial = false;
+  }
+
+  $scope.acceptChatTutorial = function () {
+    $scope.chatTutorial = false;
+    messageFactory.markTutorialAsRead(1);
   }
 
   $scope.chatMessages = messageFactory.getChatMessages();
@@ -497,6 +494,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
   //TODO Once we have messages stored in a file on your phone turn on this if statement
     messageFactory.updateChatMessages().then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
+      console.log($scope.chatMessages);
       $scope.chatUsers = messageFactory.getUserObjects();
       $scope.groups = messageFactory.getChatMessages();
     });
@@ -526,11 +524,6 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     $state.go('newChatMessage');
   }
 
-  $scope.acceptChatTutorial = function () {
-    $scope.chatTutorial = false;
-    messageFactory.markTutorialAsRead(1);
-  }
-
 }])
 
 .controller('groupsPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory',
@@ -546,29 +539,27 @@ function ($scope, $state, $stateParams, messageFactory) {
     $scope.groupsTutorial = false;
   }
 
+  $scope.acceptGroupsTutorial = function () {
+    $scope.groupsTutorial = false;
+    messageFactory.markTutorialAsRead(2);
+  }
 
   messageFactory.updateGroupData().then(function (res) {
     $scope.groupData = res;
   });
 
   $scope.groupInvitations = messageFactory.getGroupInvitations();
-  console.log("initial group invitations", $scope.groupInvitations);
   messageFactory.updateGroupInvitations().then(function (res) {
-    console.log("updated group invitations", res);
     $scope.groupInvitations = res;
   });
 
   $scope.groupApplications = messageFactory.getGroupApplications();
   messageFactory.updateGroupApplications().then(function (res) {
-    console.log(res);
     $scope.groupApplications = res;
   });
 
   $scope.viewGroup = function (group_id) {
-    console.log("view group" + group_id);
-    console.log($scope.groupData.invitedGroupObjects);
     for (var i = 0; i < $scope.groupData.invitedGroupObjects.length; i++) {
-      console.log($scope.groupData.invitedGroupObjects[i]);
       if($scope.groupData.invitedGroupObjects[i].group_id === group_id){
         $state.go('groupProfilePage', { group: $scope.groupData.invitedGroupObjects[i], returnPage: 'groupsPage'});
       }
@@ -576,23 +567,21 @@ function ($scope, $state, $stateParams, messageFactory) {
   }
 
   $scope.acceptGroupApplication = function (user_id, group_id) {
-    console.log("accepting ", user_id, group_id);
     messageFactory.acceptGroupApplication(user_id, group_id).then(function () {
       messageFactory.updateGroupApplications().then(function (apps) {
         $scope.groupApplications = apps;
         messageFactory.updateGroupData().then(function (res) {
-          $scope.groupApplications = res;
+          $scope.groupData = res;
         });
       });
     });
   }
   $scope.declineGroupApplication = function (application_id) {
-    console.log("declining ", application_id);
     messageFactory.declineGroupApplication(application_id).then(function () {
       messageFactory.updateGroupApplications().then(function (apps) {
         $scope.groupApplications = apps;
         messageFactory.updateGroupData().then(function (res) {
-          $scope.groupApplications = res;
+          $scope.groupData = res;
         });
       });
     });
@@ -603,7 +592,7 @@ function ($scope, $state, $stateParams, messageFactory) {
       messageFactory.updateGroupInvitations().then(function (res) {
         $scope.groupInvitations = res;
         messageFactory.updateGroupData().then(function (res) {
-          $scope.groupApplications = res;
+          $scope.groupData = res;
         });
       })
     });
@@ -612,9 +601,16 @@ function ($scope, $state, $stateParams, messageFactory) {
   $scope.declineGroupInvitation = function (invitation_id) {
     messageFactory.declineGroupInvitation(invitation_id).then(function () {
       messageFactory.updateGroupInvitations().then(function (res) {
-        console.log("updated group invitations after decline", res);
         $scope.groupInvitations = res;
       })
+    })
+  }
+
+  $scope.leaveGroup = function (group_id) {
+    messageFactory.leaveGroup(group_id).then(function () {
+      messageFactory.updateGroupData().then(function (res) {
+        $scope.groupData = res;
+      });
     })
   }
 
@@ -632,20 +628,6 @@ function ($scope, $state, $stateParams, messageFactory) {
 
   $scope.toSettingsPage = function (){
     $state.go('settingsPage', { context: 'groups'});
-  }
-
-  $scope.acceptGroupsTutorial = function () {
-    $scope.groupsTutorial = false;
-    messageFactory.markTutorialAsRead(2);
-  }
-
-  $scope.leaveGroup = function (group_id) {
-    console.log("leaving group", group_id);
-    messageFactory.leaveGroup(group_id).then(function () {
-      messageFactory.updateGroupData().then(function (res) {
-        $scope.groupApplications = res;
-      });
-    })
   }
 
 }])
@@ -945,8 +927,9 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
   }
 
   $scope.newPersonalMessage = function (member) {
-    console.log("new personal message");
-    console.log(member);
+    if(member.user_id !== $scope.currentUser.user_id){
+      $state.go('newChatMessage', { groupMember: member, returnPage: $stateParams.group_id });
+    }
   }
 
   $scope.data.showContacts = function () {
@@ -1152,7 +1135,8 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   //are all read
   var newlyReadMessages = [];
   for (var i = 0; i < $scope.convo.messages.length; i++) {
-    if(!$scope.convo.messages[i].read) newlyReadMessages.push($scope.convo.messages[i].message_id);
+    //If the message is unread and it wasn't sent by the current user, mark it as read
+    if(!$scope.convo.messages[i].read && $scope.convo.messages[i].from_user !== $scope.currentUser.user_id) newlyReadMessages.push($scope.convo.messages[i].message_id);
   }
   messageFactory.markChatMessagesAsRead(newlyReadMessages);
 
@@ -1183,34 +1167,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
     } else {
       console.log("enter a message!");
     }
-  }
-
-  $scope.hideChatBox = function () {
-    console.log("hide box");
-    $scope.hideInput = !$scope.hideInput;
-  }
-
-  var previousChatMessage = '';
-
-  $scope.textChecker = function () {
-    if(previousChatMessage == ''){
-      previousChatMessage = $scope.chatMessage;
-    }
-    // console.log("check the text!");
-    // console.log($scope.chatMessage);
-    //
-    console.log("prev" + previousChatMessage.length);
-
-    console.log("new" + $scope.chatMessage.length);
-
-    // if($scope.chatMessage.length < previousChatMessage.length){
-      // if(previousChatMessage[$scope.chatMessage.length] === '\`'){
-        console.log("deleted a thingy");
-        var newString = $scope.chatMessage + '';
-        $scope.chatMessage = newString.replace('午\`\`', '');
-      // }
-    // }
-    previousChatMessage = $scope.chatMessage;
   }
 
   $scope.addEmoji = function (emoji) {
@@ -1273,10 +1229,11 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   $scope.sendGroupMessage = function () {
     if($scope.groupMessage){
       if($scope.groupMessage.length > 0){
-        messageFactory.sendGroupMessage($stateParams.group_id, $scope.groupObjects[$scope.group_id].group_name, $scope.groupMessage).then(function () {
+        messageFactory.sendGroupMessage($stateParams.group_id, $scope.currentGroup.group_name, $scope.groupMessage).then(function () {
           $scope.groupMessage = "";
+          console.log($scope.groupData);
           messageFactory.updateGroupData().then(function(){
-            $scope.getGroupData();
+            $scope.groupData = messageFactory.getGroupData();
           })
         })
       }
@@ -1480,8 +1437,15 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
 function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contactsFactory) {
 
   $scope.data = {};
-  $scope.data.newChatRecipient = "";
   $scope.data.contactsHidden = true;
+  $scope.data.isWhinnyUser = false;
+  $scope.data.newChatRecipient = "";
+
+  if($stateParams.groupMember.first_name){
+    console.log($stateParams.groupMember);
+    $scope.data.isWhinnyUser = true;
+    $scope.data.newChatRecipient = $stateParams.groupMember.first_name + ' ' + $stateParams.groupMember.last_name + '';
+  }
 
   //Load all contacts into the contacts factory
   $scope.data.contacts = contactsFactory.getContacts();
@@ -1501,43 +1465,50 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
   }
 
   $scope.createNewChatMessage = function () {
-    // createNewChatMessage(to_phone, content)
-    if(!$scope.data.chosenPhone){
+    $scope.data.errors = [];
+    if(!$scope.data.chosenPhone && !$scope.data.isWhinnyUser){
       $scope.data.errors.push('Please enter a valid recipient!');
-    } else {
-      var i = $scope.data.errors.indexOf('Please enter a valid recipient!');
-      if(i != -1) $scope.data.errors.splice(i, 1);
     }
     if(!$scope.chatMessage){
       $scope.data.errors.push('Please enter a message!');
-    } else {
-      var i = $scope.data.errors.indexOf('Please enter a message!');
-      if(i != -1) $scope.data.errors.splice(i, 1);
     }
     if($scope.data.errors.length > 0){
       return;
     }
-    var parsedPhone = $scope.data.chosenPhone.replace(/[\s()-]/g, "");
-    console.log("parsedPhone");
-    console.log(parsedPhone);
-    messageFactory.createNewChatMessage(parsedPhone, $scope.chatMessage).then(function (res) {
-      messageFactory.updateChatMessages().then(function (convos) {
-        console.log("convos");
-        console.log(convos);
-        console.log("***");
-        $scope.chatMessage = "";
-        $scope.data.newChatRecipient = "";
-        var new_convo;
-        for (var i = 0; i < convos.length; i++) {
-          console.log(convos[i]);
-          if(convos[i].convoUser.user_id === res.data.user_id){
-            new_convo = convos[i];
+    //if you're speaking to another whinny user, send the chat the easy way
+    if($scope.data.isWhinnyUser){
+      messageFactory.sendChatMessage($stateParams.groupMember.user_id, $scope.chatMessage).then(function (res) {
+        messageFactory.updateChatMessages().then(function (convos) {
+          $scope.chatMessage = "";
+          $scope.data.newChatRecipient = "";
+          var new_convo;
+          for (var i = 0; i < convos.length; i++) {
+            if(convos[i].convoUser.user_id === $stateParams.groupMember.user_id){
+              new_convo = convos[i];
+            }
           }
-        }
-        // $stateParams.convo.convoUser.user_id
-        $state.go('individualChat', { convo: new_convo });
+          console.log(new_convo);
+          $state.go('individualChat', { convo: new_convo });
+        })
+      })
+
+    //If you're not speaking to a whinny user, we have to make sure the phone number is valid
+    } else {
+      var parsedPhone = $scope.data.chosenPhone.replace(/[\s()-]/g, "");
+      messageFactory.createNewChatMessage(parsedPhone, $scope.chatMessage).then(function (res) {
+        messageFactory.updateChatMessages().then(function (convos) {
+          $scope.chatMessage = "";
+          $scope.data.newChatRecipient = "";
+          var new_convo;
+          for (var i = 0; i < convos.length; i++) {
+            if(convos[i].convoUser.user_id === res.data.user_id){
+              new_convo = convos[i];
+            }
+          }
+          $state.go('individualChat', { convo: new_convo });
+        });
       });
-    });
+    }
   }
 
   $scope.addEmoji = function (emoji) {
@@ -1549,7 +1520,11 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
   }
 
   $scope.backToChatPage = function () {
-    $state.go('tabsController.chatPage');
+    if($stateParams.returnPage){
+      $state.go('groupInfo', { group_id: $stateParams.returnPage });
+    } else {
+      $state.go('tabsController.chatPage');
+    }
   }
 }])
 

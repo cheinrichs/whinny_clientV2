@@ -7,7 +7,7 @@
       <img preload-image ng-src="{{convo.convoUser.portrait_link}}" class="individualChatPortrait" alt="">
     </div>
 
-    <ion-content class="has-header has-footer chatScreen" scroll='false' keyboard-attach on-swipe-right="backToChatPage()">
+    <ion-content class="has-footer chatScreen" scroll='false' keyboard-attach on-swipe-right="backToChatPage()">
 
       <div class="top-container" scroll-glue>
 
@@ -32,7 +32,7 @@
 
         <div class="col col-80" ng-click="hideChatBox()">
           <!-- <div class="visibleTextBox" ng-bind-html="chatMessage | emoji" ng-class="{ 'hidden' : !hideInput}"></div> -->
-          <textarea class="footer-input" placeholder="Enter Message" ng-model="chatMessage" rows="2" msd-elastic cols="45" ng-focus="focus=true" ng-blur="focus=false" ng-class="{ 'shown': hideInput }" ng-change="textChecker()"></textarea>
+          <textarea class="footer-input" placeholder="Enter Message" emoji-input ng-model="chatMessage" rows="2" msd-elastic cols="45" ng-focus="focus=true" ng-blur="focus=false"></textarea>
         </div>
 
         <div class="col col-20">
@@ -43,7 +43,7 @@
       <div class="row">
         <ion-scroll zooming="false" paging="false" scrollbar-x="false" direction="x" style="height: 40px;">
           <div class="row" style="height:40px; width: 1600px;">
-            <ion-label class="emojiButton HappyFaceEButton" ng-click="addEmoji(':]HappyFace:')"></ion-label>
+            <ion-label class="emojiButton HappyFaceEButton" ng-click="addEmoji(':HappyFace:')"></ion-label>
             <ion-label class="emojiButton AngryFaceEButton" ng-click="addEmoji(':AngryFace:')"></ion-label>
             <ion-label class="emojiButton LayingHorseEButton" ng-click="addEmoji(':LayingHorse:')"></ion-label>
             <ion-label class="emojiButton GrazingHorseEButton" ng-click="addEmoji(':GrazingHorse:')"></ion-label>

@@ -12,6 +12,72 @@ angular.module('app.directives', [])
   };
 }])
 
+.directive('emojiInput', function ($timeout) {
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    link: function ($scope, $el, $attr, ngModel) {
+        $.emojiarea.path = 'img/emoji/';
+        $.emojiarea.icons = {
+            ':HappyFace:': 'HappyFace.png',
+            ':LayingHorse:': 'LayingHorse.png',
+            ':AngryFace:': 'AngryFace.png',
+            ':BuckingHorse:': 'BuckingHorse.png',
+            ':Pony:': 'Pony.png',
+            ':ArabianHorse:': 'ArabianHorse.png',
+            ':JumpingHorse:': 'JumpingHorse.png',
+            ':BarrelHorse:': 'BarrelHorse.png',
+            ':TrailHorse:': 'TrailHorse.png',
+            ':ReiningHorse:': 'ReiningHorse.png',
+            ':PoloPony:': 'PoloPony.png',
+            ':RacingHorses:': 'RacingHorses.png',
+            ':MareAndFoal:': 'MareAndFoal.png',
+            ':HunterHorse:': 'HunterHorse.png',
+            ':GrazingHorse:': 'GrazingHorse.png',
+            ':DrivingHorse:': 'DrivingHorse.png',
+            ':DressageHorse:': 'DressageHorse.png',
+            ':EventingHorse:': 'EventingHorse.png',
+            ':PaddockHorse:': 'PaddockHorse.png',
+            ':Ribbon:': 'Ribbon.png',
+            ':LegBandages:': 'LegBandages.png',
+            ':VetSymbol:': 'VetSymbol.png',
+            ':Blanket:': 'Blanket.png',
+            ':Brush:': 'Brush.png',
+            ':HoofPick:': 'HoofPick.png',
+            ':EnglishSaddle:': 'EnglishSaddle.png',
+            ':WesternSaddle:': 'WesternSaddle.png',
+            ':Bucket:': 'Bucket.png',
+            ':Wheelbarrow:': 'Wheelbarrow.png',
+            ':Pitchfork:': 'Pitchfork.png',
+            ':Corgi:': 'Corgi.png',
+            ':Fly:': 'Fly.png',
+            ':GolfCart:': 'GolfCart.png',
+            ':JackRussell:': 'JackRussell.png',
+            ':Tractor:': 'Tractor.png',
+            ':Harrow:': 'Harrow.png',
+            ':HayBale:': 'HayBale.png',
+            ':Trailer:': 'Trailer.png',
+            ':HorseShoe:': 'HorseShoe.png',
+            ':Carrot:': 'Carrot.png'
+        };
+        var options = $scope.$eval($attr.emojiInput);
+        var $wysiwyg = $($el[0]).emojiarea(options);
+        $wysiwyg.on('change', function () {
+            ngModel.$setViewValue($wysiwyg.val());
+            $scope.$apply();
+        });
+        ngModel.$formatters.push(function (data) {
+            // emojiarea doesn't have a proper destroy :( so we have to remove and rebuild
+            $wysiwyg.siblings('.emoji-wysiwyg-editor, .emoji-button').remove();
+            $timeout(function () {
+                $wysiwyg.emojiarea(options);
+            }, 0);
+            return data;
+      });
+    }
+  };
+})
+
 .directive('focusMe', function($timeout) {
   return {
     link: function(scope, element, attrs) {

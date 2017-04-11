@@ -72,8 +72,8 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
       // alert(msg.title + ': ' + msg.text);
 
       messageFactory.updateChatMessages();
-      messageFactory.updateGroupMessages();
-      messageFactory.updateBroadcastMessages();
+      messageFactory.updateGroupData();
+      messageFactory.updateBroadcastData();
 
       var randomIndex = getRandomArbitrary(0, 21);
 

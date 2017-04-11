@@ -1,6 +1,6 @@
 {
-  "name": "todo",
-  "app_id": "",
+  "name": "Whinny",
+  "app_id": "16f40046",
   "gulpStartupTasks": [
     "sass",
     "watch"
