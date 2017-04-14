@@ -10343,7 +10343,7 @@ a.button {
 
 .sendChatButton {
   position: absolute;
-  bottom: 50px; }
+  bottom: 63px; }
 
 .chatImage {
   width: 250px;
@@ -10416,7 +10416,8 @@ a.button {
   border: 1px solid #c0c0c0 !important;
   border-radius: 10px;
   width: 100%;
-  padding: 3px 5px; }
+  padding: 3px 5px;
+  height: 46px !important; }
 
 .footer-send {
   border-color: transparent;
@@ -10432,6 +10433,10 @@ a.button {
   position: relative;
   background-size: 35px 35px;
   top: -3px; }
+
+.emojiCameraButton {
+  font-size: 30px;
+  margin: 0px 5px; }
 
 .AngryFaceEButton {
   background-image: url("../img/emoji/AngryFace.png"); }

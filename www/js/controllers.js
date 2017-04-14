@@ -1117,8 +1117,8 @@ function ($scope, $state, $stateParams, messageFactory){
   }
 }])
 
-.controller('individualChatCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope',
-function ($scope, $state, $stateParams, messageFactory, $rootScope) {
+.controller('individualChatCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPopup',
+function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCamera, photoFactory, $timeout , $ionicPopup) {
 
   $scope.currentUser = messageFactory.getCurrentUser();
   $scope.chatMessages = messageFactory.getChatMessages();
@@ -1167,6 +1167,74 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
     } else {
       console.log("enter a message!");
     }
+  }
+
+  $scope.addPhoto = function () {
+    console.log("photo!");
+    //upload a photo,
+    //create a new message with img: true
+    //content :img http://thelinktotheS3image.com:
+    var customTemplate =
+      '<button class="button button-block button-tangerine" ng-click="takePhoto()">Camera</button>' +
+      '<button class="button button-block button-tangerine" ng-click="choosePhoto()">Gallery</button>';
+
+    $ionicPopup.show({
+      template: customTemplate,
+      // title: 'Upload a photo',
+      // subTitle: 'Choose source:',
+      scope: $scope,
+      buttons: [
+        {
+          text: 'Cancel',
+          type: 'button-energized',
+          onTap: function(e) {
+
+          }
+        }
+      ]
+
+    });
+  }
+
+  $scope.takePhoto = function () {
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.imgURI = imageData;
+    }, function (err) {
+        console.log("error in take photo");
+    });
+  }
+
+  $scope.choosePhoto = function () {
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    }
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
+      $scope.imgURI = imageData;
+    }, function (err) {
+      console.log("error has occurred in get picture");
+    })
   }
 
   $scope.addEmoji = function (emoji) {
