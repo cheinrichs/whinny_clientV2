@@ -15,7 +15,7 @@
           <div class="row">
             <div class="col col-80" ng-class="{ 'col-offset-20' : message.to_user != currentUser.user_id }">
               <div ng-class="{toMessage : message.to_user != currentUser.user_id, fromMessage : message.to_user == currentUser.user_id}">
-                <div ng-bind-html="message.content | emoji">{{message.content}}</div>
+                <div ng-bind-html="message.content | emoji | imageFilter">{{message.content}}</div>
                 <div class="date">{{message.message_created | date:'MMM d, y h:mm'}}</div>
               </div>
             </div>
@@ -32,7 +32,8 @@
 
         <div class="col col-80" ng-click="hideChatBox()">
           <!-- <div class="visibleTextBox" ng-bind-html="chatMessage | emoji" ng-class="{ 'hidden' : !hideInput}"></div> -->
-          <textarea class="footer-input" placeholder="Enter Message" emoji-input ng-model="chatMessage" rows="2" msd-elastic cols="45" ng-focus="focus=true" ng-blur="focus=false"></textarea>
+          <!-- emoji-input -->
+          <textarea class="footer-input" placeholder="Enter Message"  ng-model="chatMessage" rows="2" msd-elastic cols="45" ng-focus="focus=true" ng-blur="focus=false"></textarea>
         </div>
 
         <div class="col col-20">

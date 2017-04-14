@@ -10345,6 +10345,10 @@ a.button {
   position: absolute;
   bottom: 50px; }
 
+.chatImage {
+  width: 250px;
+  border-radius: 5px; }
+
 .individualBroadcastPortrait {
   position: absolute;
   top: 10px;
@@ -10424,8 +10428,9 @@ a.button {
 .emojiButton {
   height: 35px;
   width: 35px !important;
-  margin: 0px;
+  margin: 0px 5px;
   position: relative;
+  background-size: 35px 35px;
   top: -3px; }
 
 .AngryFaceEButton {
@@ -10557,10 +10562,6 @@ a.button {
 
 .WheelbarrowEButton {
   background-image: url("../img/emoji/Wheelbarrow.png"); }
-
-.emojiButton {
-  background-size: 35px 35px;
-  margin: 0px 5px; }
 
 .emoji {
   height: 30px;

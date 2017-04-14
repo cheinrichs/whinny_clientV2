@@ -92,6 +92,20 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
 
     });
 
+    // push.on('notification', function(data) {
+    //   // do something with the push data
+    //   // then call finish to let the OS know we are done
+    //   console.log("received push");
+    //   console.log(data);
+    //   alert(data.message.title + ': ' + data.message.text);
+    //
+    //   push.finish(function() {
+    //       console.log("processing of push data is finished");
+    //   }, function() {
+    //       console.log("something went wrong with push.finish for ID = " + data.additionalData.notId)
+    //   }, data.additionalData.notId);
+    // });
+
     $rootScope.$on('$ionicView.enter', function(e) {
       $ionicNavBarDelegate.showBar(true);
     });
