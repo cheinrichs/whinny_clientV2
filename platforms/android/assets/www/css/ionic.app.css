@@ -10343,7 +10343,20 @@ a.button {
 
 .sendChatButton {
   position: absolute;
-  bottom: 50px; }
+  bottom: 49px; }
+
+.chatImage {
+  width: 250px;
+  border-radius: 5px; }
+
+.chatImageStaging {
+  width: 100px;
+  border-radius: 5px;
+  transition: 2s; }
+
+.clearStagedPhotoButton {
+  color: gray;
+  font-size: 30px; }
 
 .individualBroadcastPortrait {
   position: absolute;
@@ -10412,7 +10425,8 @@ a.button {
   border: 1px solid #c0c0c0 !important;
   border-radius: 10px;
   width: 100%;
-  padding: 3px 5px; }
+  padding: 3px 5px;
+  height: 46px !important; }
 
 .footer-send {
   border-color: transparent;
@@ -10424,9 +10438,14 @@ a.button {
 .emojiButton {
   height: 35px;
   width: 35px !important;
-  margin: 0px;
+  margin: 0px 5px;
   position: relative;
+  background-size: 35px 35px;
   top: -3px; }
+
+.emojiCameraButton {
+  font-size: 30px;
+  margin: 0px 5px; }
 
 .AngryFaceEButton {
   background-image: url("../img/emoji/AngryFace.png"); }
@@ -10557,10 +10576,6 @@ a.button {
 
 .WheelbarrowEButton {
   background-image: url("../img/emoji/Wheelbarrow.png"); }
-
-.emojiButton {
-  background-size: 35px 35px;
-  margin: 0px 5px; }
 
 .emoji {
   height: 30px;

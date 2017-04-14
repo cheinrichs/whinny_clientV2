@@ -844,6 +844,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
 .factory('photoFactory', ['$http', function ($http) {
   var photoFactory = {
+    uploadChatPhoto: uploadChatPhoto,
+    uploadGroupChatPhoto: uploadGroupChatPhoto,
     uploadPersonalProfilePhoto: uploadPersonalProfilePhoto,
     uploadGroupProfilePhoto: uploadGroupProfilePhoto
   }
@@ -854,6 +856,48 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   var API_URL = 'https://whinny-staging.herokuapp.com';
 
   return photoFactory;
+
+  function uploadChatPhoto(fileName, fileURI) {
+    var uri = encodeURI(API_URL + '/chatMessageUpload');
+    var options = new FileUploadOptions();
+
+    options.fileKey = "file";
+    options.fileName = fileName;
+    options.mimeType = "text/plain";
+    options.ACL = 'public-read';
+
+    var ft = new FileTransfer();
+    return ft.upload(fileURI, uri, onSuccess, onError, options);
+
+    function onSuccess(res) {
+      console.log("successful file upload", res);
+    }
+
+    function onError(err) {
+      console.log("error in the file upload", err);
+    }
+  }
+
+  function uploadGroupChatPhoto(fileName, fileURI) {
+    var uri = encodeURI(API_URL + '/groupMessageUpload');
+    var options = new FileUploadOptions();
+
+    options.fileKey = "file";
+    options.fileName = fileName;
+    options.mimeType = "text/plain";
+    options.ACL = 'public-read';
+
+    var ft = new FileTransfer();
+    return ft.upload(fileURI, uri, onSuccess, onError, options);
+
+    function onSuccess(res) {
+      console.log("successful file upload", res);
+    }
+
+    function onError(err) {
+      console.log("error in the file upload", err);
+    }
+  }
 
   function uploadGroupProfilePhoto(fileName, fileURI) {
     var uri = encodeURI(API_URL + '/groupProfilePhotoUpload');
@@ -873,13 +917,11 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     return ft.upload(fileURI, uri, onSuccess, onError, options);
 
     function onSuccess(res) {
-      console.log("successful file upload");
-      console.log(res);
+      console.log("successful file upload", res);
     }
 
     function onError(err) {
-      console.log("error in the file upload");
-      console.log(err);
+      console.log("error in the file upload", err);
     }
 
   }
@@ -898,12 +940,11 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     return ft.upload(fileURI, uri, onSuccess, onError, options);
 
     function onSuccess(res) {
-      console.log("res in photo service success");
-      console.log(res);
+      console.log("successful file upload", res);
     }
 
     function onError(err) {
-      console.log(err);
+      console.log("error in the file upload", err);
     }
   }
 

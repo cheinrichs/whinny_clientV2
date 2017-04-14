@@ -622,12 +622,23 @@ $tabs-height:                     56px;
 
 .sendChatButton {
   position: absolute;
-  bottom: 63px;
+  bottom: 49px;
 }
 
 .chatImage {
   width: 250px;
   border-radius: 5px;
+}
+
+.chatImageStaging {
+  width: 100px;
+  border-radius: 5px;
+  transition: 2s;
+}
+
+.clearStagedPhotoButton {
+  color: gray;
+  font-size: 35px;
 }
 
 .individualBroadcastPortrait {

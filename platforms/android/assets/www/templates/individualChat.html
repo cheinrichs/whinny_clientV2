@@ -15,7 +15,7 @@
           <div class="row">
             <div class="col col-80" ng-class="{ 'col-offset-20' : message.to_user != currentUser.user_id }">
               <div ng-class="{toMessage : message.to_user != currentUser.user_id, fromMessage : message.to_user == currentUser.user_id}">
-                <div ng-bind-html="message.content | emoji">{{message.content}}</div>
+                <div ng-bind-html="message.content | emoji | imageFilter">{{message.content}}</div>
                 <div class="date">{{message.message_created | date:'MMM d, y h:mm'}}</div>
               </div>
             </div>
@@ -29,10 +29,15 @@
     <div class="messageFooter" keyboard-attach>
 
       <div class="row">
-
-        <div class="col col-80" ng-click="hideChatBox()">
+        <div class="col col-80">
           <!-- <div class="visibleTextBox" ng-bind-html="chatMessage | emoji" ng-class="{ 'hidden' : !hideInput}"></div> -->
-          <textarea class="footer-input" placeholder="Enter Message" emoji-input ng-model="chatMessage" rows="2" msd-elastic cols="45" ng-focus="focus=true" ng-blur="focus=false"></textarea>
+          <!-- emoji-input -->
+          <span ng-show="hideInput">
+            <img src="{{imgURI}}" class="chatImageStaging" alt="">
+            <a class="ion-android-cancel clearStagedPhotoButton" ng-click="clearStagedPhoto()"></a>
+            <a class="ion-close-circled clearStagedPhotoButton" ng-click="clearStagedPhoto()"></a>
+          </span>
+          <textarea class="footer-input" placeholder="Enter Message..."  ng-model="chatMessage" rows="2" msd-elastic cols="15" ng-focus="focus=true" ng-blur="focus=false" ng-hide="hideInput"></textarea>
         </div>
 
         <div class="col col-20">
@@ -42,7 +47,8 @@
 
       <div class="row">
         <ion-scroll zooming="false" paging="false" scrollbar-x="false" direction="x" style="height: 40px;">
-          <div class="row" style="height:40px; width: 1600px;">
+          <div class="row" style="height:40px; width: 1640px;">
+            <a class="emojiCameraButton ion-android-camera energized" ng-click="addPhoto()"></a>
             <ion-label class="emojiButton HappyFaceEButton" ng-click="addEmoji(':HappyFace:')"></ion-label>
             <ion-label class="emojiButton AngryFaceEButton" ng-click="addEmoji(':AngryFace:')"></ion-label>
             <ion-label class="emojiButton LayingHorseEButton" ng-click="addEmoji(':LayingHorse:')"></ion-label>

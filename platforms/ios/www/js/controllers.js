@@ -1117,13 +1117,14 @@ function ($scope, $state, $stateParams, messageFactory){
   }
 }])
 
-.controller('individualChatCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope',
-function ($scope, $state, $stateParams, messageFactory, $rootScope) {
+.controller('individualChatCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPopup',
+function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCamera, photoFactory, $timeout , $ionicPopup) {
 
   $scope.currentUser = messageFactory.getCurrentUser();
   $scope.chatMessages = messageFactory.getChatMessages();
 
   $scope.hideInput = false;
+  $scope.imgURI = '';
 
   console.log($stateParams.convo);
   for (var i = 0; i < $scope.chatMessages.length; i++) {
@@ -1149,6 +1150,13 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   }, 10000);
 
   $scope.sendChatMessage = function () {
+    if($scope.imgURI.length > 1){
+      //gets link from s3
+      //upload the photo to s3
+      //sends message with img:true, content: ':img linktoS3'
+      //clears $scope.imgURI
+      //unhides the chat box $scope.hideInput = false;
+    }
     if($scope.chatMessage){
       console.log("controller) sending message to ", $stateParams.convo.convoUser.user_id, $scope.chatMessage);
       messageFactory.sendChatMessage($stateParams.convo.convoUser.user_id, $scope.chatMessage).then(function () {
@@ -1167,6 +1175,82 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
     } else {
       console.log("enter a message!");
     }
+  }
+
+  var photoSourcePopup;
+
+  $scope.addPhoto = function () {
+    console.log("photo!");
+    //upload a photo,
+    //create a new message with img: true
+    //content :img http://thelinktotheS3image.com:
+    var customTemplate =
+      '<button class="button button-block button-tangerine" ng-click="takePhoto()">Camera</button>' +
+      '<button class="button button-block button-tangerine" ng-click="choosePhoto()">Gallery</button>';
+
+    photoSourcePopup = $ionicPopup.show({
+      template: customTemplate,
+      scope: $scope,
+      buttons: [
+        {
+          text: 'Cancel',
+          type: 'button-energized',
+          onTap: function(e) {}
+        }
+      ]
+    });
+  }
+
+  $scope.takePhoto = function () {
+
+    photoSourcePopup.close();
+
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      $scope.imgURI = imageData;
+      $scope.hideInput = true;
+    }, function (err) {
+        console.log("error in take photo");
+    });
+  }
+
+  $scope.choosePhoto = function () {
+
+    photoSourcePopup.close();
+
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    }
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      $scope.imgURI = imageData;
+      $scope.hideInput = true;
+    }, function (err) {
+      console.log("error has occurred in get picture");
+    })
+  }
+
+  $scope.clearStagedPhoto = function () {
+    $scope.imgURI = '';
+    $scope.hideInput = false;
   }
 
   $scope.addEmoji = function (emoji) {
