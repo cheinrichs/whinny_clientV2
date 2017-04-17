@@ -49,6 +49,7 @@
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="*" />
+    <allow-navigation href="http://192.168.10.200:8100" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-navigation href="file://*/*" />
     <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />

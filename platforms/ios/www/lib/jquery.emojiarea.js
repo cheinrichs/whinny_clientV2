@@ -38,7 +38,6 @@
 	var util = {};
 
 	util.restoreSelection = (function() {
-		console.log("restore selection?");
 		if (window.getSelection) {
 			return function(savedSelection) {
 				var sel = window.getSelection();
@@ -57,7 +56,6 @@
 	})();
 
 	util.saveSelection = (function() {
-		console.log("save selection?");
 		if (window.getSelection) {
 			return function() {
 				var sel = window.getSelection(), ranges = [];

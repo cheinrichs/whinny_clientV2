@@ -61,6 +61,7 @@
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="*" />
+    <allow-navigation href="http://192.168.10.200:8100" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <icon height="57" src="resources/ios/icon/icon.png" width="57" />
     <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />

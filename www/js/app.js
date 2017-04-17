@@ -110,3 +110,9 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
 .config(['$ionicConfigProvider', function($ionicConfigProvider) {
   $ionicConfigProvider.views.swipeBackEnabled(false);
 }])
+
+.config(function($compileProvider){
+  console.log("inside compile prov");
+  console.log($compileProvider);
+  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file):|data:image\//);
+})

@@ -858,6 +858,9 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   return photoFactory;
 
   function uploadChatPhoto(fileName, fileURI) {
+    console.log("uploadchat photo");
+    console.log(fileName);
+    console.log(fileURI);
     var uri = encodeURI(API_URL + '/chatMessageUpload');
     var options = new FileUploadOptions();
 
@@ -874,7 +877,11 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     }
 
     function onError(err) {
-      console.log("error in the file upload", err);
+      console.log("error in the file upload");
+      console.log(err);
+      for(key in err){
+        console.log(err[key]);
+      }
     }
   }
 
