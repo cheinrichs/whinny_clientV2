@@ -9,7 +9,7 @@
       if(input){
         return input.replace(emojiRegex, function (match, text) {
           var imgSource = match.substring(4, match.length-1);
-          return '<img class="chatImage" src="'+ imgSource + '">';
+          return '<img class="chatImage" preload-image src="'+ imgSource + ' ng-click="showModal('+ imgSrouce + ')"">';
         });
       }
     };

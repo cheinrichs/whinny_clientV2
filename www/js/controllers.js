@@ -1281,6 +1281,17 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
     }
   }
 
+  $scope.showModal = function (imageUrl) {
+    $scope.imageUrl = imageUrl;
+    $ionicModal.fromTemplateUrl('templates/broadcastZoomView.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.modal = modal;
+      $scope.modal.show();
+    })
+  }
+
   $scope.backToChatPage = function (){
     $state.go('tabsController.chatPage');
   }
