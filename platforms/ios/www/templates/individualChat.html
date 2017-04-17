@@ -15,9 +15,19 @@
           <div class="row">
             <div class="col col-80" ng-class="{ 'col-offset-20' : message.to_user != currentUser.user_id }">
               <div ng-class="{toMessage : message.to_user != currentUser.user_id, fromMessage : message.to_user == currentUser.user_id}">
-                <div ng-bind-html="message.content | emoji | imageFilter">{{message.content}}</div>
+
+                <div ng-if="message.image" ng-click="data.showModal(message.image_src)">
+                  <img class="chatImage" preload-image ng-src="{{message.image_src}}" >
+                </div>
+
+                <div ng-if="!message.image">
+                    <div ng-bind-html="message.content | emoji">{{message.content}}</div>
+                </div>
+
                 <div class="date">{{message.message_created | date:'MMM d, y h:mm'}}</div>
+
               </div>
+
             </div>
           </div>
         </div>
@@ -32,7 +42,6 @@
         <div class="col col-80">
           <span ng-show="hideInput">
             <img ng-src="{{data.imgURI}}" class="chatImageStaging animated fadeIn" alt="">
-            <img data-ng-src="{{data.imgURI}}" alt="">
             <a class="ion-close-circled clearStagedPhotoButton animated fadeIn" ng-click="clearStagedPhoto()"></a>
           </span>
           <textarea class="footer-input" placeholder="Enter Message..."  ng-model="chatMessage" rows="2" msd-elastic cols="15" ng-focus="focus=true" ng-blur="focus=false" ng-hide="hideInput"></textarea>

@@ -34,6 +34,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     setCurrentUser: setCurrentUser,
 
     sendChatMessage: sendChatMessage,
+    sendChatImage: sendChatImage,
     sendGroupMessage: sendGroupMessage,
     sendBroadcastMessage: sendBroadcastMessage,
 
@@ -345,6 +346,19 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       content: content
     }
     var url = API_URL + '/sendChatMessage';
+    return $http.post(url, data).then(function (res) {
+      return res;
+    })
+  }
+
+  function sendChatImage(to_user, link) {
+    var data = {
+      senderName: currentUser.first_name + ' ' + currentUser.last_name,
+      to_user: to_user,
+      from_user: currentUser.user_id,
+      image_src: link
+    }
+    var url = API_URL + '/sendChatImage';
     return $http.post(url, data).then(function (res) {
       return res;
     })

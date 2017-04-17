@@ -1117,8 +1117,10 @@ function ($scope, $state, $stateParams, messageFactory){
   }
 }])
 
-.controller('individualChatCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPopup',
-function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCamera, photoFactory, $timeout , $ionicPopup) {
+.controller('individualChatCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPopup', '$ionicModal',
+function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCamera, photoFactory, $timeout , $ionicPopup, $ionicModal) {
+
+  $scope.data = {};
 
   $scope.currentUser = messageFactory.getCurrentUser();
   $scope.chatMessages = messageFactory.getChatMessages();
@@ -1231,19 +1233,16 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   $scope.sendChatMessage = function () {
     if($scope.data.imgURI.length > 1){
       //create the filename using time stamp
-
-      //TODO I think this filename is screwing things up. It needs to be the local filename
       var filename = $scope.currentUser.user_id + '_chatMessage_'+ Date.now() + '.jpg';
       //upload the photo to s3
-      console.log($scope.data.imgURI);
-      console.log($scope.data.imgURI.length);
       photoFactory.uploadChatPhoto(filename, $scope.data.imgURI);
 
       //sends message with img:true, content: ':img linktoS3'
-      var photoMessage = ':img https://s3.amazonaws.com/whinnyphotos/chat_images/' + filename + ':';
-      messageFactory.sendChatMessage($stateParams.convo.convoUser.user_id, photoMessage).then(function () {
-        //insert into the convo?
-        //TODO remove?
+      //send image
+      var photoMessage = 'https://s3.amazonaws.com/whinnyphotos/chat_images/' + filename;
+      messageFactory.sendChatImage($stateParams.convo.convoUser.user_id, photoMessage).then(function () {
+        //insert into the convo? TODO
+
         messageFactory.updateChatMessages().then(function (res) {
           $scope.chatMessages = messageFactory.getChatMessages();
           $scope.chatUsers = messageFactory.getUserObjects();
@@ -1255,34 +1254,32 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
           $scope.hideInput = false;
           $scope.data.imgURI = '';
 
-          console.log("updated");
-          console.log($scope.chatMessages);
         });
       })
 
-    }
-    if($scope.chatMessage){
-      console.log("controller) sending message to ", $stateParams.convo.convoUser.user_id, $scope.chatMessage);
-      messageFactory.sendChatMessage($stateParams.convo.convoUser.user_id, $scope.chatMessage).then(function () {
-        $scope.chatMessage = "";
-        messageFactory.updateChatMessages().then(function (res) {
-          $scope.chatMessages = messageFactory.getChatMessages();
-          $scope.chatUsers = messageFactory.getUserObjects();
-
-          for (var i = 0; i < $scope.chatMessages.length; i++) {
-            if($scope.chatMessages[i].convoUser.user_id === $stateParams.convo.convoUser.user_id) $scope.convo = $scope.chatMessages[i];
-          }
-          console.log("updated");
-          console.log($scope.chatMessages);
-        });
-      })
     } else {
-      console.log("enter a message!");
+      if($scope.chatMessage){
+        console.log("controller) sending message to ", $stateParams.convo.convoUser.user_id, $scope.chatMessage);
+        messageFactory.sendChatMessage($stateParams.convo.convoUser.user_id, $scope.chatMessage).then(function () {
+          $scope.chatMessage = "";
+          messageFactory.updateChatMessages().then(function (res) {
+            $scope.chatMessages = messageFactory.getChatMessages();
+            $scope.chatUsers = messageFactory.getUserObjects();
+
+            for (var i = 0; i < $scope.chatMessages.length; i++) {
+              if($scope.chatMessages[i].convoUser.user_id === $stateParams.convo.convoUser.user_id) $scope.convo = $scope.chatMessages[i];
+            }
+            console.log("updated");
+            console.log($scope.chatMessages);
+          });
+        })
+      }
     }
   }
 
-  $scope.showModal = function (imageUrl) {
-    $scope.imageUrl = imageUrl;
+  $scope.data.showModal = function (imageSource) {
+    console.log("show modal");
+    $scope.imageUrl = imageSource;
     $ionicModal.fromTemplateUrl('templates/broadcastZoomView.html', {
       scope: $scope,
       animation: 'slide-in-up'
@@ -1290,6 +1287,10 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
       $scope.modal = modal;
       $scope.modal.show();
     })
+  }
+
+  $scope.closeModal = function () {
+    $scope.modal.remove();
   }
 
   $scope.backToChatPage = function (){
