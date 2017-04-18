@@ -1222,7 +1222,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   }
 
   $scope.addEmoji = function (emoji) {
-    console.log("adding emoji", emoji);
     if($scope.chatMessage){
       $scope.chatMessage += emoji;
     } else {
@@ -1278,7 +1277,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   }
 
   $scope.data.showModal = function (imageSource) {
-    console.log("show modal");
     $scope.imageUrl = imageSource;
     $ionicModal.fromTemplateUrl('templates/broadcastZoomView.html', {
       scope: $scope,
@@ -1299,10 +1297,16 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
 
 }])
 
-.controller('individualGroupCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope',
-function ($scope, $state, $stateParams, messageFactory, $rootScope) {
+.controller('individualGroupCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope', '$ionicModal',
+function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal) {
+
+  $scope.data = {};
+
   $scope.currentUser = messageFactory.getCurrentUser();
   $scope.group_id = $stateParams.group_id;
+
+  $scope.hideInput = false;
+  $scope.data.imgURI = '';
 
   $scope.groupData = messageFactory.getGroupData();
 
@@ -1333,6 +1337,76 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
     })
   }, 10000);
 
+  var photoSourcePopup;
+
+  $scope.addPhoto = function () {
+    var customTemplate =
+      '<button class="button button-block button-tangerine" ng-click="takePhoto()">Camera</button>' +
+      '<button class="button button-block button-tangerine" ng-click="choosePhoto()">Gallery</button>';
+
+    photoSourcePopup = $ionicPopup.show({
+      template: customTemplate,
+      scope: $scope,
+      buttons: [
+        {
+          text: 'Cancel',
+          type: 'button-energized',
+          onTap: function(e) {}
+        }
+      ]
+    });
+  }
+
+  $scope.takePhoto = function () {
+
+    photoSourcePopup.close();
+
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      $scope.data.imgURI = imageData;
+      $scope.hideInput = true;
+    })
+  }
+
+  $scope.choosePhoto = function () {
+
+    photoSourcePopup.close();
+
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    }
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      $scope.data.imgURI = imageData;
+      $scope.hideInput = true;
+    }, function (err) {
+      console.log("error has occurred in get picture");
+    })
+  }
+
+  $scope.clearStagedPhoto = function () {
+    $scope.data.imgURI = '';
+    $scope.hideInput = false;
+  }
+
   $scope.addEmoji = function (emoji) {
     if($scope.groupMessage){
       $scope.groupMessage += emoji;
@@ -1342,17 +1416,58 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope) {
   }
 
   $scope.sendGroupMessage = function () {
-    if($scope.groupMessage){
-      if($scope.groupMessage.length > 0){
-        messageFactory.sendGroupMessage($stateParams.group_id, $scope.currentGroup.group_name, $scope.groupMessage).then(function () {
-          $scope.groupMessage = "";
-          console.log($scope.groupData);
-          messageFactory.updateGroupData().then(function(){
-            $scope.groupData = messageFactory.getGroupData();
+    if($scope.data.imgURI.length > 1){
+      //create the filename using time stamp
+      var filename = $scope.currentUser.user_id + '_groupChatMessage_'+ Date.now() + '.jpg';
+      //upload the photo to s3
+      photoFactory.uploadGroupChatPhoto(filename, $scope.data.imgURI);
+
+      //sends message with img:true, content: ':img linktoS3'
+      //send image
+      var photoMessage = 'https://s3.amazonaws.com/whinnyphotos/group_chat_images/' + filename;
+      messageFactory.sendChatImage($stateParams.convo.convoUser.user_id, photoMessage).then(function () {
+        //insert into the convo? TODO
+
+        messageFactory.updateChatMessages().then(function (res) {
+
+          messageFactory.updateGroupData().then(function(res){
+            $scope.groupData = res;
           })
-        })
+
+          $scope.hideInput = false;
+          $scope.data.imgURI = '';
+
+        });
+      })
+
+    } else {
+      if($scope.groupMessage){
+        if($scope.groupMessage.length > 0){
+          messageFactory.sendGroupMessage($stateParams.group_id, $scope.currentGroup.group_name, $scope.groupMessage).then(function () {
+            $scope.groupMessage = "";
+            console.log($scope.groupData);
+            messageFactory.updateGroupData().then(function(){
+              $scope.groupData = messageFactory.getGroupData();
+            })
+          })
+        }
       }
     }
+  }
+
+  $scope.data.showModal = function (imageSource) {
+    $scope.imageUrl = imageSource;
+    $ionicModal.fromTemplateUrl('templates/broadcastZoomView.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.modal = modal;
+      $scope.modal.show();
+    })
+  }
+
+  $scope.closeModal = function () {
+    $scope.modal.remove();
   }
 
   $scope.goToGroupInfo = function () {

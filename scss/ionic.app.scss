@@ -322,7 +322,7 @@ $tabs-height:                     56px;
 }
 
 .modal {
-  background-color: rgba(0, 0, 0, 0.7) !important;
+  background-color: rgba(0, 0, 0, 0.3) !important;
   text-align: center;
   overflow: hidden;;
 }
@@ -336,10 +336,15 @@ $tabs-height:                     56px;
 }
 
 .broadcastModalButton {
-  position: absolute;
-  bottom: 0px;
-  color: white;
+  position: relative;
+  top: 10px;
+  color: #dddddd;
+  font-size: 45px;
   background-color: rgba(0, 0, 0, 0);
+}
+
+.broadcastModalButton:active {
+  color: #FFFFFF;
 }
 
 .button.broadcastModalButton.active, .button.broadcastModalButton.activated {
