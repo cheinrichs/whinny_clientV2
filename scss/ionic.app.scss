@@ -352,7 +352,6 @@ $tabs-height:                     56px;
   color: black;
 }
 
-
 .discipline {
   height: 100px;
   width: 110px;
@@ -389,7 +388,7 @@ $tabs-height:                     56px;
   background-color: #FFFFFF !important;
   background-image: linear-gradient(0deg, #ffaa3b, #ffaa3b 50%, transparent 50%) !important;
   color: #A3A3A3 !important; }
-.tabs-energized > .tabs .tab-item .badge,
+.tabs-energized > .tabs .tab-item,
 .tabs.tabs-energized .tab-item .badge {
   background-color: #FFFFFF !important;
   color: #FFB554 !important;
@@ -410,7 +409,7 @@ $tabs-height:                     56px;
   font-size: 15px !important;
   color: #A3A3A3 !important; }
 .tabs-striped.tabs-energized .tab-item .badge {
-  opacity: 0.4 !important;
+  opacity: 1 !important;
   font-size: 15px !important; }
 .tabs-striped.tabs-energized .tab-item.tab-item-active, .tabs-striped.tabs-energized .tab-item.active, .tabs-striped.tabs-energized .tab-item.activated {
   margin-top: -2px !important;
@@ -420,6 +419,10 @@ $tabs-height:                     56px;
   border-color: #FFB554 !important;
   font-size: 15px !important;}
 
+.badge.ng-enter {
+    -webkit-animation: fadeInLeft 1s;
+    animation: fadeInLeft 1s;
+}
 
 .landingPageImage {
   height: 280px;

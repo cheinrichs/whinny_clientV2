@@ -496,7 +496,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
       $scope.chatMessages = messageFactory.getChatMessages();
       console.log($scope.chatMessages);
       $scope.chatUsers = messageFactory.getUserObjects();
-      $scope.groups = messageFactory.getChatMessages();
+      // $scope.groups = messageFactory.getChatMessages();
     });
   // }
 
@@ -1925,4 +1925,27 @@ function ($scope, $state, $stateParams, messageFactory) {
   $scope.backToBroadcastsPage = function () {
     $state.go('tabsController.broadcastsPage');
   }
+}])
+
+.controller('tabsController', ['$scope', 'messageFactory', '$timeout',
+function ($scope, messageFactory, $timeout) {
+
+  $timeout(function () {
+    $scope.broadcastData = messageFactory.getBroadcastData();
+    $scope.broadcastBadges = $scope.broadcastData.unread.length;
+
+    $scope.chatMessages = messageFactory.getChatMessages();
+    var unreadChatMessages = 0;
+    for (var i = 0; i < $scope.chatMessages.length; i++) {
+      if($scope.chatMessages[i].unread){
+        unreadChatMessages++;
+      }
+    }
+    $scope.messageBadges = unreadChatMessages;
+
+    $scope.groupData = messageFactory.getGroupData();
+    $scope.groupBadges = $scope.groupData.unread.length;
+
+  }, 1000);
+
 }])
