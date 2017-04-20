@@ -51,6 +51,9 @@
     <feature name="FileTransfer">
         <param name="ios-package" value="CDVFileTransfer" />
     </feature>
+    <feature name="Badge">
+        <param name="ios-package" value="APPBadge" />
+    </feature>
     <name>Whinny</name>
     <description>
         An Ionic Framework and Cordova project.

@@ -98,6 +98,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   // var API_URL = 'https://whinny-server.herokuapp.com';
   //Staging
   var API_URL = 'https://whinny-staging.herokuapp.com';
+  //Local
+  // var API_URL = 'http://localhost:3000';
 
   var CLIENT_VERSION = '0.0.1';
   //holds all data for the current user. Used to send and parse messages
@@ -205,8 +207,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       }
 
       groupData = groupDataUnparsed;
-
-      console.log(groupData);
 
       return groupData;
     })
@@ -418,6 +418,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function markGroupMessagesAsRead(newlyReadMessages) {
+    console.log(newlyReadMessages);
     var data = {
       user_id: currentUser.user_id,
       newlyReadMessages: newlyReadMessages
@@ -506,7 +507,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   function updateGroupInvitations() {
     var url = API_URL + '/groupInvitations/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
-      console.log("res in update group invitations in service", res);
       groupInvitations = res.data;
       return groupInvitations;
     });
@@ -885,6 +885,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   // var API_URL = 'https://whinny-server.herokuapp.com';
   //Staging
   var API_URL = 'https://whinny-staging.herokuapp.com';
+  //local
+  // var API_URL = 'http://localhost:3000';
 
   return photoFactory;
 

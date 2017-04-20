@@ -55,6 +55,10 @@
                         {
                             "xml": "<feature name=\"FileTransfer\"><param name=\"android-package\" value=\"org.apache.cordova.filetransfer.FileTransfer\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Badge\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.badge.Badge\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -194,6 +198,12 @@
             "PACKAGE_NAME": "com.whinny.appL9A37RQX6D"
         },
         "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.whinny.appL9A37RQX6D"
+        },
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "com.whinny.appL9A37RQX6D"
+        },
+        "cordova-plugin-badge": {
             "PACKAGE_NAME": "com.whinny.appL9A37RQX6D"
         }
     },
@@ -546,6 +556,15 @@
             "clobbers": [
                 "window.FileTransfer"
             ]
+        },
+        {
+            "id": "cordova-plugin-badge.Badge",
+            "file": "plugins/cordova-plugin-badge/www/badge.js",
+            "pluginId": "cordova-plugin-badge",
+            "clobbers": [
+                "plugin.notification.badge",
+                "cordova.plugins.notification.badge"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -561,6 +580,8 @@
         "cordova-plugin-inappbrowser": "1.6.2-dev",
         "cordova-plugin-camera": "2.3.2-dev",
         "cordova-plugin-file": "4.3.1",
-        "cordova-plugin-file-transfer": "1.6.1"
+        "cordova-plugin-file-transfer": "1.6.1",
+        "cordova-plugin-app-event": "1.2.0",
+        "cordova-plugin-badge": "0.7.4"
     }
 }

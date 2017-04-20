@@ -17,7 +17,6 @@ function ($rootScope, $scope, $state) {
   $scope.pageTitle = 'Whinny';
 
   $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-    console.log(toState.url);
     if(toState.url === "/chatTab"){
       $scope.hideNavBar = false;
       $scope.hideGroupIcons = true;
@@ -1142,6 +1141,11 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
     if(!$scope.convo.messages[i].read && $scope.convo.messages[i].from_user !== $scope.currentUser.user_id) newlyReadMessages.push($scope.convo.messages[i].message_id);
   }
   messageFactory.markChatMessagesAsRead(newlyReadMessages);
+  var emitObject = {
+    messagesRead: newlyReadMessages,
+    source: 'chat'
+  }
+  $rootScope.$emit('readMessages', emitObject);
 
 
   $rootScope.individualChatUpdateInterval = setInterval(function () {
@@ -1319,17 +1323,27 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal)
   //and replace messages and objects
   messageFactory.updateGroupData().then(function(res){
     $scope.groupData = res;
+    console.log($scope.groupData);
   })
 
   var messagesRead = [];
+  console.log($scope.group_id);
   for (var i = 0; i < $scope.groupData.groupMessages.length; i++) {
-    if($scope.groupData.groupMessages[i].unread && $scope.groupData.groupMessages[i].to_group === $scope.group_id){
+    console.log($scope.groupData.groupMessages[i]);
+    console.log();
+    if(!$scope.groupData.groupMessages[i].read && $scope.groupData.groupMessages[i].to_group === $scope.group_id){
       messagesRead.push($scope.groupData.groupMessages[i].group_message_id);
     }
   }
   console.log(messagesRead);
 
   messageFactory.markGroupMessagesAsRead(messagesRead);
+  //Tell the tab controller you read messages to decrement the badges on tabs
+  var emitObj = {
+    messagesRead: messagesRead,
+    source: 'groups'
+  }
+  $rootScope.$emit('readMessages', emitObj);
 
   $rootScope.individualGroupUpdateInterval = setInterval(function () {
     messageFactory.updateGroupData().then(function(res){
@@ -1512,6 +1526,11 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
     }
   }
   messageFactory.markBroadcastMessagesAsRead(messagesRead);
+  var emitObj = {
+    messagesRead: messagesRead,
+    source: 'broadcasts'
+  }
+  $rootScope.$emit('readMessages', emitObj);
 
   $scope.showModal = function (imageUrl) {
     $scope.imageUrl = imageUrl;
@@ -1927,13 +1946,13 @@ function ($scope, $state, $stateParams, messageFactory) {
   }
 }])
 
-.controller('tabsController', ['$scope', 'messageFactory', '$timeout',
-function ($scope, messageFactory, $timeout) {
+.controller('tabsController', ['$rootScope', '$scope', 'messageFactory', '$timeout', '$cordovaBadge', '$localStorage',
+function ($rootScope, $scope, messageFactory, $timeout, $cordovaBadge, $localStorage) {
+
+  var badgeNumber = 0;
 
   $timeout(function () {
-    $scope.broadcastData = messageFactory.getBroadcastData();
-    $scope.broadcastBadges = $scope.broadcastData.unread.length;
-
+    //Chat badges
     $scope.chatMessages = messageFactory.getChatMessages();
     var unreadChatMessages = 0;
     for (var i = 0; i < $scope.chatMessages.length; i++) {
@@ -1943,9 +1962,40 @@ function ($scope, messageFactory, $timeout) {
     }
     $scope.messageBadges = unreadChatMessages;
 
+    //Group Badges
     $scope.groupData = messageFactory.getGroupData();
     $scope.groupBadges = $scope.groupData.unread.length;
 
+    //Broadcast Badges
+    $scope.broadcastData = messageFactory.getBroadcastData();
+    $scope.broadcastBadges = $scope.broadcastData.unread.length;
+
+    //Update the app's icon badge number
+    if (window.cordova && window.cordova.plugins) {
+      badgeNumber = $scope.messageBadges+ $scope.groupBadges + $scope.broadcastBadges
+      cordova.plugins.notification.badge.set(badgeNumber);
+
+      $localStorage.badgeNumber = badgeNumber;
+    }
+
   }, 1000);
+
+  $rootScope.$on('readMessages', function (ev, args) {
+    if(args.source === 'chat'){
+      $scope.messageBadges -= args.messagesRead.length;
+    } else if(args.source === 'groups'){
+      $scope.groupBadges -= args.messagesRead.length;
+    } else  if(args.source === 'broadcasts'){
+      $scope.broadcastBadges -= args.messagesRead.length;
+    }
+
+    //Update the app's icon badge number
+    if (window.cordova && window.cordova.plugins) {
+      badgeNumber = $scope.messageBadges+ $scope.groupBadges + $scope.broadcastBadges
+      cordova.plugins.notification.badge.set(badgeNumber);
+
+      $localStorage.badgeNumber = badgeNumber;
+    }
+  })
 
 }])

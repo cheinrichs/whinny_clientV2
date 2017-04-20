@@ -10092,7 +10092,7 @@ a.button {
   font-weight: bold; }
 
 .modal {
-  background-color: rgba(0, 0, 0, 0.7) !important;
+  background-color: rgba(0, 0, 0, 0.3) !important;
   text-align: center;
   overflow: hidden; }
 
@@ -10104,10 +10104,14 @@ a.button {
   background-repeat: no-repeat; }
 
 .broadcastModalButton {
-  position: absolute;
-  bottom: 0px;
-  color: white;
+  position: relative;
+  top: 10px;
+  color: #dddddd;
+  font-size: 45px;
   background-color: transparent; }
+
+.broadcastModalButton:active {
+  color: #FFFFFF; }
 
 .button.broadcastModalButton.active, .button.broadcastModalButton.activated {
   background-color: white;
@@ -10145,7 +10149,7 @@ a.button {
   background-image: linear-gradient(0deg, #ffaa3b, #ffaa3b 50%, transparent 50%) !important;
   color: #A3A3A3 !important; }
 
-.tabs-energized > .tabs .tab-item .badge,
+.tabs-energized > .tabs .tab-item,
 .tabs.tabs-energized .tab-item .badge {
   background-color: #FFFFFF !important;
   color: #FFB554 !important;
@@ -10167,7 +10171,7 @@ a.button {
   color: #A3A3A3 !important; }
 
 .tabs-striped.tabs-energized .tab-item .badge {
-  opacity: 0.4 !important;
+  opacity: 1 !important;
   font-size: 15px !important; }
 
 .tabs-striped.tabs-energized .tab-item.tab-item-active, .tabs-striped.tabs-energized .tab-item.active, .tabs-striped.tabs-energized .tab-item.activated {
@@ -10177,6 +10181,10 @@ a.button {
   border-width: 2px 0 0 0 !important;
   border-color: #FFB554 !important;
   font-size: 15px !important; }
+
+.badge.ng-enter {
+  -webkit-animation: fadeInLeft 1s;
+  animation: fadeInLeft 1s; }
 
 .landingPageImage {
   height: 280px;

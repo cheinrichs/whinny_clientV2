@@ -41,8 +41,8 @@ angular.module('app', ['ionic', 'ionic.cloud', 'app.controllers', 'app.routes', 
 
 }])
 
-.run(['$ionicPlatform', '$rootScope', '$ionicPush', '$localStorage', '$ionicNavBarDelegate', '$ionicPopup', 'messageFactory',
-function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDelegate, $ionicPopup, messageFactory) {
+.run(['$ionicPlatform', '$rootScope', '$ionicPush', '$localStorage', '$ionicNavBarDelegate', '$ionicPopup', 'messageFactory', '$cordovaBadge',
+function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDelegate, $ionicPopup, messageFactory, $cordovaBadge) {
 
   $rootScope.data = {};
 
@@ -59,7 +59,6 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
     })
 
     //All the possible strings for receiving a push notification button text
-
     var possibleButtonTexts = ['Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Awesome!', 'Ok', 'Great', 'Great...', 'Cool', 'Affirmative', 'I tip my hat', 'Simply marvelous', 'Okey Dokey', 'Good', 'Super', 'Dagnabbit!', 'Hot Diggity Dog!'];
     //used to randomly choose text for the button
     function getRandomArbitrary(min, max) {
@@ -67,9 +66,7 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
     }
 
     $rootScope.$on('cloud:push:notification', function(event, data) {
-      console.log(data.message);
       var msg = data.message;
-      // alert(msg.title + ': ' + msg.text);
 
       messageFactory.updateChatMessages();
       messageFactory.updateGroupData();
@@ -90,6 +87,11 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
         okType: 'button-tangerine'
       });
 
+
+      $localStorage.badgeNumber += 1;
+      //Update the app badge number
+      if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) cordova.plugins.notification.badge.set(badgeNumber);
+      
     });
 
     $rootScope.$on('$ionicView.enter', function(e) {

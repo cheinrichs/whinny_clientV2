@@ -36,6 +36,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     sendChatMessage: sendChatMessage,
     sendChatImage: sendChatImage,
     sendGroupMessage: sendGroupMessage,
+    sendGroupImage: sendGroupImage,
     sendBroadcastMessage: sendBroadcastMessage,
 
     markChatMessagesAsRead: markChatMessagesAsRead,
@@ -376,6 +377,22 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
     var url = API_URL + '/sendGroupMessage'
     // var url = 'http://localhost:3000/sendGroupMessage';
+    return $http.post(url, data).then(function (res) {
+      return res;
+    })
+  }
+
+  function sendGroupImage(group_id, groupName, image_src) {
+    var data = {
+      groupName: groupName,
+      to_group: group_id,
+      from_user: currentUser.user_id,
+      content: '',
+      senderName: currentUser.first_name + ' ' + currentUser.last_name,
+      image: true,
+      image_src: image_src
+    }
+    var url = API_URL + '/sendGroupImage'
     return $http.post(url, data).then(function (res) {
       return res;
     })
@@ -872,9 +889,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   return photoFactory;
 
   function uploadChatPhoto(fileName, fileURI) {
-    console.log("uploadchat photo");
-    console.log(fileName);
-    console.log(fileURI);
     var uri = encodeURI(API_URL + '/chatMessageUpload');
     var options = new FileUploadOptions();
 
@@ -891,11 +905,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     }
 
     function onError(err) {
-      console.log("error in the file upload");
-      console.log(err);
-      for(key in err){
-        console.log(err[key]);
-      }
+      console.log("error in the file upload", err);
     }
   }
 

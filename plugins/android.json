@@ -43,11 +43,17 @@
         },
         "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.whinny.appL9A37RQX6D"
+        },
+        "cordova-plugin-badge": {
+            "PACKAGE_NAME": "com.whinny.appL9A37RQX6D"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-compat": {
             "PACKAGE_NAME": "com.ionicframework.todo937652"
+        },
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "com.whinny.appL9A37RQX6D"
         }
     }
 }

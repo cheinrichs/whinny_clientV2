@@ -347,6 +347,15 @@ module.exports = [
         "clobbers": [
             "window.FileTransfer"
         ]
+    },
+    {
+        "id": "cordova-plugin-badge.Badge",
+        "file": "plugins/cordova-plugin-badge/www/badge.js",
+        "pluginId": "cordova-plugin-badge",
+        "clobbers": [
+            "plugin.notification.badge",
+            "cordova.plugins.notification.badge"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -364,7 +373,9 @@ module.exports.metadata =
     "cordova-plugin-inappbrowser": "1.6.2-dev",
     "cordova-plugin-camera": "2.3.2-dev",
     "cordova-plugin-file": "4.3.1",
-    "cordova-plugin-file-transfer": "1.6.1"
+    "cordova-plugin-file-transfer": "1.6.1",
+    "cordova-plugin-app-event": "1.2.0",
+    "cordova-plugin-badge": "0.7.4"
 };
 // BOTTOM OF METADATA
 });
