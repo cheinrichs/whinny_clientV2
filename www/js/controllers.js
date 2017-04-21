@@ -161,7 +161,6 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, $localSt
   //handle auto log in
   if($localStorage.whinny_user){
     if($localStorage.whinny_user.verified){
-      console.log($localStorage.whinny_user);
       messageFactory.versionCheck().then(function (res) {
         if(res.deprecatedClient){
           alert("Your Whinny app is now out of date! Please download the new version!");
@@ -169,6 +168,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, $localSt
         } else {
           //Set the current whinny_user to the user object stored in localStorage and go to the chat page.
           messageFactory.setCurrentUser($localStorage.whinny_user);
+          console.log($localStorage.whinny_user);
           $state.go('tabsController.chatPage');
         }
       })
@@ -491,13 +491,11 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
 
   // if($scope.chatMessages.length === 0){
   //TODO Once we have messages stored in a file on your phone turn on this if statement
-    messageFactory.updateChatMessages().then(function (res) {
+    messageFactory.updateChatMessages()
+    .then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
-      console.log($scope.chatMessages);
       $scope.chatUsers = messageFactory.getUserObjects();
-      // $scope.groups = messageFactory.getChatMessages();
     });
-  // }
 
   $rootScope.chatPageUpdateInterval = setInterval(function () {
     messageFactory.updateChatMessages().then(function (res) {
@@ -614,6 +612,7 @@ function ($scope, $state, $stateParams, messageFactory) {
   }
 
   $scope.goToGroupMessage = function (group_id) {
+    console.log(group_id);
     $state.go('groupMessagePage', { group_id: group_id });
   }
 
@@ -1127,7 +1126,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   $scope.hideInput = false;
   $scope.data.imgURI = '';
 
-  console.log($stateParams.convo);
   for (var i = 0; i < $scope.chatMessages.length; i++) {
     if($scope.chatMessages[i].convoUser.user_id === $stateParams.convo.convoUser.user_id) $scope.convo = $scope.chatMessages[i];
   }
@@ -1138,9 +1136,11 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   var newlyReadMessages = [];
   for (var i = 0; i < $scope.convo.messages.length; i++) {
     //If the message is unread and it wasn't sent by the current user, mark it as read
+    console.log($scope.convo.messages[i]);
     if(!$scope.convo.messages[i].read && $scope.convo.messages[i].from_user !== $scope.currentUser.user_id) newlyReadMessages.push($scope.convo.messages[i].message_id);
   }
   messageFactory.markChatMessagesAsRead(newlyReadMessages);
+  console.log(newlyReadMessages);
   var emitObject = {
     messagesRead: newlyReadMessages,
     source: 'chat'
@@ -1235,13 +1235,10 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
 
   $scope.sendChatMessage = function () {
     if($scope.data.imgURI.length > 1){
-      //create the filename using time stamp
+
       var filename = $scope.currentUser.user_id + '_chatMessage_'+ Date.now() + '.jpg';
-      //upload the photo to s3
       photoFactory.uploadChatPhoto(filename, $scope.data.imgURI);
 
-      //sends message with img:true, content: ':img linktoS3'
-      //send image
       var photoMessage = 'https://s3.amazonaws.com/whinnyphotos/chat_images/' + filename;
       messageFactory.sendChatImage($stateParams.convo.convoUser.user_id, photoMessage).then(function () {
         //insert into the convo? TODO
@@ -1308,36 +1305,31 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal)
 
   $scope.currentUser = messageFactory.getCurrentUser();
   $scope.group_id = $stateParams.group_id;
+  $scope.groupData = messageFactory.getGroupData();
 
   $scope.hideInput = false;
   $scope.data.imgURI = '';
 
-  $scope.groupData = messageFactory.getGroupData();
 
   for (var i = 0; i < $scope.groupData.groupObjects.length; i++) {
     //Set the current group to match the one in the passed in group id
     if($scope.groupData.groupObjects[i].group_id === $scope.group_id) $scope.currentGroup = $scope.groupData.groupObjects[i];
   }
 
-  //update the group messages
-  //and replace messages and objects
-  messageFactory.updateGroupData().then(function(res){
-    $scope.groupData = res;
-    console.log($scope.groupData);
+  var messagesRead = [];
+  for (var i = 0; i < $scope.groupData.unread.length; i++) {
+    if(!$scope.groupData.unread[i].read && $scope.groupData.unread[i].group_id === $scope.group_id){
+      messagesRead.push($scope.groupData.unread[i].group_message_read_id);
+    }
+
+  }
+
+  messageFactory.markGroupMessagesAsRead(messagesRead).then(function () {
+    messageFactory.updateGroupData().then(function(res){
+      $scope.groupData = res;
+    })
   })
 
-  var messagesRead = [];
-  console.log($scope.group_id);
-  for (var i = 0; i < $scope.groupData.groupMessages.length; i++) {
-    console.log($scope.groupData.groupMessages[i]);
-    console.log();
-    if(!$scope.groupData.groupMessages[i].read && $scope.groupData.groupMessages[i].to_group === $scope.group_id){
-      messagesRead.push($scope.groupData.groupMessages[i].group_message_id);
-    }
-  }
-  console.log(messagesRead);
-
-  messageFactory.markGroupMessagesAsRead(messagesRead);
   //Tell the tab controller you read messages to decrement the badges on tabs
   var emitObj = {
     messagesRead: messagesRead,
@@ -1681,7 +1673,6 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
 
 }])
 
-
 .controller('newChatMessageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaContacts', 'contactsFactory',
 function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contactsFactory) {
 
@@ -1689,6 +1680,8 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
   $scope.data.contactsHidden = true;
   $scope.data.isWhinnyUser = false;
   $scope.data.newChatRecipient = "";
+  $scope.data.imgURI = '';
+  $scope.hideInput = false;
 
   if($stateParams.groupMember.first_name){
     console.log($stateParams.groupMember);
@@ -1706,6 +1699,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
   $scope.data.chooseContact = function (name, phone) {
     $scope.data.chosenPhone = phone;
     $scope.data.newChatRecipient = name;
+    console.log(name);
     $scope.data.contactsHidden = true;
   }
 
@@ -1713,20 +1707,100 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
     $scope.data.contactsHidden = false;
   }
 
+  var photoSourcePopup;
+
+  $scope.addPhoto = function () {
+    var customTemplate =
+      '<button class="button button-block button-tangerine" ng-click="takePhoto()">Camera</button>' +
+      '<button class="button button-block button-tangerine" ng-click="choosePhoto()">Gallery</button>';
+
+    photoSourcePopup = $ionicPopup.show({
+      template: customTemplate,
+      scope: $scope,
+      buttons: [
+        {
+          text: 'Cancel',
+          type: 'button-energized',
+          onTap: function(e) {}
+        }
+      ]
+    });
+  }
+
+  $scope.takePhoto = function () {
+
+    photoSourcePopup.close();
+
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      $scope.data.imgURI = imageData;
+      $scope.hideInput = true;
+    })
+  }
+
+  $scope.choosePhoto = function () {
+
+    photoSourcePopup.close();
+
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    }
+    $cordovaCamera.getPicture(options).then(function (imageData) {
+      $scope.data.imgURI = imageData;
+      $scope.hideInput = true;
+    }, function (err) {
+      console.log("error has occurred in get picture");
+    })
+  }
+
+  $scope.clearStagedPhoto = function () {
+    $scope.data.imgURI = '';
+    $scope.hideInput = false;
+  }
+
   $scope.createNewChatMessage = function () {
     $scope.data.errors = [];
     if(!$scope.data.chosenPhone && !$scope.data.isWhinnyUser){
       $scope.data.errors.push('Please enter a valid recipient!');
     }
-    if(!$scope.chatMessage){
+    if(!$scope.chatMessage && $scope.data.imgURI.length < 1){
       $scope.data.errors.push('Please enter a message!');
     }
     if($scope.data.errors.length > 0){
       return;
     }
+
+    var newChatMessage;
+    if($scope.data.imgURI.length > 1){
+      var filename = $scope.currentUser.user_id + '_chatMessage_'+ Date.now() + '.jpg';
+      photoFactory.uploadChatPhoto(filename, $scope.data.imgURI);
+      newChatMessage = 'https://s3.amazonaws.com/whinnyphotos/chat_images/' + filename;
+    } else {
+      newChatMessage = $scope.chatMessage;
+    }
+
     //if you're speaking to another whinny user, send the chat the easy way
     if($scope.data.isWhinnyUser){
-      messageFactory.sendChatMessage($stateParams.groupMember.user_id, $scope.chatMessage).then(function (res) {
+      messageFactory.sendChatMessage($stateParams.groupMember.user_id, newChatMessage).then(function (res) {
         messageFactory.updateChatMessages().then(function (convos) {
           $scope.chatMessage = "";
           $scope.data.newChatRecipient = "";
@@ -1744,7 +1818,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
     //If you're not speaking to a whinny user, we have to make sure the phone number is valid
     } else {
       var parsedPhone = $scope.data.chosenPhone.replace(/[\s()-]/g, "");
-      messageFactory.createNewChatMessage(parsedPhone, $scope.chatMessage).then(function (res) {
+      messageFactory.createNewChatMessage(parsedPhone, newChatMessage).then(function (res) {
         messageFactory.updateChatMessages().then(function (convos) {
           $scope.chatMessage = "";
           $scope.data.newChatRecipient = "";
@@ -1950,14 +2024,17 @@ function ($scope, $state, $stateParams, messageFactory) {
 function ($rootScope, $scope, messageFactory, $timeout, $cordovaBadge, $localStorage) {
 
   var badgeNumber = 0;
+  $scope.currentUser = messageFactory.getCurrentUser();
 
   $timeout(function () {
     //Chat badges
     $scope.chatMessages = messageFactory.getChatMessages();
     var unreadChatMessages = 0;
     for (var i = 0; i < $scope.chatMessages.length; i++) {
-      if($scope.chatMessages[i].unread){
-        unreadChatMessages++;
+      for (var j = 0; j < $scope.chatMessages[i].messages.length; j++) {
+        if(!$scope.chatMessages[i].messages[j].read && $scope.chatMessages[i].messages[j].from_user !== $scope.currentUser.user_id){
+          unreadChatMessages++;
+        }
       }
     }
     $scope.messageBadges = unreadChatMessages;

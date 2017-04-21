@@ -98,6 +98,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   // var API_URL = 'https://whinny-server.herokuapp.com';
   //Staging
   var API_URL = 'https://whinny-staging.herokuapp.com';
+  //Local
+  // var API_URL = 'http://localhost:3000';
 
   var CLIENT_VERSION = '0.0.1';
   //holds all data for the current user. Used to send and parse messages
@@ -156,7 +158,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateChatMessages(){
-
+    if(Object.keys(currentUser).length === 0) return;
     var url = API_URL + '/chatMessages/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
       chatMessages = res.data;
@@ -165,6 +167,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateGroupData(){
+    if(Object.keys(currentUser).length === 0) return;
     var url = API_URL + '/groupMessages/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
 
@@ -206,13 +209,12 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
       groupData = groupDataUnparsed;
 
-      console.log(groupData);
-
       return groupData;
     })
   }
 
   function updateBroadcastData(){
+    if(Object.keys(currentUser).length === 0) return;
     var url = API_URL + '/broadcastMessages/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
       var broadcastDataUnparsed = res.data;
@@ -506,7 +508,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   function updateGroupInvitations() {
     var url = API_URL + '/groupInvitations/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
-      console.log("res in update group invitations in service", res);
       groupInvitations = res.data;
       return groupInvitations;
     });
@@ -885,6 +886,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   // var API_URL = 'https://whinny-server.herokuapp.com';
   //Staging
   var API_URL = 'https://whinny-staging.herokuapp.com';
+  //local
+  // var API_URL = 'http://localhost:3000';
 
   return photoFactory;
 

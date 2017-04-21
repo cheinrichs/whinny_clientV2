@@ -158,7 +158,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateChatMessages(){
-
+    if(Object.keys(currentUser).length === 0) return;
     var url = API_URL + '/chatMessages/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
       chatMessages = res.data;
@@ -167,6 +167,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateGroupData(){
+    if(Object.keys(currentUser).length === 0) return;
     var url = API_URL + '/groupMessages/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
 
@@ -213,6 +214,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateBroadcastData(){
+    if(Object.keys(currentUser).length === 0) return;
     var url = API_URL + '/broadcastMessages/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
       var broadcastDataUnparsed = res.data;
@@ -243,8 +245,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       }
 
       broadcastData = broadcastDataUnparsed;
-
-      console.log(broadcastData);
 
       return broadcastData;
     })
@@ -418,7 +418,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function markGroupMessagesAsRead(newlyReadMessages) {
-    console.log(newlyReadMessages);
     var data = {
       user_id: currentUser.user_id,
       newlyReadMessages: newlyReadMessages

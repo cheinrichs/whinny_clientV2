@@ -17,7 +17,6 @@ function ($rootScope, $scope, $state) {
   $scope.pageTitle = 'Whinny';
 
   $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-    console.log(toState.url);
     if(toState.url === "/chatTab"){
       $scope.hideNavBar = false;
       $scope.hideGroupIcons = true;
@@ -492,13 +491,11 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
 
   // if($scope.chatMessages.length === 0){
   //TODO Once we have messages stored in a file on your phone turn on this if statement
-    messageFactory.updateChatMessages().then(function (res) {
+    messageFactory.updateChatMessages()
+    .then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
-      console.log($scope.chatMessages);
       $scope.chatUsers = messageFactory.getUserObjects();
-      // $scope.groups = messageFactory.getChatMessages();
     });
-  // }
 
   $rootScope.chatPageUpdateInterval = setInterval(function () {
     messageFactory.updateChatMessages().then(function (res) {
@@ -1142,6 +1139,11 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
     if(!$scope.convo.messages[i].read && $scope.convo.messages[i].from_user !== $scope.currentUser.user_id) newlyReadMessages.push($scope.convo.messages[i].message_id);
   }
   messageFactory.markChatMessagesAsRead(newlyReadMessages);
+  var emitObject = {
+    messagesRead: newlyReadMessages,
+    source: 'chat'
+  }
+  $rootScope.$emit('readMessages', emitObject);
 
 
   $rootScope.individualChatUpdateInterval = setInterval(function () {
@@ -1304,32 +1306,39 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal)
 
   $scope.currentUser = messageFactory.getCurrentUser();
   $scope.group_id = $stateParams.group_id;
+  $scope.groupData = messageFactory.getGroupData();
 
   $scope.hideInput = false;
   $scope.data.imgURI = '';
 
-  $scope.groupData = messageFactory.getGroupData();
 
   for (var i = 0; i < $scope.groupData.groupObjects.length; i++) {
     //Set the current group to match the one in the passed in group id
     if($scope.groupData.groupObjects[i].group_id === $scope.group_id) $scope.currentGroup = $scope.groupData.groupObjects[i];
   }
 
-  //update the group messages
-  //and replace messages and objects
-  messageFactory.updateGroupData().then(function(res){
-    $scope.groupData = res;
-  })
-
   var messagesRead = [];
+  console.log($scope.group_id);
   for (var i = 0; i < $scope.groupData.groupMessages.length; i++) {
+    console.log($scope.groupData.groupMessages[i]);
     if($scope.groupData.groupMessages[i].unread && $scope.groupData.groupMessages[i].to_group === $scope.group_id){
+      console.log($scope.groupData.groupMessages[i]);
       messagesRead.push($scope.groupData.groupMessages[i].group_message_id);
     }
   }
-  console.log(messagesRead);
 
-  messageFactory.markGroupMessagesAsRead(messagesRead);
+  messageFactory.markGroupMessagesAsRead(messagesRead).then(function () {
+    messageFactory.updateGroupData().then(function(res){
+      $scope.groupData = res;
+      console.log($scope.groupData);
+    })
+  })
+  //Tell the tab controller you read messages to decrement the badges on tabs
+  var emitObj = {
+    messagesRead: messagesRead,
+    source: 'groups'
+  }
+  $rootScope.$emit('readMessages', emitObj);
 
   $rootScope.individualGroupUpdateInterval = setInterval(function () {
     messageFactory.updateGroupData().then(function(res){
@@ -1512,6 +1521,11 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
     }
   }
   messageFactory.markBroadcastMessagesAsRead(messagesRead);
+  var emitObj = {
+    messagesRead: messagesRead,
+    source: 'broadcasts'
+  }
+  $rootScope.$emit('readMessages', emitObj);
 
   $scope.showModal = function (imageUrl) {
     $scope.imageUrl = imageUrl;
@@ -1725,6 +1739,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
     //If you're not speaking to a whinny user, we have to make sure the phone number is valid
     } else {
       var parsedPhone = $scope.data.chosenPhone.replace(/[\s()-]/g, "");
+      console.log($scope.data.newChatRecipient);
       messageFactory.createNewChatMessage(parsedPhone, $scope.chatMessage).then(function (res) {
         messageFactory.updateChatMessages().then(function (convos) {
           $scope.chatMessage = "";
@@ -1927,8 +1942,10 @@ function ($scope, $state, $stateParams, messageFactory) {
   }
 }])
 
-.controller('tabsController', ['$scope', 'messageFactory', '$timeout', '$cordovaBadge', '$localStorage',
-function ($scope, messageFactory, $timeout, $cordovaBadge, $localStorage) {
+.controller('tabsController', ['$rootScope', '$scope', 'messageFactory', '$timeout', '$cordovaBadge', '$localStorage',
+function ($rootScope, $scope, messageFactory, $timeout, $cordovaBadge, $localStorage) {
+
+  var badgeNumber = 0;
 
   $timeout(function () {
     //Chat badges
@@ -1950,13 +1967,32 @@ function ($scope, messageFactory, $timeout, $cordovaBadge, $localStorage) {
     $scope.broadcastBadges = $scope.broadcastData.unread.length;
 
     //Update the app's icon badge number
-    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-      var badgeNumber = $scope.messageBadges+ $scope.groupBadges + $scope.broadcastBadges
+    if (window.cordova && window.cordova.plugins) {
+      badgeNumber = $scope.messageBadges+ $scope.groupBadges + $scope.broadcastBadges
       cordova.plugins.notification.badge.set(badgeNumber);
 
       $localStorage.badgeNumber = badgeNumber;
     }
 
   }, 1000);
+
+  $rootScope.$on('readMessages', function (ev, args) {
+    if(args.source === 'chat'){
+      $scope.messageBadges -= args.messagesRead.length;
+    } else if(args.source === 'groups'){
+      console.log(args.messagesRead);
+      $scope.groupBadges -= args.messagesRead.length;
+    } else  if(args.source === 'broadcasts'){
+      $scope.broadcastBadges -= args.messagesRead.length;
+    }
+
+    //Update the app's icon badge number
+    if (window.cordova && window.cordova.plugins) {
+      badgeNumber = $scope.messageBadges+ $scope.groupBadges + $scope.broadcastBadges
+      cordova.plugins.notification.badge.set(badgeNumber);
+
+      $localStorage.badgeNumber = badgeNumber;
+    }
+  })
 
 }])

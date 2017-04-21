@@ -90,8 +90,8 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
 
       $localStorage.badgeNumber += 1;
       //Update the app badge number
-      if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) cordova.plugins.notification.badge.set(badgeNumber);
-      
+      if (window.cordova && window.cordova.plugins) cordova.plugins.notification.badge.set(badgeNumber);
+
     });
 
     $rootScope.$on('$ionicView.enter', function(e) {
