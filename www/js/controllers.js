@@ -1528,7 +1528,7 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
     $scope.imageUrl = imageUrl;
     $ionicModal.fromTemplateUrl('templates/broadcastZoomView.html', {
       scope: $scope,
-      animation: 'slide-in-up'
+      animation: 'scale-in'
     }).then(function (modal) {
       $scope.modal = modal;
       $scope.modal.show();

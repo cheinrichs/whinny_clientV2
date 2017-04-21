@@ -246,8 +246,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
       broadcastData = broadcastDataUnparsed;
 
-      console.log(broadcastData);
-
       return broadcastData;
     })
   }

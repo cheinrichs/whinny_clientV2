@@ -114,7 +114,5 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
 }])
 
 .config(function($compileProvider){
-  console.log("inside compile prov");
-  console.log($compileProvider);
   $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file):|data:image\//);
 })

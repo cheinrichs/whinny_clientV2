@@ -36,19 +36,23 @@
     <div class="messageFooter" keyboard-attach>
 
       <div class="row">
-
         <div class="col col-80">
-          <textarea class="footer-input" placeholder="Enter Message" ng-model="chatMessage" rows="2" msd-elastic cols="45" ng-focus="focus=true" ng-blur="focus=false"></textarea>
+          <span ng-show="hideInput">
+            <img ng-src="{{data.imgURI}}" class="chatImageStaging animated fadeIn" alt="">
+            <a class="ion-close-circled clearStagedPhotoButton animated fadeIn" ng-click="clearStagedPhoto()"></a>
+          </span>
+          <textarea class="footer-input" placeholder="Enter Message" ng-model="groupMessage" rows="2" msd-elastic cols="45" ng-focus="focus=true" ng-blur="focus=false" ng-hide="hideInput"></textarea>
         </div>
 
         <div class="col col-20">
-          <button class="button button-tangerine sendChatButton" ng-click="createNewChatMessage()">Send</button>
+          <button class="button button-tangerine sendChatButton" ng-click="sendGroupMessage()">Send</button>
         </div>
       </div>
 
       <div class="row">
         <ion-scroll zooming="false" paging="false" scrollbar-x="false" direction="x" style="height: 40px;">
-          <div class="row" style="height:40px; width: 1600px;">
+          <div class="row" style="height:40px; width: 1640px;">
+            <a class="emojiCameraButton ion-android-camera energized" ng-click="addPhoto()"></a>
             <ion-label class="emojiButton HappyFaceEButton" ng-click="addEmoji(':HappyFace:')"></ion-label>
             <ion-label class="emojiButton AngryFaceEButton" ng-click="addEmoji(':AngryFace:')"></ion-label>
             <ion-label class="emojiButton LayingHorseEButton" ng-click="addEmoji(':LayingHorse:')"></ion-label>
