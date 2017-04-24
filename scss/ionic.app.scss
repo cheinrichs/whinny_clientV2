@@ -322,7 +322,7 @@ $tabs-height:                     56px;
 }
 
 .modal {
-  background-color: rgba(0, 0, 0, 0.3) !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
   text-align: center;
   overflow: hidden;
 }
@@ -732,7 +732,11 @@ $tabs-height:                     56px;
 }
 
 .chatScreen {
-  padding: 40px 0px 80px 0px;
+  padding: 20% 0 15% 0;
+}
+
+.chatScreenFewMessages {
+  padding: 0px;
 }
 
 .groupSearchPadding {

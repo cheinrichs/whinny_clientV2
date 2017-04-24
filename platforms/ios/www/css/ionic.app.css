@@ -10092,7 +10092,7 @@ a.button {
   font-weight: bold; }
 
 .modal {
-  background-color: rgba(0, 0, 0, 0.3) !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
   text-align: center;
   overflow: hidden; }
 
@@ -10441,7 +10441,10 @@ a.button {
   margin-left: 38px; }
 
 .chatScreen {
-  padding: 40px 0px 80px 0px; }
+  padding: 20% 0 15% 0; }
+
+.chatScreenFewMessages {
+  padding: 0px; }
 
 .groupSearchPadding {
   margin: auto auto 50px auto; }

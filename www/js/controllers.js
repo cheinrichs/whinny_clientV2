@@ -168,8 +168,22 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, $localSt
         } else {
           //Set the current whinny_user to the user object stored in localStorage and go to the chat page.
           messageFactory.setCurrentUser($localStorage.whinny_user);
+          console.log("---");
           console.log($localStorage.whinny_user);
-          $state.go('tabsController.chatPage');
+          console.log($localStorage.token);
+          console.log("---");
+          if($localStorage.token){
+
+            if($localStorage.whinny_user.device_token != $localStorage.token.token){
+              console.log("FIX TOKEN!");
+              messageFactory.updateDeviceToken($localStorage.token.token).then(function () {
+                $state.go('tabsController.chatPage');
+              })
+            }
+
+          } else {
+            $state.go('tabsController.chatPage');
+          }
         }
       })
     }
@@ -471,9 +485,19 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     $timeout(function () {
       console.log("fix this shit");
       $scope.chatMessages = messageFactory.getChatMessages();
-      $scope.chatUsers = messageFactory.getUserObjects();
     }, 1000)
   }
+
+  //TODO remove later
+  contactsFactory.updateContacts();
+  messageFactory.updateGroupData();
+  messageFactory.updateBroadcastData();
+  messageFactory.updateChatMessages();
+
+  $timeout(function () {
+    console.log("fix this shit");
+    $scope.chatMessages = messageFactory.getChatMessages();
+  }, 1000)
 
   if($scope.currentUser.tutorial_1){
     //show the tutorial on true
@@ -488,21 +512,17 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
   }
 
   $scope.chatMessages = messageFactory.getChatMessages();
-  $scope.chatUsers = messageFactory.getUserObjects();
 
   $scope.local_storage = $localStorage;
 
   $rootScope.chatPageUpdateInterval = setInterval(function () {
     messageFactory.updateChatMessages().then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
-      $scope.chatUsers = messageFactory.getUserObjects();
       console.log($scope.chatMessages);
-      console.log($scope.chatUsers);
     });
   }, 10000);
 
   $scope.$on('$ionicView.leave', function() {
-    console.log("LEFFFT CHATTTPAGE. Canceling update interval");
     clearInterval($rootScope.chatPageUpdateInterval);
   });
 
@@ -1157,6 +1177,11 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
     });
   }, 10000);
 
+  $scope.$on('$ionicView.leave', function() {
+    console.log("LEFFFT individual chat. Canceling update interval");
+    clearInterval($rootScope.individualChatUpdateInterval);
+  });
+
   var photoSourcePopup;
 
   $scope.addPhoto = function () {
@@ -1345,6 +1370,11 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal)
     })
   }, 10000);
 
+  $scope.$on('$ionicView.leave', function() {
+    console.log("LEFFFT Group chat. Canceling update interval");
+    clearInterval($rootScope.individualGroupUpdateInterval);
+  });
+
   var photoSourcePopup;
 
   $scope.addPhoto = function () {
@@ -1512,6 +1542,11 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
       $scope.broadcastData = messageFactory.getBroadcastData();
     });
   }, 10000);
+
+  $scope.$on('$ionicView.leave', function() {
+    console.log("LEFFFT Broadcasts. Canceling update interval");
+    clearInterval($rootScope.individualBroadcastUpdateInterval);
+  });
 
   var messagesRead = [];
   for (var i = 0; i < $scope.currentBroadcastMessages.length; i++) {
@@ -2047,15 +2082,27 @@ function ($rootScope, $scope, messageFactory, $timeout, $cordovaBadge, $localSto
 
     //Group Badges
     $scope.groupData = messageFactory.getGroupData();
-    $scope.groupBadges = $scope.groupData.unread.length;
+    if($scope.groupData){
+      if($scope.groupData.unread){
+        $scope.groupBadges = $scope.groupData.unread.length;
+      } else {
+        $scope.groupBadges = 0;
+      }
+    }
 
     //Broadcast Badges
     $scope.broadcastData = messageFactory.getBroadcastData();
-    $scope.broadcastBadges = $scope.broadcastData.unread.length;
+    if($scope.broadcastData){
+      if($scope.broadcastData.unread){
+        $scope.broadcastBadges = $scope.broadcastData.unread.length;
+      } else {
+        $scope.broadcastBadges = 0;
+      }
+    }
 
     //Update the app's icon badge number
     if (window.cordova && window.cordova.plugins) {
-      badgeNumber = $scope.messageBadges+ $scope.groupBadges + $scope.broadcastBadges
+      badgeNumber = $scope.messageBadges + $scope.groupBadges + $scope.broadcastBadges
       cordova.plugins.notification.badge.set(badgeNumber);
 
       $localStorage.badgeNumber = badgeNumber;

@@ -12,9 +12,10 @@
 
     <ion-content padding="true" class="has-header">
 
-      <div ng-repeat="convo in chatMessages | orderBy:'-unread' track by $index">
+     <!-- track by $index -->
+      <div ng-repeat="convo in chatMessages | orderBy:'-unread'">
         <ion-item class="item item-avatar" ng-click="goToChatWithUser({{convo}})">
-          <img preload-image ng-src="{{convo.convoUser.portrait_link}}" alt="">
+          <img ng-src="{{convo.convoUser.portrait_link}}" alt="">
           <i ng-if="!convo.unread" class="messageIcon icon ion-chevron-right energized"></i>
           <i ng-if="convo.unread" class="messageIcon newMessageIcon icon ion-record energized"></i>
           <span ng-if="!convo.convoUser.first_name" class="convoSubject">{{convo.convoUser.phone}}</span>

@@ -86,6 +86,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
     markAccountAsSetUp: markAccountAsSetUp,
 
+    updateDeviceToken: updateDeviceToken,
+
     versionCheck: versionCheck,
 
     logIn: logIn,
@@ -797,7 +799,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function markAccountAsSetUp(user_id) {
-    var url = 'http://whinny-server.herokuapp.com/markAccountAsSetUp' ;
+    var url = API_URL + '/markAccountAsSetUp';
     var data = {
       user_id: user_id
     }
@@ -806,9 +808,19 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     })
   }
 
+  function updateDeviceToken(token) {
+    var url = API_URL + '/updateDeviceToken';
+    var data = {
+      user_id: currentUser.user_id,
+      device_token: token,
+    }
+    return $http.post(url, data).then(function (res) {
+      return res.data;
+    })
+  }
+
   function versionCheck() {
-    var url = 'http://whinny-server.herokuapp.com/versionCheck/' + CLIENT_VERSION;
-    // var url = 'http://localhost:3000/versionCheck/' + CLIENT_VERSION;
+    var url = API_URL + '/versionCheck/' + CLIENT_VERSION;
     return $http.get(url).then(function (res) {
       return res.data;
     })

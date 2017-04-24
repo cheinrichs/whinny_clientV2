@@ -61,7 +61,7 @@
 
     <ion-list>
       <ion-item ng-repeat="group in groupData.groupObjects | orderBy:'-unread' track by $index" class="item item-avatar" ng-click="goToGroupMessage(group.group_id)">
-        <img preload-image ng-src="{{group.group_photo_small}}" alt="">
+        <img ng-src="{{group.group_photo_small}}" alt="">
 
         <i ng-if="!group.unread" class="messageIcon groupMessageIcon icon ion-chevron-right"></i>
         <i ng-if="group.unread" class="messageIcon groupMessageIcon newMessageIcon icon ion-record energized"></i>
