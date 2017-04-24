@@ -167,10 +167,18 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function updateGroupData(){
-    if(Object.keys(currentUser).length === 0) return;
+    if(Object.keys(currentUser).length === 0){
+      var holderData = [
+        {
+          unread: false,
+          messages: [],
+          convoUser: null
+        }
+      ]
+      return holderData;
+    }
     var url = API_URL + '/groupMessages/' + currentUser.user_id;
     return $http.get(url).then(function (res) {
-
 
       var groupDataUnparsed = res.data;
       var unreadGroups = [];
@@ -208,6 +216,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       }
 
       groupData = groupDataUnparsed;
+
+      console.log(groupData);
 
       return groupData;
     })
@@ -481,10 +491,16 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     })
   }
 
-  function createNewChatMessage(to_phone, content) {
-    console.log("creating new chat message with ", currentUser, " to phone ", to_phone, " content ", content);
-    var url = API_URL + '/createNewChat/' + to_phone + '/' + currentUser.user_id + '/' + content;
-    return $http.get(url).then(function (res) {
+  function createNewChatMessage(to_phone, content, first_name, last_name) {
+    var data = {
+      to_phone: to_phone,
+      from_user: currentUser.user_id,
+      content: content,
+      first_name: first_name,
+      last_name: last_name
+    }
+    var url = API_URL + '/createNewChat';
+    return $http.post(url, data).then(function (res) {
       return res;
     });
   }

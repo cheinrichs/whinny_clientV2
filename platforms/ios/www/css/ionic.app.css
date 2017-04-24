@@ -10096,6 +10096,23 @@ a.button {
   text-align: center;
   overflow: hidden; }
 
+.scale-in {
+  transform: scale(0.9);
+  opacity: 0; }
+
+.scale-in.ng-enter,
+.scale-in > .ng-enter {
+  transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms; }
+
+.scale-in.ng-enter-active,
+.scale-in > .ng-enter-active {
+  transform: scale(1);
+  opacity: 1; }
+
+.scale-in.ng-leave,
+.scale-in > .ng-leave {
+  transition: all ease-in-out 250ms; }
+
 .broadcastZoomedImage {
   overflow: hidden;
   height: 500px !important;

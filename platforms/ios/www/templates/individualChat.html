@@ -1,15 +1,16 @@
 <ion-view hide-nav-bar="true">
+
   <div ng-controller="individualChatCtrl">
 
     <div class="bar bar-header bar-energized">
       <a class="button icon-left ion-chevron-left button-energized" ng-click="backToChatPage()"></a>
       <h1 class="title chatTitle">{{convo.convoUser.first_name}}</h1>
-      <img preload-image ng-src="{{convo.convoUser.portrait_link}}" class="individualChatPortrait" alt="">
+      <img preload-image ng-src="{{convo.convoUser.portrait_link}}" class="individualChatPortrait">
     </div>
 
     <ion-content class="has-footer chatScreen" scroll='false' keyboard-attach on-swipe-right="backToChatPage()">
 
-      <div class="top-container" scroll-glue>
+      <div class="top-container" scroll-glue force-glue>
 
         <div ng-repeat="message in convo.messages">
           <div class="row">

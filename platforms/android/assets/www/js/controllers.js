@@ -454,12 +454,26 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
   }
 }])
 
-.controller('chatPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$localStorage', '$ionicPopup', '$rootScope',
-function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localStorage, $ionicPopup, $rootScope) {
+.controller('chatPageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$localStorage', '$ionicPopup', '$rootScope', '$timeout',
+function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localStorage, $ionicPopup, $rootScope, $timeout) {
 
   $scope.currentUser = messageFactory.getCurrentUser();
   //Send users to log in if there is no user id
   if(!$scope.currentUser.user_id) $state.go('welcomePage');
+
+  document.addEventListener("deviceready", onDeviceReady, false);
+  function onDeviceReady() {
+    contactsFactory.updateContacts();
+    messageFactory.updateGroupData();
+    messageFactory.updateBroadcastData();
+    messageFactory.updateChatMessages();
+
+    $timeout(function () {
+      console.log("fix this shit");
+      $scope.chatMessages = messageFactory.getChatMessages();
+      $scope.chatUsers = messageFactory.getUserObjects();
+    }, 1000)
+  }
 
   if($scope.currentUser.tutorial_1){
     //show the tutorial on true
@@ -478,31 +492,19 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
 
   $scope.local_storage = $localStorage;
 
-
-  //load all contacts for use with other pages in the app //TODO **__** CONTAX
-  document.addEventListener("deviceready", onDeviceReady, false);
-  function onDeviceReady() {
-    contactsFactory.updateContacts();
-  }
-
-  //for better user experience, update the group and broadcast messages right when the user lands on chat
-  messageFactory.updateGroupData();
-  messageFactory.updateBroadcastData();
-
-  // if($scope.chatMessages.length === 0){
-  //TODO Once we have messages stored in a file on your phone turn on this if statement
-    messageFactory.updateChatMessages()
-    .then(function (res) {
-      $scope.chatMessages = messageFactory.getChatMessages();
-      $scope.chatUsers = messageFactory.getUserObjects();
-    });
-
   $rootScope.chatPageUpdateInterval = setInterval(function () {
     messageFactory.updateChatMessages().then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
       $scope.chatUsers = messageFactory.getUserObjects();
+      console.log($scope.chatMessages);
+      console.log($scope.chatUsers);
     });
   }, 10000);
+
+  $scope.$on('$ionicView.leave', function() {
+    console.log("LEFFFT CHATTTPAGE. Canceling update interval");
+    clearInterval($rootScope.chatPageUpdateInterval);
+  });
 
   $scope.goToChatWithUser = function(convo){
     $state.go('individualChat', { convo: convo });
@@ -1281,7 +1283,7 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
     $scope.imageUrl = imageSource;
     $ionicModal.fromTemplateUrl('templates/broadcastZoomView.html', {
       scope: $scope,
-      animation: 'slide-in-up'
+      animation: 'scale-in'
     }).then(function (modal) {
       $scope.modal = modal;
       $scope.modal.show();
@@ -1465,7 +1467,7 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal)
     $scope.imageUrl = imageSource;
     $ionicModal.fromTemplateUrl('templates/broadcastZoomView.html', {
       scope: $scope,
-      animation: 'slide-in-up'
+      animation: 'scale-in'
     }).then(function (modal) {
       $scope.modal = modal;
       $scope.modal.show();
@@ -1528,7 +1530,7 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
     $scope.imageUrl = imageUrl;
     $ionicModal.fromTemplateUrl('templates/broadcastZoomView.html', {
       scope: $scope,
-      animation: 'slide-in-up'
+      animation: 'scale-in'
     }).then(function (modal) {
       $scope.modal = modal;
       $scope.modal.show();
@@ -1699,7 +1701,11 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
   $scope.data.chooseContact = function (name, phone) {
     $scope.data.chosenPhone = phone;
     $scope.data.newChatRecipient = name;
-    console.log(name);
+
+    var firstSpace = name.indexOf(' ');
+    $scope.data.newChatFirstName = name.substring(0, firstSpace);
+    $scope.data.newChatLastName = name.substring(firstSpace+1);
+
     $scope.data.contactsHidden = true;
   }
 
@@ -1818,7 +1824,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
     //If you're not speaking to a whinny user, we have to make sure the phone number is valid
     } else {
       var parsedPhone = $scope.data.chosenPhone.replace(/[\s()-]/g, "");
-      messageFactory.createNewChatMessage(parsedPhone, newChatMessage).then(function (res) {
+      messageFactory.createNewChatMessage(parsedPhone, newChatMessage, $scope.data.newChatFirstName, $scope.data.newChatLastName).then(function (res) {
         messageFactory.updateChatMessages().then(function (convos) {
           $scope.chatMessage = "";
           $scope.data.newChatRecipient = "";

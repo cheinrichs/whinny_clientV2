@@ -41,11 +41,11 @@
             <img ng-src="{{data.imgURI}}" class="chatImageStaging animated fadeIn" alt="">
             <a class="ion-close-circled clearStagedPhotoButton animated fadeIn" ng-click="clearStagedPhoto()"></a>
           </span>
-          <textarea class="footer-input" placeholder="Enter Message" ng-model="groupMessage" rows="2" msd-elastic cols="45" ng-focus="focus=true" ng-blur="focus=false" ng-hide="hideInput"></textarea>
+          <textarea class="footer-input" placeholder="Enter Message" ng-model="chatMessage" rows="2" msd-elastic cols="45" ng-focus="focus=true" ng-blur="focus=false" ng-hide="hideInput"></textarea>
         </div>
 
         <div class="col col-20">
-          <button class="button button-tangerine sendChatButton" ng-click="sendGroupMessage()">Send</button>
+          <button class="button button-tangerine sendChatButton" ng-click="createNewChatMessage()">Send</button>
         </div>
       </div>
 
