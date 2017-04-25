@@ -22,7 +22,7 @@
         <br>
       </div>
 
-    <form ng-submit="confirmPhoneNumber()">
+    <form ng-submit="confirmPhoneNumber()" ng-show="showConfirmForm">
       <label class="item item-input">
         <input type="text" placeholder="Confirmation Number" ng-model="confirmationNumber">
       </label>
@@ -33,7 +33,9 @@
   </div>
 
   <div class="row">
-    <button class="col-offset-10 col-80 button button-tangerine" ng-click="confirmPhoneNumber()">Submit</button>
+    <button class="col-offset-10 col-80 button button-tangerine" ng-click="confirmPhoneNumber()" ng-show="showConfirmForm">Submit</button>
+    <ion-spinner class="spinner-energized createGroupSpinner" icon="android"  ng-hide="showConfirmForm"></ion-spinner>
   </div>
+
 
 </ion-view>

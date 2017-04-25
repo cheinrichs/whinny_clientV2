@@ -316,10 +316,10 @@ function ($scope, $state, $stateParams, messageFactory) {
   //read from file,
   //if logged in, redirect to tabs.messages
 
-  console.log($stateParams.newUserData);
-
   $scope.data = {};
   $scope.data.errors = [];
+
+  $scope.showConfirmForm = true;
 
   $scope.confirmPhoneNumber = function () {
     $scope.data.errors = [];
@@ -333,6 +333,7 @@ function ($scope, $state, $stateParams, messageFactory) {
       }
     }
     if($scope.data.errors.length === 0){
+      $scope.showForm = false;
       messageFactory.submitConfirmationNumber($stateParams.newUserData.phone, $scope.confirmationNumber).then(function (res) {
         if (res.data.verified === true) {
           //If you have a user picture and
@@ -344,8 +345,8 @@ function ($scope, $state, $stateParams, messageFactory) {
             $state.go('disciplines', {returnPage: 'newUserPhoto'});
           }
         } else if(res.data.status === 'Incorrect code given') {
-          $scope.data.errors.push('Hmmm, looks like the code you submitted didn\'t work. Try to send it again.');
-          console.log("An error has occurred");
+          $scope.data.errors.push('Hmmm, looks like the code you submitted was incorrect. Try to send it again.');
+          $scope.showConfirmForm = true;
         }
       });
     }
@@ -483,7 +484,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
     messageFactory.updateChatMessages();
 
     $timeout(function () {
-      console.log("fix this shit");
+      //TODO fix this?
       $scope.chatMessages = messageFactory.getChatMessages();
     }, 1000)
   }
@@ -495,7 +496,7 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $localS
   messageFactory.updateChatMessages();
 
   $timeout(function () {
-    console.log("fix this shit");
+    //TODO fix this?
     $scope.chatMessages = messageFactory.getChatMessages();
   }, 1000)
 
@@ -1720,6 +1721,8 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
   $scope.data.imgURI = '';
   $scope.hideInput = false;
 
+  $scope.showLoader = false;
+
   if($stateParams.groupMember.first_name){
     console.log($stateParams.groupMember);
     $scope.data.isWhinnyUser = true;
@@ -1820,6 +1823,9 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
 
   $scope.createNewChatMessage = function () {
     $scope.data.errors = [];
+    if($scope.showLoader){
+      return;
+    }
     if(!$scope.data.chosenPhone && !$scope.data.isWhinnyUser){
       $scope.data.errors.push('Please enter a valid recipient!');
     }
@@ -1828,6 +1834,8 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
     }
     if($scope.data.errors.length > 0){
       return;
+    } else {
+      $scope.showLoader = true;
     }
 
     var newChatMessage;
