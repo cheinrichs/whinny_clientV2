@@ -1031,6 +1031,37 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
     });
   }
 
+  $scope.emailMessagePrintout = function (group_id, group_name) {
+
+    var confirmPopup = $ionicPopup.confirm({
+     title: 'Are you sure you want to email a log of all messages in ' + group_name + '?',
+     template: 'Important: A printable log will be emailed to the email address associated with your Whinny account.',
+     cancelText: 'Cancel', // String (default: 'Cancel'). The text of the Cancel button.
+     okText: 'Email Log', // String (default: 'OK'). The text of the OK button.
+     okType: 'button-tangerine', // String (default: 'button-positive'). The type of the OK button.
+    });
+
+    var printSuccessfulAlert = $ionicPopup.alert({
+      title: 'Success',
+      template: 'A message log for this group has been created and sent to your Whinny email address.',
+    })
+
+    confirmPopup.then(function(res) {
+     if(res) {
+       console.log("email message log for group" + group_name);
+       messageFactory.printGroupContent($stateParams.group_id, group_name).then(function () {
+         printSuccessfulAlert.then(function (res) {
+           if(res){
+             console.log("clearing alert?");
+           }
+         })
+       })
+     } else {
+       console.log('Not emailing');
+     }
+    });
+  }
+
   $scope.data.backToGroupPage = function () {
     //return to the group messages page from whence you came
     $state.go('groupMessagePage', { group_id: $stateParams.group_id });
@@ -1506,10 +1537,12 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal)
   }
 
   $scope.closeModal = function () {
+    console.log("close modal");
     $scope.modal.remove();
   }
 
   $scope.goToGroupInfo = function () {
+    console.log("go to group info");
     $state.go('groupInfo', { group_id: $stateParams.group_id });
   }
 

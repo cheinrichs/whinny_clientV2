@@ -1,13 +1,10 @@
 <ion-view title="GroupsPage" hide-nav-bar="true" id="GroupsPage">
 
   <p ng-if="groupsTutorial" class="triangle-border tutorialBubble groupsTutorial">
-    <button class="button button-energized ion-android-close tutorialX" ng-click="acceptGroupsTutorial()"></button>
-    This is the Groups page.
+    Search for groups to join or create your own!
     <br>
     <br>
-    Search for groups to join by touching the magnifying glass or create your own with the pencil button.
-    <br>
-    <button class="button button-block button-energized" ng-click="acceptGroupsTutorial()">Neat!</button>
+    <button class="button button-block button-tangerine groupsTutorialButton" ng-click="acceptGroupsTutorial()">CLOSE</button>
   </p>
 
   <ion-content padding="true" class="has-header tab-padding">
@@ -60,7 +57,7 @@
     </span>
 
     <ion-list>
-      <ion-item ng-repeat="group in groupData.groupObjects | orderBy:'-unread' track by $index" class="item item-avatar" ng-click="goToGroupMessage(group.group_id)">
+      <ion-item ng-repeat="group in groupData.groupObjects | orderBy:'-unread' track by $index" class="item-thumbnail-left" ng-click="goToGroupMessage(group.group_id)">
         <img ng-src="{{group.group_photo_small}}" alt="">
 
         <i ng-if="!group.unread" class="messageIcon groupMessageIcon icon ion-chevron-right"></i>

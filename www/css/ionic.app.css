@@ -6348,6 +6348,7 @@ button.item.item-button-right {
   .item-thumbnail-left .item-image,
   .item-thumbnail-left .item-content > img:first-child,
   .item-thumbnail-left .item-content .item-image {
+    border-radius: 10px;
     position: absolute;
     top: 10px;
     left: 10px;
@@ -9842,7 +9843,7 @@ a.button {
   right: 5px;
   padding: 15px;
   margin: 1em 0 3em;
-  border: 5px solid #26A69A;
+  border: 5px solid #FFB554;
   color: #333;
   background: #fff;
   /* css3 */
@@ -9871,7 +9872,7 @@ a.button {
   /* controls horizontal position */
   border-width: 20px 20px 0;
   border-style: solid;
-  border-color: #26A69A transparent;
+  border-color: #FFB554 transparent;
   display: block;
   width: 0; }
 
@@ -9885,83 +9886,75 @@ a.button {
   /* value = (:before left) + (:before border-left) - (:after border-left) */
   border-width: 13px 13px 0;
   border-style: solid;
-  border-color: #fff transparent;
+  border-color: #FFB554 transparent;
   display: block;
   width: 0; }
 
-/* Variant : top
------------------------------------------- */
-/* creates the larger triangle */
-.triangle-border.top:before {
-  top: -20px;
+.triangle-border.chatTutorial:before {
+  top: -15px;
   /* value = - border-top-width - border-bottom-width */
-  bottom: auto;
-  left: auto;
-  right: 40px;
+  right: 4%;
   /* controls horizontal position */
-  border-width: 0 20px 20px; }
-
-/* creates the smaller  triangle */
-.triangle-border.top:after {
-  top: -13px;
-  /* value = - border-top-width - border-bottom-width */
   bottom: auto;
   left: auto;
-  right: 47px;
-  /* value = (:before right) + (:before border-right) - (:after border-right) */
-  border-width: 0 13px 13px; }
+  border-width: 0 15px 15px;
+  /* vary these values to change the angle of the vertex */
+  border-color: #FFB554 transparent; }
+
+.triangle-border.chatTutorial:after {
+  top: -15px;
+  /* value = - border-top-width - border-bottom-width */
+  right: 4%;
+  /* controls horizontal position */
+  bottom: auto;
+  left: auto;
+  border-width: 0 15px 15px;
+  /* vary these values to change the angle of the vertex */
+  border-color: #FFB554 transparent; }
 
 .triangle-border.groupsTutorial:before {
-  content: "";
-  position: absolute;
-  bottom: -20px;
+  top: -15px;
   /* value = - border-top-width - border-bottom-width */
-  left: 159px;
+  right: 8%;
   /* controls horizontal position */
-  border-width: 20px 20px 0;
-  border-style: solid;
-  border-color: #26A69A transparent;
-  display: block;
-  width: 0; }
+  bottom: auto;
+  left: auto;
+  border-width: 0 15px 15px;
+  /* vary these values to change the angle of the vertex */
+  border-color: #FFB554 transparent; }
 
 .triangle-border.groupsTutorial:after {
-  content: "";
-  position: absolute;
-  bottom: -13px;
+  top: -15px;
   /* value = - border-top-width - border-bottom-width */
-  left: 166px;
-  /* value = (:before left) + (:before border-left) - (:after border-left) */
-  border-width: 13px 13px 0;
-  border-style: solid;
-  border-color: #fff transparent;
-  display: block;
-  width: 0; }
+  right: 8%;
+  /* controls horizontal position */
+  bottom: auto;
+  left: auto;
+  border-width: 0 15px 15px;
+  /* vary these values to change the angle of the vertex */
+  border-color: #FFB554 transparent; }
 
 .triangle-border.broadcastTutorial:before {
-  content: "";
-  position: absolute;
-  bottom: -20px;
+  top: -15px;
   /* value = - border-top-width - border-bottom-width */
-  left: 283px;
+  right: 1%;
   /* controls horizontal position */
-  border-width: 20px 20px 0;
-  border-style: solid;
-  border-color: #26A69A transparent;
-  display: block;
-  width: 0; }
+  bottom: auto;
+  left: auto;
+  border-width: 0 15px 15px;
+  /* vary these values to change the angle of the vertex */
+  border-color: #FFB554 transparent; }
 
 .triangle-border.broadcastTutorial:after {
-  content: "";
-  position: absolute;
-  bottom: -13px;
+  top: -15px;
   /* value = - border-top-width - border-bottom-width */
-  left: 290px;
-  /* value = (:before left) + (:before border-left) - (:after border-left) */
-  border-width: 13px 13px 0;
-  border-style: solid;
-  border-color: #fff transparent;
-  display: block;
-  width: 0; }
+  right: 1%;
+  /* controls horizontal position */
+  bottom: auto;
+  left: auto;
+  border-width: 0 15px 15px;
+  /* vary these values to change the angle of the vertex */
+  border-color: #FFB554 transparent; }
 
 .tutorialX {
   position: absolute;
@@ -9973,22 +9966,29 @@ a.button {
   position: absolute;
   z-index: 100;
   text-align: center;
-  font-size: 16px; }
+  font-size: 16px;
+  background-color: #FFB554; }
 
 .platform-android .chatTutorial {
-  top: 335px; }
+  top: 7%; }
 
 .platform-android .groupsTutorial {
-  top: 315px; }
+  top: 7%; }
 
 .platform-android .broadcastTutorial {
-  top: 305px; }
+  top: 7%; }
+
+.chatTutorial {
+  top: 7%; }
 
 .broadcastTutorial {
-  top: 350px; }
+  top: 7%; }
 
 .groupsTutorial {
-  top: 370px; }
+  top: 7%; }
+
+.groupsTutorialButton {
+  color: black !important; }
 
 .animate-enter {
   -webkit-transition: 1s linear all;
@@ -9998,9 +9998,6 @@ a.button {
 
 .animate-enter.animate-enter-active {
   opacity: 1; }
-
-.chatTutorial {
-  top: 390px; }
 
 .popup {
   border-radius: 5px !important; }

@@ -6345,6 +6345,7 @@ button.item.item-button-right {
   .item-thumbnail-left .item-image,
   .item-thumbnail-left .item-content > img:first-child,
   .item-thumbnail-left .item-content .item-image {
+    border: 10px solid red;
     position: absolute;
     top: 10px;
     left: 10px;

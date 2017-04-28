@@ -1,13 +1,11 @@
 <ion-view title="ChatPage" hide-nav-bar="true" id="ChatPage">
   <div class="content-container">
 
-    <p ng-if="chatTutorial" class="triangle-border tutorialBubble chatTutorial">
-      <button class="button button-energized ion-android-close tutorialX" ng-click="acceptChatTutorial()"></button>
-      This is the Messages page.
+    <p ng-if="chatTutorial" class="triangle-border chatTutorial tutorialBubble">
+      Create a new message here!
       <br>
       <br>
-      Here you can chat one-on-one with friends. To begin a new conversation click the pencil.
-      <button class="button button-block button-energized" ng-click="acceptChatTutorial()">Awesome!</button>
+      <button class="button button-block button-tangerine groupsTutorialButton" ng-click="acceptChatTutorial()">CLOSE</button>
     </p>
 
     <ion-content padding="true" class="has-header">

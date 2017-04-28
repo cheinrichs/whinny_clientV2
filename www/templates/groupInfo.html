@@ -71,6 +71,11 @@
       </li>
 
       <li class="item">
+        Email a printable log of all group messages:
+        <button class="button button-block button-royal" ng-if="admin" ng-click="emailMessagePrintout()">Email Message Printout</button>
+      </li>
+
+      <li class="item">
         <button class="button button-block button-assertive" ng-click="leaveGroup(group.group_name)">Leave Group</button>
         <button class="button button-block button-assertive" ng-if="admin" ng-click="deleteGroup(group_id, group.group_name)">Delete Group</button>
       </li>
