@@ -123,14 +123,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
   var groupData;
 
-  //Contains all messages for each group the current is user is part of.
-  // var groupMessages = {};
-  // Contains name and profile picture for each user associated with a group the
-  //the current user is a part of
-  // var groupObjects = [];
-  //Contains objects for each user for group chat
-  // var groupUserObjects = {};
-
   //Contains all messages for each broadcast
   var broadcastMessages = [];
   //contains all data for each broadcast the current user is subscribed to,

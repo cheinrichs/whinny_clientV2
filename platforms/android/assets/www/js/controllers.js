@@ -1638,6 +1638,8 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
   $scope.data = {};
   $scope.data.currentUser = messageFactory.getCurrentUser();
 
+  $scope.showLoader = false;
+
   $scope.data.uploadSuccessful = false;
 
   $scope.data.messageNotifications = $scope.data.currentUser.message_notifications;
@@ -1716,9 +1718,14 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
     var filename = $scope.data.currentUser.user_id + '_PersonalProfilePic.jpg'
     photoFactory.uploadPersonalProfilePhoto(filename, $scope.data.imgURI);
 
+    $scope.showLoader = true;
+
     $timeout(function () {
       $scope.data.uploadSuccessful = true;
-    }, 1000);
+      $scope.showLoader = false;
+      $scope.data.currentUser = messageFactory.getCurrentUser();
+      $scope.apply();
+    }, 3000);
 
   }
   $scope.backToChatPage = function () {

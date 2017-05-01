@@ -10077,6 +10077,11 @@ a.button {
   margin-left: auto;
   margin-right: auto; }
 
+.uploadNewProfilePicSpinner {
+  position: relative;
+  top: 10px;
+  left: 10px; }
+
 .broadcastCardLink {
   text-transform: uppercase;
   color: #FFB554;

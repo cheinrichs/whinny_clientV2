@@ -7,7 +7,7 @@
       <img ng-src="{{currentBroadcast.broadcast_photo}}" class="individualBroadcastPortrait" alt="">
     </div>
 
-    <ion-content class="has-header has-footer chatScreen" on-swipe-right="backToBroadcastsPage()">
+    <ion-content class="has-header has-footer chatScreen" on-swipe-right="backToBroadcastsPage()" scroll-glue-top force-glue>
 
       <div ng-repeat="message in currentBroadcastMessages | orderBy:'-broadcast_message_id'">
         <div ng-show="message.to_broadcast === currentBroadcast_id">

@@ -52,7 +52,13 @@
             <button class="col-50 button button-tangerine" ng-click="data.choosePhoto()">Choose New Photo</button>
           </div>
           <div class="row">
-            <button class="button button-outline button-energized button-block" ng-click="data.uploadUpdatedPhoto()">Upload updated photo<span ng-if="data.uploadSuccessful === true" class="animated zoomIn"><a class="icon-right ion-android-done settingsDoneCheck"></a></span></button>
+            <button class="button button-outline button-energized button-block" ng-click="data.uploadUpdatedPhoto()">
+              <span ng-if="!showLoader">Upload updated photo</span>
+              <span ng-if="data.uploadSuccessful === true" class="animated zoomIn">
+                <a class="icon-right ion-android-done settingsDoneCheck"></a>
+              </span>
+              <ion-spinner ng-if="showLoader" class="spinner-energized uploadNewProfilePicSpinner" icon="android"></ion-spinner>
+            </button>
           </div>
         </li>
 
