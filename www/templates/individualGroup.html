@@ -4,7 +4,7 @@
 
     <div class="bar bar-header bar-energized">
       <a class="button icon-left ion-chevron-left button-energized" ng-click="backToGroupsPage()"></a>
-      <h1 class="title chatTitle">{{currentGroup.group_name | nameShortener}}</h1>
+      <h1 class="title chatTitle" ng-click="goToGroupInfo()">{{currentGroup.group_name | nameShortener}}</h1>
       <img ng-src="{{currentGroup.group_photo}}" class="individualGroupPortrait" ng-click="goToGroupInfo()">
     </div>
 

@@ -6348,7 +6348,6 @@ button.item.item-button-right {
   .item-thumbnail-left .item-image,
   .item-thumbnail-left .item-content > img:first-child,
   .item-thumbnail-left .item-content .item-image {
-    border-radius: 10px;
     position: absolute;
     top: 10px;
     left: 10px;
@@ -9956,17 +9955,11 @@ a.button {
   /* vary these values to change the angle of the vertex */
   border-color: #FFB554 transparent; }
 
-.tutorialX {
-  position: absolute;
-  float: left;
-  left: 0px;
-  top: 0px; }
-
 .tutorialBubble {
   position: absolute;
   z-index: 100;
   text-align: center;
-  font-size: 16px;
+  font-size: 22px;
   background-color: #FFB554; }
 
 .platform-android .chatTutorial {
@@ -10221,6 +10214,8 @@ a.button {
 
 .whinnyHeader {
   font-family: 'Aquatico Regular' !important;
+  font-size: 40px;
+  font-weight: bold;
   color: #FFB554 !important; }
 
 .bar .buttons .button.headerButton:before {
@@ -10264,6 +10259,19 @@ a.button {
   background: #ffb554;
   font-size: 18px !important; }
 
+.toMessage:after {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 10px 0 10px 10px;
+  border-color: transparent #FFB554;
+  display: block;
+  width: 0;
+  z-index: 1;
+  margin-top: -15px;
+  right: -7px;
+  top: 74%; }
+
 .fromMessage {
   position: relative;
   padding: 5px;
@@ -10275,6 +10283,19 @@ a.button {
   text-align: left;
   background: #FCDAA9;
   font-size: 18px !important; }
+
+.fromMessage:after {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 10px 10px 10px 0;
+  border-color: transparent #FCDAA9;
+  display: block;
+  width: 0;
+  z-index: 1;
+  left: -7px;
+  margin-top: -15px;
+  top: 74%; }
 
 .platform-ios .messageIcon {
   float: right;
@@ -10350,18 +10371,18 @@ a.button {
   margin: 10px 20px;
   border-radius: 5px;
   padding: 5px 0px 0px 0px;
-  text-align: center; }
+  text-align: center;
+  border: 1px solid #DDDDDD; }
 
 .individualChatPortrait {
   position: absolute;
   top: 10px;
-  right: 17px;
-  height: 80px;
-  width: 80px;
+  right: 15px;
+  height: 50px;
+  width: 50px;
   z-index: 1;
-  border-radius: 10px;
-  background-color: white;
-  border: 2px solid #FDB55F; }
+  border-radius: 50px;
+  background-color: white; }
 
 .sendChatButton {
   position: absolute;
@@ -10383,24 +10404,22 @@ a.button {
 .individualBroadcastPortrait {
   position: absolute;
   top: 10px;
-  right: 10px;
-  height: 80px;
-  width: 80px;
+  right: 15px;
+  height: 50px;
+  width: 50px;
   z-index: 1;
   border-radius: 10px;
-  background-color: white;
-  border: 2px solid #FDB55F; }
+  background-color: white; }
 
 .individualGroupPortrait {
   position: absolute;
   top: 10px;
-  right: 10px;
-  height: 80px;
-  width: 80px;
+  right: 15px;
+  height: 50px;
+  width: 50px;
   z-index: 1;
   border-radius: 10px;
-  background-color: white;
-  border: 2px solid #FDB55F; }
+  background-color: white; }
 
 .chatSubheader {
   position: absolute;
@@ -10423,9 +10442,17 @@ a.button {
   background-image: linear-gradient(180deg, #ffaa3b, #ffaa3b 50%, transparent 50%); }
 
 .chatTitle {
+  top: 50px;
   font-size: 16px !important;
-  position: relative;
-  left: -45px !important; }
+  text-align: center;
+  font-family: 'Aquatico Regular' !important; }
+
+.chatSubTitle {
+  font-size: 10px;
+  text-align: center; }
+
+.bar-header {
+  text-align: center; }
 
 .convoSubject {
   font-size: 16px !important;
@@ -10438,7 +10465,7 @@ a.button {
   margin-left: 38px; }
 
 .chatScreen {
-  padding: 20% 0 15% 0; }
+  padding: 10% 0 20% 0; }
 
 .chatScreenFewMessages {
   padding: 0px; }
@@ -10683,6 +10710,18 @@ a.button {
 .top-container {
   height: 100%;
   overflow-y: scroll; }
+
+.item-thumbnail-left,
+.item-thumbnail-left .item-content {
+  padding-top: 8px;
+  padding-left: 106px;
+  min-height: 100px; }
+
+.item-thumbnail-left > img:first-child,
+.item-thumbnail-left .item-image,
+.item-thumbnail-left .item-content > img:first-child,
+.item-thumbnail-left .item-content .item-image {
+  border-radius: 15px; }
 
 .button.button-energized {
   border-color: transparent;
