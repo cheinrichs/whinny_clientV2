@@ -702,6 +702,26 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     })
   }
 
+  function printGroupContent(group_id, groupName) {
+    var emailRegex = new Regex(/.*[@].*[.].*/, 'g');
+    if(emailRegex.test(currentUser.email)){
+      console.log("valid email");
+    } else {
+      //prompt a user to update their email
+      console.log("invalid email");
+    }
+    var data = {
+      group_id: group_id,
+      user_id: currentUser.user_id,
+      groupName: groupName,
+      user_email: currentUser.email
+    }
+    var url = API_URL + '/printGroupContent'
+    return $http.post(url, data).then(function (res) {
+      return res.data;
+    })
+  }
+
   function deleteGroup(group_id) {
     var url = API_URL + '/deleteGroup';
     var data = {

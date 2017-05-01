@@ -165,36 +165,38 @@ $tabs-height:                     56px;
 }
 
 .tutorialBubble {
-  position: absolute;
-  z-index: 100;
+  position: relative;
+  z-index: 1;
   text-align: center;
   font-size: 22px;
   background-color: $energized;
+  width: 97%;
 }
 
 .platform-android .chatTutorial {
-  top: 7%;
+  top: $bar-height + 10px;
 }
 .platform-android .groupsTutorial {
-  top: 7%;
+  top: $bar-height + 10px;
 }
 .platform-android .broadcastTutorial {
-  top: 7%;
+  top: $bar-height + 10px;
 }
 
 .chatTutorial {
-  top: 7%;
+  top: $bar-height + 10px;
 }
 
 .broadcastTutorial {
-  top: 7%;
+  top: $bar-height + 10px;
 }
 .groupsTutorial {
-  top: 7%;
+  top: $bar-height + 10px;
 }
 
 .groupsTutorialButton {
   color: black !important;
+  text-decoration: underline;
 }
 
 .animate-enter {
@@ -497,7 +499,7 @@ $tabs-height:                     56px;
   margin: 5px;
   -webkit-border-radius:10px;
   -moz-border-radius:10px;
-  border-radius:10px;
+  border-radius: 10px;
   text-align: right;
   background: #ffb554;
   font-size: 18px !important;
@@ -753,7 +755,7 @@ top: 74%;
 }
 
 .chatScreen {
-  padding: 10% 0 20% 0;
+  padding: $bar-height + 25px 0 22% 0;
 }
 
 .chatScreenFewMessages {

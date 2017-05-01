@@ -176,6 +176,8 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, $localSt
               messageFactory.updateDeviceToken($localStorage.token.token).then(function () {
                 $state.go('tabsController.chatPage');
               })
+            } else {
+              $state.go('tabsController.chatPage');
             }
 
           } else {

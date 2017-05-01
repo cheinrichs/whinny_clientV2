@@ -9956,32 +9956,34 @@ a.button {
   border-color: #FFB554 transparent; }
 
 .tutorialBubble {
-  position: absolute;
-  z-index: 100;
+  position: relative;
+  z-index: 1;
   text-align: center;
   font-size: 22px;
-  background-color: #FFB554; }
+  background-color: #FFB554;
+  width: 97%; }
 
 .platform-android .chatTutorial {
-  top: 7%; }
+  top: 54px; }
 
 .platform-android .groupsTutorial {
-  top: 7%; }
+  top: 54px; }
 
 .platform-android .broadcastTutorial {
-  top: 7%; }
+  top: 54px; }
 
 .chatTutorial {
-  top: 7%; }
+  top: 54px; }
 
 .broadcastTutorial {
-  top: 7%; }
+  top: 54px; }
 
 .groupsTutorial {
-  top: 7%; }
+  top: 54px; }
 
 .groupsTutorialButton {
-  color: black !important; }
+  color: black !important;
+  text-decoration: underline; }
 
 .animate-enter {
   -webkit-transition: 1s linear all;
@@ -10465,7 +10467,7 @@ a.button {
   margin-left: 38px; }
 
 .chatScreen {
-  padding: 10% 0 20% 0; }
+  padding: 69px 0 22% 0; }
 
 .chatScreenFewMessages {
   padding: 0px; }

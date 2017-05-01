@@ -7,7 +7,7 @@
       <div class="chatSubheader"></div>
     </div>
 
-    <ion-content class="has-header has-footer" on-swipe-right="backToChatPage()">
+    <ion-content class="has-header" on-swipe-right="backToChatPage()">
 
       <div class="list list-inset">
         <label class="item item-input">
@@ -29,7 +29,7 @@
           <ion-radio ng-model="groupData.createGroupInfo.privacyStatus" ng-value="'Public'">Public <div class="groupExplanationText" ng-show="groupData.showExplanations">Users can search for and join your group.</div></ion-radio>
           <ion-radio ng-model="groupData.createGroupInfo.privacyStatus" ng-value="'Private'">Private <div class="groupExplanationText" ng-show="groupData.showExplanations">Users can search for your group and ask to join.</div></ion-radio>
           <ion-radio ng-model="groupData.createGroupInfo.privacyStatus" ng-value="'Hidden'">Hidden <div class="groupExplanationText" ng-show="groupData.showExplanations">Users cannot search for your group, they can <br> only be invited by you.</div></ion-radio>
-
+          <ion-radio ng-model="groupData.createGroupInfo.privacyStatus" ng-value="'Log'">Log <div class="groupExplanationText" ng-show="groupData.showExplanations">Used for anything you'd like including keeping <br> track of your horse's medical history, or your training <br> regimen.</div></ion-radio>
         </ion-list>
 
       </div>
@@ -45,7 +45,12 @@
         </label>
 
         <div class="profilePicBorder">
-          <img ng-src="{{groupData.imgURI}}" class="groupProfilePic" alt=""> <!--TODO show placeholder and format -->
+          <span ng-show="groupData.showPlaceholderPortrait">
+            <img src="https://s3.amazonaws.com/whinnyphotos/whinny_placeholder_portrait.png" style="height: 250px; width: 250px;" alt="">
+          </span>
+          <span ng-if="!groupData.showPlaceholderPortrait">
+            <img ng-src="{{groupData.imgURI}}" class="" alt="">
+          </span>
         </div>
 
         <div class="row">

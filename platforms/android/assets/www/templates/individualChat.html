@@ -5,7 +5,7 @@
     <div class="bar bar-header bar-energized">
       <a class="button icon-left ion-chevron-left button-energized" ng-click="backToChatPage()"></a>
       <h1 class="title chatTitle">{{convo.convoUser.first_name}}</h1>
-      <img preload-image ng-src="{{convo.convoUser.portrait_link}}" class="individualChatPortrait">
+      <img ng-src="{{convo.convoUser.portrait_link}}" class="individualChatPortrait">
     </div>
 
     <ion-content class="has-footer chatScreen" scroll='false' keyboard-attach on-swipe-right="backToChatPage()">
@@ -14,7 +14,7 @@
 
         <div ng-repeat="message in convo.messages">
           <div class="row">
-            <div class="col col-80" ng-class="{ 'col-offset-20' : message.to_user != currentUser.user_id }">
+            <div class="col col-80 animated" ng-class="{ 'col-offset-20' : message.to_user != currentUser.user_id }">
               <div ng-class="{toMessage : message.to_user != currentUser.user_id, fromMessage : message.to_user == currentUser.user_id}">
 
                 <div ng-if="message.image" ng-click="data.showModal(message.image_src)">

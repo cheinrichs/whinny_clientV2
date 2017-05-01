@@ -9842,7 +9842,7 @@ a.button {
   right: 5px;
   padding: 15px;
   margin: 1em 0 3em;
-  border: 5px solid #26A69A;
+  border: 5px solid #FFB554;
   color: #333;
   background: #fff;
   /* css3 */
@@ -9871,7 +9871,7 @@ a.button {
   /* controls horizontal position */
   border-width: 20px 20px 0;
   border-style: solid;
-  border-color: #26A69A transparent;
+  border-color: #FFB554 transparent;
   display: block;
   width: 0; }
 
@@ -9885,110 +9885,105 @@ a.button {
   /* value = (:before left) + (:before border-left) - (:after border-left) */
   border-width: 13px 13px 0;
   border-style: solid;
-  border-color: #fff transparent;
+  border-color: #FFB554 transparent;
   display: block;
   width: 0; }
 
-/* Variant : top
------------------------------------------- */
-/* creates the larger triangle */
-.triangle-border.top:before {
-  top: -20px;
+.triangle-border.chatTutorial:before {
+  top: -15px;
   /* value = - border-top-width - border-bottom-width */
-  bottom: auto;
-  left: auto;
-  right: 40px;
+  right: 4%;
   /* controls horizontal position */
-  border-width: 0 20px 20px; }
-
-/* creates the smaller  triangle */
-.triangle-border.top:after {
-  top: -13px;
-  /* value = - border-top-width - border-bottom-width */
   bottom: auto;
   left: auto;
-  right: 47px;
-  /* value = (:before right) + (:before border-right) - (:after border-right) */
-  border-width: 0 13px 13px; }
+  border-width: 0 15px 15px;
+  /* vary these values to change the angle of the vertex */
+  border-color: #FFB554 transparent; }
+
+.triangle-border.chatTutorial:after {
+  top: -15px;
+  /* value = - border-top-width - border-bottom-width */
+  right: 4%;
+  /* controls horizontal position */
+  bottom: auto;
+  left: auto;
+  border-width: 0 15px 15px;
+  /* vary these values to change the angle of the vertex */
+  border-color: #FFB554 transparent; }
 
 .triangle-border.groupsTutorial:before {
-  content: "";
-  position: absolute;
-  bottom: -20px;
+  top: -15px;
   /* value = - border-top-width - border-bottom-width */
-  left: 159px;
+  right: 8%;
   /* controls horizontal position */
-  border-width: 20px 20px 0;
-  border-style: solid;
-  border-color: #26A69A transparent;
-  display: block;
-  width: 0; }
+  bottom: auto;
+  left: auto;
+  border-width: 0 15px 15px;
+  /* vary these values to change the angle of the vertex */
+  border-color: #FFB554 transparent; }
 
 .triangle-border.groupsTutorial:after {
-  content: "";
-  position: absolute;
-  bottom: -13px;
+  top: -15px;
   /* value = - border-top-width - border-bottom-width */
-  left: 166px;
-  /* value = (:before left) + (:before border-left) - (:after border-left) */
-  border-width: 13px 13px 0;
-  border-style: solid;
-  border-color: #fff transparent;
-  display: block;
-  width: 0; }
+  right: 8%;
+  /* controls horizontal position */
+  bottom: auto;
+  left: auto;
+  border-width: 0 15px 15px;
+  /* vary these values to change the angle of the vertex */
+  border-color: #FFB554 transparent; }
 
 .triangle-border.broadcastTutorial:before {
-  content: "";
-  position: absolute;
-  bottom: -20px;
+  top: -15px;
   /* value = - border-top-width - border-bottom-width */
-  left: 283px;
+  right: 1%;
   /* controls horizontal position */
-  border-width: 20px 20px 0;
-  border-style: solid;
-  border-color: #26A69A transparent;
-  display: block;
-  width: 0; }
+  bottom: auto;
+  left: auto;
+  border-width: 0 15px 15px;
+  /* vary these values to change the angle of the vertex */
+  border-color: #FFB554 transparent; }
 
 .triangle-border.broadcastTutorial:after {
-  content: "";
-  position: absolute;
-  bottom: -13px;
+  top: -15px;
   /* value = - border-top-width - border-bottom-width */
-  left: 290px;
-  /* value = (:before left) + (:before border-left) - (:after border-left) */
-  border-width: 13px 13px 0;
-  border-style: solid;
-  border-color: #fff transparent;
-  display: block;
-  width: 0; }
-
-.tutorialX {
-  position: absolute;
-  float: left;
-  left: 0px;
-  top: 0px; }
+  right: 1%;
+  /* controls horizontal position */
+  bottom: auto;
+  left: auto;
+  border-width: 0 15px 15px;
+  /* vary these values to change the angle of the vertex */
+  border-color: #FFB554 transparent; }
 
 .tutorialBubble {
-  position: absolute;
-  z-index: 100;
+  position: relative;
+  z-index: 1;
   text-align: center;
-  font-size: 16px; }
+  font-size: 22px;
+  background-color: #FFB554;
+  width: 97%; }
 
 .platform-android .chatTutorial {
-  top: 335px; }
+  top: 54px; }
 
 .platform-android .groupsTutorial {
-  top: 315px; }
+  top: 54px; }
 
 .platform-android .broadcastTutorial {
-  top: 305px; }
+  top: 54px; }
+
+.chatTutorial {
+  top: 54px; }
 
 .broadcastTutorial {
-  top: 350px; }
+  top: 54px; }
 
 .groupsTutorial {
-  top: 370px; }
+  top: 54px; }
+
+.groupsTutorialButton {
+  color: black !important;
+  text-decoration: underline; }
 
 .animate-enter {
   -webkit-transition: 1s linear all;
@@ -9998,9 +9993,6 @@ a.button {
 
 .animate-enter.animate-enter-active {
   opacity: 1; }
-
-.chatTutorial {
-  top: 390px; }
 
 .popup {
   border-radius: 5px !important; }
@@ -10224,6 +10216,8 @@ a.button {
 
 .whinnyHeader {
   font-family: 'Aquatico Regular' !important;
+  font-size: 40px;
+  font-weight: bold;
   color: #FFB554 !important; }
 
 .bar .buttons .button.headerButton:before {
@@ -10267,6 +10261,19 @@ a.button {
   background: #ffb554;
   font-size: 18px !important; }
 
+.toMessage:after {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 10px 0 10px 10px;
+  border-color: transparent #FFB554;
+  display: block;
+  width: 0;
+  z-index: 1;
+  margin-top: -15px;
+  right: -7px;
+  top: 74%; }
+
 .fromMessage {
   position: relative;
   padding: 5px;
@@ -10278,6 +10285,19 @@ a.button {
   text-align: left;
   background: #FCDAA9;
   font-size: 18px !important; }
+
+.fromMessage:after {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 10px 10px 10px 0;
+  border-color: transparent #FCDAA9;
+  display: block;
+  width: 0;
+  z-index: 1;
+  left: -7px;
+  margin-top: -15px;
+  top: 74%; }
 
 .platform-ios .messageIcon {
   float: right;
@@ -10353,18 +10373,18 @@ a.button {
   margin: 10px 20px;
   border-radius: 5px;
   padding: 5px 0px 0px 0px;
-  text-align: center; }
+  text-align: center;
+  border: 1px solid #DDDDDD; }
 
 .individualChatPortrait {
   position: absolute;
   top: 10px;
-  right: 17px;
-  height: 80px;
-  width: 80px;
+  right: 15px;
+  height: 50px;
+  width: 50px;
   z-index: 1;
-  border-radius: 10px;
-  background-color: white;
-  border: 2px solid #FDB55F; }
+  border-radius: 50px;
+  background-color: white; }
 
 .sendChatButton {
   position: absolute;
@@ -10386,24 +10406,22 @@ a.button {
 .individualBroadcastPortrait {
   position: absolute;
   top: 10px;
-  right: 10px;
-  height: 80px;
-  width: 80px;
+  right: 15px;
+  height: 50px;
+  width: 50px;
   z-index: 1;
   border-radius: 10px;
-  background-color: white;
-  border: 2px solid #FDB55F; }
+  background-color: white; }
 
 .individualGroupPortrait {
   position: absolute;
   top: 10px;
-  right: 10px;
-  height: 80px;
-  width: 80px;
+  right: 15px;
+  height: 50px;
+  width: 50px;
   z-index: 1;
   border-radius: 10px;
-  background-color: white;
-  border: 2px solid #FDB55F; }
+  background-color: white; }
 
 .chatSubheader {
   position: absolute;
@@ -10426,9 +10444,17 @@ a.button {
   background-image: linear-gradient(180deg, #ffaa3b, #ffaa3b 50%, transparent 50%); }
 
 .chatTitle {
+  top: 50px;
   font-size: 16px !important;
-  position: relative;
-  left: -45px !important; }
+  text-align: center;
+  font-family: 'Aquatico Regular' !important; }
+
+.chatSubTitle {
+  font-size: 10px;
+  text-align: center; }
+
+.bar-header {
+  text-align: center; }
 
 .convoSubject {
   font-size: 16px !important;
@@ -10441,7 +10467,7 @@ a.button {
   margin-left: 38px; }
 
 .chatScreen {
-  padding: 20% 0 15% 0; }
+  padding: 69px 0 22% 0; }
 
 .chatScreenFewMessages {
   padding: 0px; }
@@ -10686,6 +10712,18 @@ a.button {
 .top-container {
   height: 100%;
   overflow-y: scroll; }
+
+.item-thumbnail-left,
+.item-thumbnail-left .item-content {
+  padding-top: 8px;
+  padding-left: 106px;
+  min-height: 100px; }
+
+.item-thumbnail-left > img:first-child,
+.item-thumbnail-left .item-image,
+.item-thumbnail-left .item-content > img:first-child,
+.item-thumbnail-left .item-content .item-image {
+  border-radius: 15px; }
 
 .button.button-energized {
   border-color: transparent;
