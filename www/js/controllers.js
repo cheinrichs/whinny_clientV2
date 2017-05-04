@@ -1193,7 +1193,7 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
     if($scope.chatMessages[i].convoUser.user_id === $stateParams.convo.convoUser.user_id) $scope.convo = $scope.chatMessages[i];
   }
   $timeout(function () {
-    $ionicScrollDelegate.$getByHandle('data.individualChatScroll').scrollBottom(true);
+    $ionicScrollDelegate.$getByHandle('data.individualChatScroll').scrollBottom(false);
   }, 100);
 
   //when we enter an individual chat, take the chat message ids of that specific
@@ -1386,8 +1386,8 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
 
 }])
 
-.controller('individualGroupCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope', '$ionicModal',
-function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal) {
+.controller('individualGroupCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope', '$cordovaCamera', 'photoFactory', '$ionicPopup', '$ionicModal', '$timeout', '$ionicScrollDelegate',
+function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCamera, photoFactory, $ionicPopup, $ionicModal, $timeout, $ionicScrollDelegate) {
 
   $scope.data = {};
 
@@ -1409,8 +1409,11 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal)
     if(!$scope.groupData.unread[i].read && $scope.groupData.unread[i].group_id === $scope.group_id){
       messagesRead.push($scope.groupData.unread[i].group_message_read_id);
     }
-
   }
+
+  $timeout(function () {
+    $ionicScrollDelegate.$getByHandle('data.individualGroupScroll').scrollBottom(false);
+  }, 100);
 
   messageFactory.markGroupMessagesAsRead(messagesRead).then(function () {
     messageFactory.updateGroupData().then(function(res){
@@ -1425,11 +1428,10 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal)
     })
   })
 
-
-
   $rootScope.individualGroupUpdateInterval = setInterval(function () {
     messageFactory.updateGroupData().then(function(res){
       $scope.groupData = res;
+      $ionicScrollDelegate.$getByHandle('data.individualGroupScroll').scrollBottom(true);
     })
   }, 10000);
 
@@ -1526,7 +1528,7 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal)
       //sends message with img:true, content: ':img linktoS3'
       //send image
       var photoMessage = 'https://s3.amazonaws.com/whinnyphotos/group_chat_images/' + filename;
-      messageFactory.sendChatImage($stateParams.convo.convoUser.user_id, photoMessage).then(function () {
+      messageFactory.sendGroupImage($scope.group_id, $scope.currentGroup.group_name, photoMessage).then(function () {
         //insert into the convo? TODO
 
         messageFactory.updateChatMessages().then(function (res) {
@@ -1537,6 +1539,10 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal)
 
           $scope.hideInput = false;
           $scope.data.imgURI = '';
+
+          $timeout(function () {
+            $ionicScrollDelegate.$getByHandle('data.individualGroupScroll').scrollBottom(false);
+          }, 100);
 
         });
       })
@@ -1549,6 +1555,9 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal)
             console.log($scope.groupData);
             messageFactory.updateGroupData().then(function(){
               $scope.groupData = messageFactory.getGroupData();
+              $timeout(function () {
+                $ionicScrollDelegate.$getByHandle('data.individualGroupScroll').scrollBottom(false);
+              }, 100);
             })
           })
         }
@@ -1568,12 +1577,10 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $ionicModal)
   }
 
   $scope.closeModal = function () {
-    console.log("close modal");
     $scope.modal.remove();
   }
 
   $scope.goToGroupInfo = function () {
-    console.log("go to group info");
     $state.go('groupInfo', { group_id: $stateParams.group_id });
   }
 
