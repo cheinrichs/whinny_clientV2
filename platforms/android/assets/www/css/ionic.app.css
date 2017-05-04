@@ -10078,9 +10078,8 @@ a.button {
   margin-right: auto; }
 
 .uploadNewProfilePicSpinner {
-  position: relative;
-  top: 10px;
-  left: 10px; }
+  margin-left: auto;
+  margin-right: auto; }
 
 .broadcastCardLink {
   text-transform: uppercase;
@@ -10369,6 +10368,12 @@ a.button {
   color: #26A69A !important;
   position: absolute;
   left: 270px; }
+
+.emailWarning {
+  color: red;
+  float: left;
+  margin: 10px;
+  font-size: 25px; }
 
 .groupProfilePic {
   height: 300px;

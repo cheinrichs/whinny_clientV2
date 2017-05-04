@@ -113,6 +113,10 @@ function($ionicPlatform, $rootScope, $ionicPush, $localStorage, $ionicNavBarDele
   $ionicConfigProvider.views.swipeBackEnabled(false);
 }])
 
+.config(function($ionicConfigProvider) {
+  $ionicConfigProvider.scrolling.jsScrolling(false);
+})
+
 .config(function($compileProvider){
   $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file):|data:image\//);
 })

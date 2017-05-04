@@ -71,6 +71,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     makeUserAdmin: makeUserAdmin,
     removeUserAdmin: removeUserAdmin,
     sendInvitations: sendInvitations,
+    printGroupContent: printGroupContent,
     deleteGroup: deleteGroup,
 
     getBroadcastSearchObjects: getBroadcastSearchObjects,
@@ -83,6 +84,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     updateMessageNotificationSettings: updateMessageNotificationSettings,
     updateGroupNotificationSettings: updateGroupNotificationSettings,
     updateBroadcastNotificationSettings: updateBroadcastNotificationSettings,
+
+    updateEmailAndPassword: updateEmailAndPassword,
 
     markAccountAsSetUp: markAccountAsSetUp,
 
@@ -695,13 +698,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   function printGroupContent(group_id, groupName) {
-    var emailRegex = new Regex(/.*[@].*[.].*/, 'g');
-    if(emailRegex.test(currentUser.email)){
-      console.log("valid email");
-    } else {
-      //prompt a user to update their email
-      console.log("invalid email");
-    }
     var data = {
       group_id: group_id,
       user_id: currentUser.user_id,
@@ -806,7 +802,19 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       broadcast: broadcast
     }
     return $http.post(url, data).then(function (res) {
-      return res;
+      return res.data;
+    })
+  }
+
+  function updateEmailAndPassword(email, password) {
+    var url = API_URL + '/updateEmailAndPassword';
+    var data = {
+      user_id: currentUser.user_id,
+      email: email,
+      password: password
+    }
+    return $http.post(url, data).then(function (res) {
+      return res.data;
     })
   }
 

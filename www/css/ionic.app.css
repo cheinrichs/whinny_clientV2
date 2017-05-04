@@ -10369,6 +10369,12 @@ a.button {
   position: absolute;
   left: 270px; }
 
+.emailWarning {
+  color: red;
+  float: left;
+  margin: 10px;
+  font-size: 25px; }
+
 .groupProfilePic {
   height: 300px;
   width: 300px; }
@@ -10472,6 +10478,9 @@ a.button {
 
 .chatScreen {
   padding: 69px 0 22% 0; }
+
+.broadcastPadding {
+  padding: 10px 0px 0px 0px; }
 
 .chatScreenFewMessages {
   padding: 0px; }

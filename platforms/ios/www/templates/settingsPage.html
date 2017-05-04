@@ -10,6 +10,44 @@
 
       <ul class="list">
 
+        <li class="item item-text-wrap" ng-if="!currentUser.account_is_setup" ng-hide="showPasswordUpdated">
+
+
+          <a class="icon-right ion-alert-circled emailWarning"></a>
+          Your email and password is currently not set up!
+          To update, please enter an email address and password.
+
+          <div class="list list-inset">
+            <label class="item item-input">
+              <input type="text" placeholder="Email" ng-model="data.newEmail">
+            </label>
+          </div>
+
+          <div class="list list-inset">
+            <label class="item item-input">
+              <input type="password" placeholder="Password" ng-model="data.newPasswordOne">
+            </label>
+            <label class="item item-input">
+              <input type="password" placeholder="Confirm Password" ng-model="data.newPasswordTwo">
+            </label>
+          </div>
+
+          <div ng-repeat="error in errors" class="errors" ng-if="errors.length > 0">
+            {{error}}
+          </div>
+
+          <div class="row" ng-if="!showPasswordUpdated">
+            <button class="button button-block button-tangerine" ng-click="data.updateEmailAndPassword()">Update Password and Email</button>
+          </div>
+        </li>
+
+        <li class="item item-text-wrap" ng-hide="currentUser.account_is_setup">
+          <div class="row" ng-if="showPasswordUpdated">
+            Your password has been updated. Check your email for a confirmation message.
+          </div>
+        </li>
+
+
         <li class="item item-toggle">
            Message Notifications
            <label class="toggle toggle-energized">
@@ -52,8 +90,10 @@
             <button class="col-50 button button-tangerine" ng-click="data.choosePhoto()">Choose New Photo</button>
           </div>
           <div class="row">
-            <button class="button button-outline button-energized button-block" ng-click="data.uploadUpdatedPhoto()"> <span ng-if="!showLoader"> Upload updated photo</span>
-              <span ng-if="data.uploadSuccessful === true" class="animated zoomIn"><a class="icon-right ion-android-done settingsDoneCheck"></a>
+            <button class="button button-outline button-energized button-block" ng-click="data.uploadUpdatedPhoto()">
+              <span ng-if="!showLoader">Upload updated photo</span>
+              <span ng-if="data.uploadSuccessful === true" class="animated zoomIn">
+                <a class="icon-right ion-android-done settingsDoneCheck"></a>
               </span>
               <ion-spinner ng-if="showLoader" class="spinner-energized uploadNewProfilePicSpinner" icon="android"></ion-spinner>
             </button>

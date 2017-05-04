@@ -6,5 +6,8 @@
   },
   "resolutions": {
     "angular": "1.5.3"
+  },
+  "dependencies": {
+    "ionic-native-transitions": "shprink/ionic-native-transitions#^1.0.3"
   }
 }

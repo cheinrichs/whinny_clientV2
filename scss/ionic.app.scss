@@ -303,6 +303,8 @@ $tabs-height:                     56px;
   margin-right: auto;
 }
 
+
+
 .broadcastCardLink {
   text-transform: uppercase;
   color: #FFB554;
@@ -643,6 +645,13 @@ top: 74%;
   left: 270px;
 }
 
+.emailWarning {
+  color: red;
+  float: left;
+  margin: 10px;
+  font-size: 25px;
+}
+
 //used in create group
 .groupProfilePic {
   height: 300px;
@@ -761,6 +770,10 @@ top: 74%;
 
 .chatScreen {
   padding: $bar-height + 25px 0 22% 0;
+}
+
+.broadcastPadding {
+  padding: 10px 0px 0px 0px;
 }
 
 .chatScreenFewMessages {

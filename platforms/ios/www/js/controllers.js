@@ -172,8 +172,10 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, $localSt
           if($localStorage.token){
 
             if($localStorage.whinny_user.device_token != $localStorage.token.token){
-              console.log("FIX TOKEN!");
-              messageFactory.updateDeviceToken($localStorage.token.token).then(function () {
+              //also updates the current user object
+              messageFactory.updateDeviceToken($localStorage.token.token).then(function (res) {
+                console.log("should be user data");
+                console.log(res);
                 $state.go('tabsController.chatPage');
               })
             } else {
@@ -717,6 +719,8 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
   $scope.group_id = $stateParams.group_id;
   $scope.currentUser = messageFactory.getCurrentUser();
 
+  $scope.displayAccountSetupMessage = false;
+
   messageFactory.getGroupMembers($stateParams.group_id).then(function (res) {
     $scope.groupMembers = res;
 
@@ -1030,7 +1034,12 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
     });
   }
 
-  $scope.emailMessagePrintout = function (group_id, group_name) {
+  $scope.data.emailMessagePrintout = function (group_name) {
+    console.log("printout");
+    if(!$scope.currentUser.account_is_setup){
+      $scope.displayAccountSetupMessage = true;
+      return;
+    }
 
     var confirmPopup = $ionicPopup.confirm({
      title: 'Are you sure you want to email a log of all messages in ' + group_name + '?',
@@ -1040,15 +1049,16 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
      okType: 'button-tangerine', // String (default: 'button-positive'). The type of the OK button.
     });
 
-    var printSuccessfulAlert = $ionicPopup.alert({
-      title: 'Success',
-      template: 'A message log for this group has been created and sent to your Whinny email address.',
-    })
-
     confirmPopup.then(function(res) {
      if(res) {
        console.log("email message log for group" + group_name);
        messageFactory.printGroupContent($stateParams.group_id, group_name).then(function () {
+
+         var printSuccessfulAlert = $ionicPopup.alert({
+           title: 'Success',
+           template: 'A message log for this group has been created and sent to your Whinny email address.',
+         })
+
          printSuccessfulAlert.then(function (res) {
            if(res){
              console.log("clearing alert?");
@@ -1642,30 +1652,76 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
 
   $scope.data.uploadSuccessful = false;
 
+  $scope.showPasswordUpdated = false;
+
+  var emailRegex = new RegExp(/.*[@].*[.].*/, 'g'); //TODO
+
   $scope.data.messageNotifications = $scope.data.currentUser.message_notifications;
   $scope.data.broadcastNotifications = $scope.data.currentUser.group_notifications;
   $scope.data.groupNotifications= $scope.data.currentUser.broadcast_notifications;
+
+  $scope.errors = [];
+
+  $scope.data.updateEmailAndPassword = function () {
+
+    $scope.errors = [];
+
+    if($scope.data.newEmail){
+      if($scope.data.newEmail.length < 1){
+        $scope.errors.push("Your email is really dumb");
+      }
+
+      if(!emailRegex.test($scope.data.newEmail)){
+        $scope.errors.push("Please enter a valid email");
+      }
+
+      console.log($scope.data.newEmail.length < 1);
+      console.log(emailRegex.test($scope.data.newEmail));
+
+    } else {
+      $scope.errors.push("Please enter a valid email");
+    }
+
+    if(!$scope.data.newPasswordOne || !$scope.data.newPasswordTwo){
+      $scope.errors.push("Please enter and confirm a password");
+    } else {
+      if($scope.data.newPasswordOne.length < 6){
+        $scope.errors.push("Please enter a password with at least 6 characters")
+      }
+    }
+    if($scope.data.newPasswordOne !== $scope.data.newPasswordTwo) $scope.errors.push("Given passwords don't match.");
+
+    if($scope.errors.length === 0){
+      messageFactory.updateEmailAndPassword($scope.data.newEmail, $scope.data.newPasswordOne).then(function (res) {
+        console.log(res);
+        console.log("______-----^^^^^^----________");
+        if(res.confirmationEmail === 'sent'){
+          //Update the current User
+          $scope.showPasswordUpdated = true;
+        }
+      })
+    }
+
+
+  }
 
   $scope.updateNotificationSettings = function () {
     messageFactory.updateNotificationSettings($scope.data.messageNotifications, $scope.data.groupNotifications, $scope.data.broadcastNotifications);
   }
 
   $scope.updateMessageNotificationSettings = function () {
-    console.log("update message settings");
     messageFactory.updateMessageNotificationSettings($scope.data.messageNotifications).then(function (res) {
       console.log(res);
     })
   }
 
   $scope.updateGroupNotificationSettings = function () {
-    console.log("update group settings");
     messageFactory.updateGroupNotificationSettings($scope.data.groupNotifications).then(function (res) {
       console.log(res);
     })
   }
 
   $scope.updateBroadcastNotificationSettings = function () {
-    console.log("update broadcast settings");
     messageFactory.updateBroadcastNotificationSettings($scope.data.broadcastNotifications).then(function (res) {
       console.log(res);
     })
@@ -1728,6 +1784,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
     }, 3000);
 
   }
+
   $scope.backToChatPage = function () {
     $state.go('tabsController.chatPage');
   }

@@ -70,9 +70,12 @@
 
       </li>
 
-      <li class="item">
+      <li class="item item-text-wrap" ng-if="admin">
+        <div class="errors" ng-show="displayAccountSetupMessage">
+          Your Whinny Email may not be setup to receive a printout. Please go to the Settings page and add a valid email address and password.
+        </div>
         Email a printable log of all group messages:
-        <button class="button button-block button-royal" ng-if="admin" ng-click="emailMessagePrintout()">Email Message Printout</button>
+        <button class="button button-block button-royal" ng-click="data.emailMessagePrintout(group.group_name)">Email Message Printout</button>
       </li>
 
       <li class="item">
