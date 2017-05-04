@@ -1178,8 +1178,8 @@ function ($scope, $state, $stateParams, messageFactory){
   }
 }])
 
-.controller('individualChatCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPopup', '$ionicModal',
-function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCamera, photoFactory, $timeout , $ionicPopup, $ionicModal) {
+.controller('individualChatCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPopup', '$ionicModal', '$ionicScrollDelegate',
+function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCamera, photoFactory, $timeout , $ionicPopup, $ionicModal, $ionicScrollDelegate) {
 
   $scope.data = {};
 
@@ -1192,6 +1192,9 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   for (var i = 0; i < $scope.chatMessages.length; i++) {
     if($scope.chatMessages[i].convoUser.user_id === $stateParams.convo.convoUser.user_id) $scope.convo = $scope.chatMessages[i];
   }
+  $timeout(function () {
+    $ionicScrollDelegate.$getByHandle('data.individualChatScroll').scrollBottom(true);
+  }, 100);
 
   //when we enter an individual chat, take the chat message ids of that specific
   //user and send the ids in an array in a post request to tell the server they
@@ -1199,7 +1202,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   var newlyReadMessages = [];
   for (var i = 0; i < $scope.convo.messages.length; i++) {
     //If the message is unread and it wasn't sent by the current user, mark it as read
-    console.log($scope.convo.messages[i]);
     if(!$scope.convo.messages[i].read && $scope.convo.messages[i].from_user !== $scope.currentUser.user_id) newlyReadMessages.push($scope.convo.messages[i].message_id);
   }
   messageFactory.markChatMessagesAsRead(newlyReadMessages).then(function () {
@@ -1215,6 +1217,10 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
     messageFactory.updateChatMessages().then(function (res) {
       $scope.chatMessages = messageFactory.getChatMessages();
       $scope.chatUsers = messageFactory.getUserObjects();
+      $timeout(function () {
+        var delegate = $ionicScrollDelegate.$getByHandle('data.individualChatScroll').scrollBottom(true);
+        console.log(delegate);
+      }, 100);
     });
   }, 10000);
 
@@ -1322,6 +1328,11 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
           $scope.hideInput = false;
           $scope.data.imgURI = '';
 
+          $timeout(function () {
+            var delegate = $ionicScrollDelegate.$getByHandle('data.individualChatScroll').scrollBottom(true);
+            console.log(delegate);
+          }, 100);
+
         });
       })
 
@@ -1342,6 +1353,12 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
             }
             console.log("updated");
             console.log($scope.chatMessages);
+
+            $timeout(function () {
+              var delegate = $ionicScrollDelegate.$getByHandle('data.individualChatScroll').scrollBottom(true);
+              console.log(delegate);
+            }, 100);
+
           });
         })
       }

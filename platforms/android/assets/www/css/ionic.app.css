@@ -10479,6 +10479,9 @@ a.button {
 .chatScreen {
   padding: 69px 0 22% 0; }
 
+.broadcastPadding {
+  padding: 10px 0px 0px 0px; }
+
 .chatScreenFewMessages {
   padding: 0px; }
 

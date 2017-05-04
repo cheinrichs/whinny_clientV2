@@ -8,9 +8,9 @@
       <img ng-src="{{convo.convoUser.portrait_link}}" class="individualChatPortrait">
     </div>
 
-    <ion-content class="has-footer chatScreen" scroll='false' keyboard-attach on-swipe-right="backToChatPage()">
+    <ion-content class="has-footer chatScreen" overflow-scroll="false" keyboard-attach on-swipe-right="backToChatPage()" delegate-handle="data.individualChatScroll">
 
-      <div class="top-container" scroll-glue-bottom force-glue>
+      <div class="top-container">
 
         <div ng-repeat="message in convo.messages">
           <div class="row">
