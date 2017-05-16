@@ -45,7 +45,18 @@
             <img ng-src="{{data.imgURI}}" class="chatImageStaging animated fadeIn" alt="">
             <a class="ion-close-circled clearStagedPhotoButton animated fadeIn" ng-click="clearStagedPhoto()"></a>
           </span>
-          <textarea class="footer-input" placeholder="Enter Message" ng-model="chatMessage" rows="2" msd-elastic cols="45" ng-focus="focus=true" ng-blur="focus=false" ng-hide="hideInput"></textarea>
+
+          <!-- <textarea class="footer-input" placeholder="Enter Message" ng-model="chatMessage" rows="2" msd-elastic cols="45" ng-focus="focus=true" ng-blur="focus=false" ng-hide="hideInput"></textarea> -->
+
+          <div
+            id="newChatboxDiv"
+            ng-focus="focus=true"
+            ng-blur="focus=false"
+            class="footer-input"
+            contenteditable="true"
+            style="-webkit-user-select: text; -khtml-user-select: text;-moz-user-select: text;-o-user-select: text;user-select: text;"
+          ></div>
+
         </div>
 
         <div class="col col-20">

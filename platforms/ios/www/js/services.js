@@ -100,9 +100,9 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   //TODO switch between databases when you push!!@?!@#!@#
   //Remember to switch in the photo upload factory as well
   //Production
-  // var API_URL = 'https://whinny-server.herokuapp.com';
+  var API_URL = 'https://whinny-server.herokuapp.com';
   //Staging
-  var API_URL = 'https://whinny-staging.herokuapp.com';
+  // var API_URL = 'https://whinny-staging.herokuapp.com';
   //Local
   // var API_URL = 'http://localhost:3000';
 
@@ -929,9 +929,9 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
   }
 
   //Production
-  // var API_URL = 'https://whinny-server.herokuapp.com';
+  var API_URL = 'https://whinny-server.herokuapp.com';
   //Staging
-  var API_URL = 'https://whinny-staging.herokuapp.com';
+  // var API_URL = 'https://whinny-staging.herokuapp.com';
   //local
   // var API_URL = 'http://localhost:3000';
 

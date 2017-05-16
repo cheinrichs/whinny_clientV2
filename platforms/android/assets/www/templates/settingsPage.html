@@ -86,8 +86,7 @@
             <img ng-hide="data.imgURI === undefined" ng-src="{{data.imgURI}}" class="settingsProfilePic" alt=""> <!--TODO show placeholder and format -->
           </div>
           <div class="row">
-            <button class="col-50 button button-tangerine" ng-click="data.takePhoto()">Take New Photo</button>
-            <button class="col-50 button button-tangerine" ng-click="data.choosePhoto()">Choose New Photo</button>
+            <button class="button button-outline button-energized button-block" ng-click="data.addPhoto()">Update Photo</button>
           </div>
           <div class="row">
             <button class="button button-outline button-energized button-block" ng-click="data.uploadUpdatedPhoto()">

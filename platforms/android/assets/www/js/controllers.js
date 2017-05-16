@@ -1178,8 +1178,8 @@ function ($scope, $state, $stateParams, messageFactory){
   }
 }])
 
-.controller('individualChatCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPopup', '$ionicModal', '$ionicScrollDelegate',
-function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCamera, photoFactory, $timeout , $ionicPopup, $ionicModal, $ionicScrollDelegate) {
+.controller('individualChatCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPopup', '$ionicModal', '$ionicScrollDelegate', '$ionicActionSheet',
+function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCamera, photoFactory, $timeout , $ionicPopup, $ionicModal, $ionicScrollDelegate, $ionicActionSheet) {
 
   $scope.data = {};
 
@@ -1218,8 +1218,7 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
       $scope.chatMessages = messageFactory.getChatMessages();
       $scope.chatUsers = messageFactory.getUserObjects();
       $timeout(function () {
-        var delegate = $ionicScrollDelegate.$getByHandle('data.individualChatScroll').scrollBottom(true);
-        console.log(delegate);
+        $ionicScrollDelegate.$getByHandle('data.individualChatScroll').scrollBottom(true);
       }, 100);
     });
   }, 10000);
@@ -1232,26 +1231,30 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   var photoSourcePopup;
 
   $scope.addPhoto = function () {
-    var customTemplate =
-      '<button class="button button-block button-tangerine" ng-click="takePhoto()">Camera</button>' +
-      '<button class="button button-block button-tangerine" ng-click="choosePhoto()">Gallery</button>';
 
-    photoSourcePopup = $ionicPopup.show({
-      template: customTemplate,
-      scope: $scope,
-      buttons: [
-        {
-          text: 'Cancel',
-          type: 'button-energized',
-          onTap: function(e) {}
-        }
-      ]
-    });
+    var hideSheet = $ionicActionSheet.show({
+     buttons: [
+       { text: 'Camera' },
+       { text: 'Gallery' }
+     ],
+     cancelText: 'Cancel',
+     cancel: function() {
+          // add cancel code..
+        },
+     buttonClicked: function(index) {
+       switch(index){
+        case 0:
+          $scope.takePhoto();
+          return true;
+        case 1:
+          $scope.choosePhoto();
+          return true;
+       }
+     }
+   });
   }
 
   $scope.takePhoto = function () {
-
-    photoSourcePopup.close();
 
     var options = {
       quality: 75,
@@ -1272,8 +1275,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   }
 
   $scope.choosePhoto = function () {
-
-    photoSourcePopup.close();
 
     var options = {
       quality: 75,
@@ -1300,14 +1301,18 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   }
 
   $scope.addEmoji = function (emoji) {
-    if($scope.chatMessage){
-      $scope.chatMessage += emoji;
-    } else {
-      $scope.chatMessage = "" + emoji;
-    }
+
+    console.log("adding emoji", emoji);
+    var imgEmoji = emoji.substring(1, emoji.length - 1);
+
+    document.getElementById("chatboxDiv").innerHTML += '<img class="emoji" src="img/emoji/'+imgEmoji+'.png"></img>';
+    document.getElementById("chatboxDiv").innerHTML = document.getElementById("chatboxDiv").innerHTML.replace(new RegExp('<br>', 'g'), '');
+    placeCaretAtEnd( document.getElementById("chatboxDiv") );
+
   }
 
   $scope.sendChatMessage = function () {
+    console.log("sending message");
     if($scope.data.imgURI.length > 1){
 
       var filename = $scope.currentUser.user_id + '_chatMessage_'+ Date.now() + '.jpg';
@@ -1337,13 +1342,24 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
       })
 
     } else {
-      if($scope.chatMessage){
+      if(document.getElementById("chatboxDiv").innerHTML){
 
         if (window.cordova && window.cordova.plugins) cordova.plugins.Keyboard.close();
 
-        console.log("controller) sending message to ", $stateParams.convo.convoUser.user_id, $scope.chatMessage);
-        messageFactory.sendChatMessage($stateParams.convo.convoUser.user_id, $scope.chatMessage).then(function () {
-          $scope.chatMessage = "";
+        var chatMessageEncoded = document.getElementById("chatboxDiv").innerHTML;
+        var emojiIds = [ 'HappyFace','LayingHorse','AngryFace','BuckingHorse','Pony','ArabianHorse','JumpingHorse','BarrelHorse','TrailHorse','ReiningHorse','PoloPony','RacingHorses','MareAndFoal','HunterHorse','GrazingHorse','DrivingHorse','DressageHorse','EventingHorse','PaddockHorse','Ribbon','LegBandages','VetSymbol','Blanket','Brush','HoofPick','EnglishSaddle','WesternSaddle','Bucket','Wheelbarrow','Pitchfork','Corgi','Fly','GolfCart', 'JackRussell', 'Tractor', 'Harrow', 'HayBale', 'Trailer', 'HorseShoe', 'Carrot'];
+
+        var chatMessageDecoded; 
+        var emojiIdsLength = emojiIds.length;
+        for (var i = 0; i < emojiIdsLength; i++){
+           chatMessageDecoded = chatMessageEncoded.replace(new RegExp('<img class="emoji" src="img/emoji/' + emojiIds[i] + '.png"></img>', 'g'), ":" + emojiIds[i] + ":");
+        }
+
+        console.log("controller) sending message to ", $stateParams.convo.convoUser.user_id, chatMessageDecoded);
+        messageFactory.sendChatMessage($stateParams.convo.convoUser.user_id, chatMessageDecoded).then(function () {
+
+          document.getElementById("chatboxDiv").innerHTML = "";
+
           messageFactory.updateChatMessages().then(function (res) {
             $scope.chatMessages = messageFactory.getChatMessages();
             $scope.chatUsers = messageFactory.getUserObjects();
@@ -1384,10 +1400,29 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
     $state.go('tabsController.chatPage');
   }
 
+  function placeCaretAtEnd(el) {
+    el.focus();
+    if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
+      console.log("the defined top");
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      range.collapse(false);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } else if (typeof document.body.createTextRange != "undefined") {
+      console.log("the undefined bottom");
+      var textRange = document.body.createTextRange();
+      textRange.moveToElementText(el);
+      textRange.collapse(false);
+      textRange.select();
+    }
+  }
+
 }])
 
-.controller('individualGroupCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope', '$cordovaCamera', 'photoFactory', '$ionicPopup', '$ionicModal', '$timeout', '$ionicScrollDelegate',
-function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCamera, photoFactory, $ionicPopup, $ionicModal, $timeout, $ionicScrollDelegate) {
+.controller('individualGroupCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$rootScope', '$cordovaCamera', 'photoFactory', '$ionicPopup', '$ionicModal', '$timeout', '$ionicScrollDelegate', '$ionicActionSheet',
+function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCamera, photoFactory, $ionicPopup, $ionicModal, $timeout, $ionicScrollDelegate, $ionicActionSheet) {
 
   $scope.data = {};
 
@@ -1443,21 +1478,27 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   var photoSourcePopup;
 
   $scope.addPhoto = function () {
-    var customTemplate =
-      '<button class="button button-block button-tangerine" ng-click="takePhoto()">Camera</button>' +
-      '<button class="button button-block button-tangerine" ng-click="choosePhoto()">Gallery</button>';
 
-    photoSourcePopup = $ionicPopup.show({
-      template: customTemplate,
-      scope: $scope,
-      buttons: [
-        {
-          text: 'Cancel',
-          type: 'button-energized',
-          onTap: function(e) {}
-        }
-      ]
-    });
+    var hideSheet = $ionicActionSheet.show({
+     buttons: [
+       { text: 'Camera' },
+       { text: 'Gallery' }
+     ],
+     cancelText: 'Cancel',
+     cancel: function() {
+          // add cancel code..
+        },
+     buttonClicked: function(index) {
+       switch(index){
+        case 0:
+          $scope.takePhoto();
+          return true;
+        case 1:
+          $scope.choosePhoto();
+          return true;
+       }
+     }
+   });
   }
 
   $scope.takePhoto = function () {
@@ -1511,11 +1552,14 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   }
 
   $scope.addEmoji = function (emoji) {
-    if($scope.groupMessage){
-      $scope.groupMessage += emoji;
-    } else {
-      $scope.groupMessage = "" + emoji;
-    }
+
+    console.log("adding emoji", emoji);
+    var imgEmoji = emoji.substring(1, emoji.length - 1);
+
+    document.getElementById("groupChatboxDiv").innerHTML += '<img class="emoji" src="img/emoji/'+imgEmoji+'.png"></img>';
+    document.getElementById("groupChatboxDiv").innerHTML = document.getElementById("groupChatboxDiv").innerHTML.replace(new RegExp('<br>', 'g'), '');
+    placeCaretAtEnd( document.getElementById("groupChatboxDiv") );
+
   }
 
   $scope.sendGroupMessage = function () {
@@ -1548,19 +1592,29 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
       })
 
     } else {
-      if($scope.groupMessage){
-        if($scope.groupMessage.length > 0){
-          messageFactory.sendGroupMessage($stateParams.group_id, $scope.currentGroup.group_name, $scope.groupMessage).then(function () {
-            $scope.groupMessage = "";
-            console.log($scope.groupData);
-            messageFactory.updateGroupData().then(function(){
-              $scope.groupData = messageFactory.getGroupData();
-              $timeout(function () {
-                $ionicScrollDelegate.$getByHandle('data.individualGroupScroll').scrollBottom(false);
-              }, 100);
-            })
-          })
+      if(document.getElementById("groupChatboxDiv").innerHTML){
+
+        if (window.cordova && window.cordova.plugins) cordova.plugins.Keyboard.close();
+
+        var groupChatMessageEncoded = document.getElementById("groupChatboxDiv").innerHTML;
+
+        var emojiIds = [ 'HappyFace','LayingHorse','AngryFace','BuckingHorse','Pony','ArabianHorse','JumpingHorse','BarrelHorse','TrailHorse','ReiningHorse','PoloPony','RacingHorses','MareAndFoal','HunterHorse','GrazingHorse','DrivingHorse','DressageHorse','EventingHorse','PaddockHorse','Ribbon','LegBandages','VetSymbol','Blanket','Brush','HoofPick','EnglishSaddle','WesternSaddle','Bucket','Wheelbarrow','Pitchfork','Corgi','Fly','GolfCart', 'JackRussell', 'Tractor', 'Harrow', 'HayBale', 'Trailer', 'HorseShoe', 'Carrot'];
+
+        var groupChatMessageDencoded; 
+        var emojiIdsLength = emojiIds.length;
+        for (var i = 0; i < emojiIdsLength; i++){
+           groupChatMessageDencoded = groupChatMessageEncoded.replace(new RegExp('<img class="emoji" src="img/emoji/' + emojiIds[i] + '.png"></img>', 'g'), ":" + emojiIds[i] + ":");
         }
+
+        messageFactory.sendGroupMessage($stateParams.group_id, $scope.currentGroup.group_name, groupChatMessageDencoded).then(function () {
+          $scope.groupMessage = "";
+          messageFactory.updateGroupData().then(function(){
+            $scope.groupData = messageFactory.getGroupData();
+            $timeout(function () {
+              $ionicScrollDelegate.$getByHandle('data.individualGroupScroll').scrollBottom(false);
+            }, 100);
+          })
+        })
       }
     }
   }
@@ -1586,6 +1640,23 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
 
   $scope.backToGroupsPage = function (){
     $state.go('tabsController.groupsPage');
+  }
+
+  function placeCaretAtEnd(el) {
+    el.focus();
+    if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      range.collapse(false);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } else if (typeof document.body.createTextRange != "undefined") {
+      var textRange = document.body.createTextRange();
+      textRange.moveToElementText(el);
+      textRange.collapse(false);
+      textRange.select();
+    }
   }
 
 }])
@@ -1667,8 +1738,8 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
 
 }])
 
-.controller('settingsCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPush', '$localStorage', '$rootScope',
-function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFactory, $timeout, $ionicPush, $localStorage, $rootScope) {
+.controller('settingsCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaCamera', 'photoFactory', '$timeout', '$ionicPush', '$localStorage', '$rootScope', '$ionicActionSheet',
+function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFactory, $timeout, $ionicPush, $localStorage, $rootScope, $ionicActionSheet) {
   $scope.data = {};
   $scope.data.currentUser = messageFactory.getCurrentUser();
 
@@ -1749,6 +1820,30 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
     messageFactory.updateBroadcastNotificationSettings($scope.data.broadcastNotifications).then(function (res) {
       console.log(res);
     })
+  }
+
+  $scope.data.addPhoto = function () {
+
+    var hideSheet = $ionicActionSheet.show({
+     buttons: [
+       { text: 'Camera' },
+       { text: 'Gallery' }
+     ],
+     cancelText: 'Cancel',
+     cancel: function() {
+          // add cancel code..
+        },
+     buttonClicked: function(index) {
+       switch(index){
+        case 0:
+          $scope.data.takePhoto();
+          return true;
+        case 1:
+          $scope.data.choosePhoto();
+          return true;
+       }
+     }
+   });
   }
 
   $scope.data.takePhoto = function () {
@@ -1954,7 +2049,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
     if(!$scope.data.chosenPhone && !$scope.data.isWhinnyUser){
       $scope.data.errors.push('Please enter a valid recipient!');
     }
-    if(!$scope.chatMessage && $scope.data.imgURI.length < 1){
+    if(document.getElementById("newChatboxDiv").innerHTML == "" && $scope.data.imgURI.length < 1){
       $scope.data.errors.push('Please enter a message!');
     }
     if($scope.data.errors.length > 0){
@@ -1972,9 +2067,19 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
       newChatMessage = $scope.chatMessage;
     }
 
+    var chatMessageEncoded = document.getElementById("newChatboxDiv").innerHTML;
+    var emojiIds = [ 'HappyFace','LayingHorse','AngryFace','BuckingHorse','Pony','ArabianHorse','JumpingHorse','BarrelHorse','TrailHorse','ReiningHorse','PoloPony','RacingHorses','MareAndFoal','HunterHorse','GrazingHorse','DrivingHorse','DressageHorse','EventingHorse','PaddockHorse','Ribbon','LegBandages','VetSymbol','Blanket','Brush','HoofPick','EnglishSaddle','WesternSaddle','Bucket','Wheelbarrow','Pitchfork','Corgi','Fly','GolfCart', 'JackRussell', 'Tractor', 'Harrow', 'HayBale', 'Trailer', 'HorseShoe', 'Carrot'];
+
+    var chatMessageDecoded; 
+    var emojiIdsLength = emojiIds.length;
+    for (var i = 0; i < emojiIdsLength; i++){
+       chatMessageDecoded = chatMessageEncoded.replace(new RegExp('<img class="emoji" src="img/emoji/' + emojiIds[i] + '.png"></img>', 'g'), ":" + emojiIds[i] + ":");
+    }
+
     //if you're speaking to another whinny user, send the chat the easy way
     if($scope.data.isWhinnyUser){
-      messageFactory.sendChatMessage($stateParams.groupMember.user_id, newChatMessage).then(function (res) {
+
+      messageFactory.sendChatMessage($stateParams.groupMember.user_id, chatMessageDecoded).then(function (res) {
         messageFactory.updateChatMessages().then(function (convos) {
           $scope.chatMessage = "";
           $scope.data.newChatRecipient = "";
@@ -1992,7 +2097,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
     //If you're not speaking to a whinny user, we have to make sure the phone number is valid
     } else {
       var parsedPhone = $scope.data.chosenPhone.replace(/[\s()-]/g, "");
-      messageFactory.createNewChatMessage(parsedPhone, newChatMessage, $scope.data.newChatFirstName, $scope.data.newChatLastName).then(function (res) {
+      messageFactory.createNewChatMessage(parsedPhone, chatMessageDecoded, $scope.data.newChatFirstName, $scope.data.newChatLastName).then(function (res) {
         messageFactory.updateChatMessages().then(function (convos) {
           $scope.chatMessage = "";
           $scope.data.newChatRecipient = "";
@@ -2009,11 +2114,14 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
   }
 
   $scope.addEmoji = function (emoji) {
-    if($scope.chatMessage){
-      $scope.chatMessage += emoji;
-    } else {
-      $scope.chatMessage = "" + emoji;
-    }
+
+    console.log("adding emoji", emoji);
+    var imgEmoji = emoji.substring(1, emoji.length - 1);
+
+    document.getElementById("newChatboxDiv").innerHTML += '<img class="emoji" src="img/emoji/'+imgEmoji+'.png"></img>';
+    document.getElementById("newChatboxDiv").innerHTML = document.getElementById("newChatboxDiv").innerHTML.replace(new RegExp('<br>', 'g'), '');
+    placeCaretAtEnd( document.getElementById("newChatboxDiv") );
+
   }
 
   $scope.backToChatPage = function () {
@@ -2023,6 +2131,25 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
       $state.go('tabsController.chatPage');
     }
   }
+
+  //TODO remove and place in service?
+  function placeCaretAtEnd(el) {
+    el.focus();
+    if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      range.collapse(false);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } else if (typeof document.body.createTextRange != "undefined") {
+      var textRange = document.body.createTextRange();
+      textRange.moveToElementText(el);
+      textRange.collapse(false);
+      textRange.select();
+    }
+  }
+
 }])
 
 .controller('createNewGroupCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', 'contactsFactory', '$cordovaCamera', 'Upload', 'photoFactory', '$timeout',

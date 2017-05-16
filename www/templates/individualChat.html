@@ -40,17 +40,29 @@
     <div class="messageFooter" keyboard-attach>
 
       <div class="row">
+
         <div class="col col-80">
+          <div
+            id="chatboxDiv"
+            ng-focus="focus=true"
+            ng-blur="focus=false"
+            class="footer-input"
+            contenteditable="true"
+            style="-webkit-user-select: text; -khtml-user-select: text;-moz-user-select: text;-o-user-select: text;user-select: text;"
+          ></div>
+
+
           <span ng-show="hideInput">
             <img ng-src="{{data.imgURI}}" class="chatImageStaging animated fadeIn" alt="">
             <a class="ion-close-circled clearStagedPhotoButton animated fadeIn" ng-click="clearStagedPhoto()"></a>
           </span>
-          <textarea class="footer-input" placeholder="Enter Message..."  ng-model="chatMessage" rows="2" msd-elastic cols="15" ng-focus="focus=true" ng-blur="focus=false" ng-hide="hideInput"></textarea>
+
         </div>
 
         <div class="col col-20">
           <button class="button button-tangerine sendChatButton" ng-click="sendChatMessage()">Send</button>
         </div>
+
       </div>
 
       <div class="row">

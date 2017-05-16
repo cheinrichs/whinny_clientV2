@@ -10348,11 +10348,6 @@ a.button {
   transform: rotate(180deg);
   display: inline-block; }
 
-.visibleTextBox {
-  position: absolute;
-  top: 12px;
-  left: 15px; }
-
 .groupChatPortrait {
   border: 1px solid white;
   border-radius: 50%;
@@ -10493,7 +10488,8 @@ a.button {
   border-radius: 10px;
   width: 100%;
   padding: 3px 5px;
-  height: 46px !important; }
+  min-height: 45px;
+  display: inline-block; }
 
 .footer-send {
   border-color: transparent;
@@ -10570,7 +10566,9 @@ a.button {
   background-image: url("../img/emoji/GolfCart.png"); }
 
 .GrazingHorseEButton {
-  background-image: url("../img/emoji/GrazingHorse.png"); }
+  background-image: url("../img/emoji/GrazingHorse.png");
+  position: relative;
+  top: -7px; }
 
 .HappyFaceEButton {
   background-image: url("../img/emoji/HappyFace.png"); }
