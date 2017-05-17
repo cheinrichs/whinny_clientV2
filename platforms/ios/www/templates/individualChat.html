@@ -44,10 +44,12 @@
         <div class="col col-80">
           <div
             id="chatboxDiv"
-            ng-focus="focus=true"
-            ng-blur="focus=false"
             class="footer-input"
             contenteditable="true"
+
+            ng-hide="hideInput"
+            ng-focus="focus=true"
+            ng-blur="focus=false"
             style="-webkit-user-select: text; -khtml-user-select: text;-moz-user-select: text;-o-user-select: text;user-select: text;"
           ></div>
 

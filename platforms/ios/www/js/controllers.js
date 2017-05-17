@@ -59,12 +59,6 @@ function ($rootScope, $scope, $state) {
       $scope.showSettings = false;
       $scope.pageTitle = 'New Group';
     }
-    if(toState.url === '/groupSearch'){
-      $scope.hideGroupIcons = true;
-      $scope.showBackToGroups = true;
-      $scope.showSettings = false;
-      $scope.pageTitle = 'Groups';
-    }
     if(toState.url === '/broadcastSearch'){
       $scope.hideBroadcastIcons = true;
       $scope.showBackToBroadcasts = true;
@@ -93,6 +87,7 @@ function ($rootScope, $scope, $state) {
     if(toState.url === '/newUserPhoto') $scope.hideNavBar = true;
     if(toState.url === '/groupProfilePage') $scope.hideNavBar = true;
     if(toState.url === '/broadcastSearch') $scope.hideNavBar = true;
+    if(toState.url === '/groupSearch') $scope.hideNavBar = true;
   });
 
   $scope.toSettingsPage = function () {
@@ -1228,30 +1223,28 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
     clearInterval($rootScope.individualChatUpdateInterval);
   });
 
-  var photoSourcePopup;
-
   $scope.addPhoto = function () {
 
     var hideSheet = $ionicActionSheet.show({
-     buttons: [
-       { text: 'Camera' },
-       { text: 'Gallery' }
-     ],
-     cancelText: 'Cancel',
-     cancel: function() {
-          // add cancel code..
-        },
-     buttonClicked: function(index) {
-       switch(index){
+      buttons: [
+        { text: 'Camera' },
+        { text: 'Gallery' }
+      ],
+      cancelText: 'Cancel',
+      cancel: function() {
+
+      },
+      buttonClicked: function(index) {
+        switch(index){
         case 0:
           $scope.takePhoto();
           return true;
         case 1:
           $scope.choosePhoto();
           return true;
-       }
-     }
-   });
+        }
+      }
+    });
   }
 
   $scope.takePhoto = function () {
@@ -1475,8 +1468,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
     clearInterval($rootScope.individualGroupUpdateInterval);
   });
 
-  var photoSourcePopup;
-
   $scope.addPhoto = function () {
 
     var hideSheet = $ionicActionSheet.show({
@@ -1503,8 +1494,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
 
   $scope.takePhoto = function () {
 
-    photoSourcePopup.close();
-
     var options = {
       quality: 75,
       destinationType: Camera.DestinationType.FILE_URI,
@@ -1524,8 +1513,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   }
 
   $scope.choosePhoto = function () {
-
-    photoSourcePopup.close();
 
     var options = {
       quality: 75,
@@ -1574,6 +1561,8 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
       var photoMessage = 'https://s3.amazonaws.com/whinnyphotos/group_chat_images/' + filename;
       messageFactory.sendGroupImage($scope.group_id, $scope.currentGroup.group_name, photoMessage).then(function () {
         //insert into the convo? TODO
+
+        document.getElementById("groupChatboxDiv").innerHTML = "";
 
         messageFactory.updateChatMessages().then(function (res) {
 
@@ -1931,8 +1920,8 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
 
 }])
 
-.controller('newChatMessageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaContacts', 'contactsFactory',
-function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contactsFactory) {
+.controller('newChatMessageCtrl', ['$scope', '$state', '$stateParams', 'messageFactory', '$cordovaContacts', 'contactsFactory', '$ionicActionSheet', '$cordovaCamera', 'photoFactory',
+function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contactsFactory, $ionicActionSheet, $cordovaCamera, photoFactory) {
 
   $scope.data = {};
   $scope.data.contactsHidden = true;
@@ -1971,29 +1960,31 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
     $scope.data.contactsHidden = false;
   }
 
-  var photoSourcePopup;
-
   $scope.addPhoto = function () {
-    var customTemplate =
-      '<button class="button button-block button-tangerine" ng-click="takePhoto()">Camera</button>' +
-      '<button class="button button-block button-tangerine" ng-click="choosePhoto()">Gallery</button>';
 
-    photoSourcePopup = $ionicPopup.show({
-      template: customTemplate,
-      scope: $scope,
+    var hideSheet = $ionicActionSheet.show({
       buttons: [
-        {
-          text: 'Cancel',
-          type: 'button-energized',
-          onTap: function(e) {}
+        { text: 'Camera' },
+        { text: 'Gallery' }
+      ],
+      cancelText: 'Cancel',
+      cancel: function() {
+
+      },
+      buttonClicked: function(index) {
+        switch(index){
+        case 0:
+          $scope.takePhoto();
+          return true;
+        case 1:
+          $scope.choosePhoto();
+          return true;
         }
-      ]
+      }
     });
   }
 
   $scope.takePhoto = function () {
-
-    photoSourcePopup.close();
 
     var options = {
       quality: 75,
@@ -2014,8 +2005,6 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaContacts, contac
   }
 
   $scope.choosePhoto = function () {
-
-    photoSourcePopup.close();
 
     var options = {
       quality: 75,
