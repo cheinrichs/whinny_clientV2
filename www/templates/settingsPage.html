@@ -10,7 +10,7 @@
 
       <ul class="list">
 
-        <li class="item item-text-wrap" ng-if="!currentUser.account_is_setup" ng-hide="showPasswordUpdated">
+        <li class="item item-text-wrap" ng-if="data.emailSetupRequired" ng-hide="showPasswordUpdated">
 
 
           <a class="icon-right ion-alert-circled emailWarning"></a>
@@ -81,16 +81,15 @@
         <li class="item">
 
           Current Profile Picture:
-          <div class="">
+
+          <div class="settingsProfilePicContainer">
             <img ng-hide="data.imgURI !== undefined" ng-src="{{data.currentUser.portrait_link}}" class="settingsProfilePic" alt=""> <!--TODO show placeholder and format -->
             <img ng-hide="data.imgURI === undefined" ng-src="{{data.imgURI}}" class="settingsProfilePic" alt=""> <!--TODO show placeholder and format -->
           </div>
+
           <div class="row">
-            <button class="button button-outline button-energized button-block" ng-click="data.addPhoto()">Update Photo</button>
-          </div>
-          <div class="row">
-            <button class="button button-outline button-energized button-block" ng-click="data.uploadUpdatedPhoto()">
-              <span ng-if="!showLoader">Upload updated photo</span>
+            <button class="button button-tangerine button-block" ng-click="data.addPhoto()">
+              <span ng-if="!showLoader">Take or Select New Photo</span>
               <span ng-if="data.uploadSuccessful === true" class="animated zoomIn">
                 <a class="icon-right ion-android-done settingsDoneCheck"></a>
               </span>

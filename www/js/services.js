@@ -85,6 +85,8 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     updateGroupNotificationSettings: updateGroupNotificationSettings,
     updateBroadcastNotificationSettings: updateBroadcastNotificationSettings,
 
+    emailAndPasswordIsValid: emailAndPasswordIsValid,
+
     updateEmailAndPassword: updateEmailAndPassword,
 
     markAccountAsSetUp: markAccountAsSetUp,
@@ -330,9 +332,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     var url = API_URL + '/confirmCode/' + user_phone + '/' + givenConfirmationNumber;
     return $http.get(url).then(function (res) {
       setCurrentUser(res.data);
-      console.log("logged in and set current user to");
-      console.log(res.data);
-      $localStorage.whinny_user = res.data;
       return res;
     })
 
@@ -344,6 +343,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
 
   function setCurrentUser(user){
     currentUser = user;
+    $localStorage.whinny_user = user;
   }
 
   function sendChatMessage(to_user, content) {
@@ -482,7 +482,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     // var url = 'http://localhost:3000/resetTutorials';
     var url = API_URL + '/resetTutorials';
     return $http.post(url, data).then(function (res) {
-      console.log(res.data.updatedUser);
       setCurrentUser(res.data.updatedUser);
       return res;
     })
@@ -806,6 +805,13 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     })
   }
 
+  function emailAndPasswordIsValid() {
+    var url = API_URL + '/emailAndPasswordIsValid/' + currentUser.user_id;
+    return $http.get(url).then(function (res) {
+      return res.data;
+    })
+  }
+
   function updateEmailAndPassword(email, password) {
     var url = API_URL + '/updateEmailAndPassword';
     var data = {
@@ -862,7 +868,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       if(res.data[0]){
         if(res.data[0].user_id){
           setCurrentUser(res.data[0]);
-          $localStorage.whinny_user = res.data[0];
         }
       }
       return res;

@@ -1188,7 +1188,8 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
     if($scope.chatMessages[i].convoUser.user_id === $stateParams.convo.convoUser.user_id) $scope.convo = $scope.chatMessages[i];
   }
   $timeout(function () {
-    $ionicScrollDelegate.$getByHandle('data.individualChatScroll').scrollBottom(false);
+    console.log("scroll to bottom");
+    $ionicScrollDelegate.$getByHandle('data.individualChatScroll').scrollBottom(true);
   }, 100);
 
   //when we enter an individual chat, take the chat message ids of that specific
@@ -1200,7 +1201,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
     if(!$scope.convo.messages[i].read && $scope.convo.messages[i].from_user !== $scope.currentUser.user_id) newlyReadMessages.push($scope.convo.messages[i].message_id);
   }
   messageFactory.markChatMessagesAsRead(newlyReadMessages).then(function () {
-    console.log(newlyReadMessages);
     var emitObject = {
       messagesRead: newlyReadMessages,
       source: 'chat'
@@ -1562,8 +1562,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
       messageFactory.sendGroupImage($scope.group_id, $scope.currentGroup.group_name, photoMessage).then(function () {
         //insert into the convo? TODO
 
-        document.getElementById("groupChatboxDiv").innerHTML = "";
-
         messageFactory.updateChatMessages().then(function (res) {
 
           messageFactory.updateGroupData().then(function(res){
@@ -1596,7 +1594,7 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
         }
 
         messageFactory.sendGroupMessage($stateParams.group_id, $scope.currentGroup.group_name, groupChatMessageDencoded).then(function () {
-          $scope.groupMessage = "";
+          document.getElementById("groupChatboxDiv").innerHTML = "";
           messageFactory.updateGroupData().then(function(){
             $scope.groupData = messageFactory.getGroupData();
             $timeout(function () {
@@ -1731,12 +1729,25 @@ function ($scope, $state, $stateParams, messageFactory, $window, $timeout, $cord
 function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFactory, $timeout, $ionicPush, $localStorage, $rootScope, $ionicActionSheet) {
   $scope.data = {};
   $scope.data.currentUser = messageFactory.getCurrentUser();
-
   $scope.showLoader = false;
-
   $scope.data.uploadSuccessful = false;
-
+  $scope.data.emailSetupRequired = false;
   $scope.showPasswordUpdated = false;
+
+  //call to the server, see if the user needs to add an email and password to their account
+  if(!$scope.data.currentUser.account_is_setup){
+    messageFactory.emailAndPasswordIsValid().then(function (res) {
+      if(!res.account_is_setup){
+        $scope.data.emailSetupRequired = true;
+      } else {
+        //set the local user account_is_setup to true
+        $scope.data.currentUser.account_is_setup = true
+        messageFactory.setCurrentUser($scope.data.currentUser);
+        $scope.data.currentUser = messageFactory.getCurrentUser();
+      }
+    })
+  }
+
 
   var emailRegex = new RegExp(/.*[@].*[.].*/, 'g'); //TODO
 
@@ -1752,7 +1763,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
 
     if($scope.data.newEmail){
       if($scope.data.newEmail.length < 1){
-        $scope.errors.push("Your email is really dumb");
+        $scope.errors.push("Please enter an email address");
       }
 
       if(!emailRegex.test($scope.data.newEmail)){
@@ -1851,6 +1862,19 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
     $cordovaCamera.getPicture(options).then(function (imageData) {
       // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
       $scope.data.imgURI = imageData;
+
+      var filename = $scope.data.currentUser.user_id + '_PersonalProfilePic.jpg'
+      photoFactory.uploadPersonalProfilePhoto(filename, $scope.data.imgURI);
+
+      $scope.showLoader = true;
+
+      $timeout(function () {
+        $scope.data.uploadSuccessful = true;
+        $scope.showLoader = false;
+        $scope.data.currentUser = messageFactory.getCurrentUser();
+        $scope.apply();
+      }, 2000);
+
     }, function (err) {
         console.log("error in take photo");
     });
@@ -1871,26 +1895,22 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
     $cordovaCamera.getPicture(options).then(function (imageData) {
       // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
       $scope.data.imgURI = imageData;
+
+      var filename = $scope.data.currentUser.user_id + '_PersonalProfilePic.jpg'
+      photoFactory.uploadPersonalProfilePhoto(filename, $scope.data.imgURI);
+
+      $scope.showLoader = true;
+
+      $timeout(function () {
+        $scope.data.uploadSuccessful = true;
+        $scope.showLoader = false;
+        $scope.data.currentUser = messageFactory.getCurrentUser();
+        $scope.apply();
+      }, 2000);
+
     }, function (err) {
       console.log("error has occurred in get picture");
     })
-  }
-
-  $scope.data.uploadUpdatedPhoto = function () {
-    if(!$scope.data.imgURI) return;
-
-    var filename = $scope.data.currentUser.user_id + '_PersonalProfilePic.jpg'
-    photoFactory.uploadPersonalProfilePhoto(filename, $scope.data.imgURI);
-
-    $scope.showLoader = true;
-
-    $timeout(function () {
-      $scope.data.uploadSuccessful = true;
-      $scope.showLoader = false;
-      $scope.data.currentUser = messageFactory.getCurrentUser();
-      $scope.apply();
-    }, 3000);
-
   }
 
   $scope.backToChatPage = function () {
