@@ -1459,7 +1459,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   $rootScope.individualGroupUpdateInterval = setInterval(function () {
     messageFactory.updateGroupData().then(function(res){
       $scope.groupData = res;
-      $ionicScrollDelegate.$getByHandle('data.individualGroupScroll').scrollBottom(true);
     })
   }, 10000);
 
@@ -1863,7 +1862,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
       // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
       $scope.data.imgURI = imageData;
 
-      var filename = $scope.data.currentUser.user_id + '_PersonalProfilePic_' + Date.now() + '.jpg'
+      var filename = $scope.data.currentUser.user_id + '_PersonalProfilePic.jpg'
       photoFactory.uploadPersonalProfilePhoto(filename, $scope.data.imgURI);
 
       $scope.showLoader = true;
@@ -1896,12 +1895,8 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
       // $scope.groupData.imgURI = "data:image/jpeg;base64," + imageData;
       $scope.data.imgURI = imageData;
 
-      var filename = $scope.data.currentUser.user_id + '_PersonalProfilePic_' + Date.now() + '.jpg'
-      console.log(filename);
+      var filename = $scope.data.currentUser.user_id + '_PersonalProfilePic.jpg'
       photoFactory.uploadPersonalProfilePhoto(filename, $scope.data.imgURI);
-
-      $localStorage.whinny_user.portrait_link = 'https://s3.amazonaws.com/whinnyphotos/profile_photos/' + filename;
-      messageFactory.setCurrentUser($localStorage.whinny_user);
 
       $scope.showLoader = true;
 
@@ -1909,6 +1904,7 @@ function ($scope, $state, $stateParams, messageFactory, $cordovaCamera, photoFac
         $scope.data.uploadSuccessful = true;
         $scope.showLoader = false;
         $scope.data.currentUser = messageFactory.getCurrentUser();
+        $scope.apply();
       }, 2000);
 
     }, function (err) {

@@ -10079,7 +10079,8 @@ a.button {
 
 .uploadNewProfilePicSpinner {
   margin-left: auto;
-  margin-right: auto; }
+  margin-right: auto;
+  margin-top: auto; }
 
 .broadcastCardLink {
   text-transform: uppercase;
