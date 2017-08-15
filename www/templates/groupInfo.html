@@ -29,8 +29,8 @@
       <li class="item">
         Group Members
 
-        <ion-item ng-repeat="member in groupMembers" class="item item-avatar" ng-click="newPersonalMessage(member)">
-          <img ng-src="{{member.portrait_link}}" alt="">
+        <ion-item ng-repeat="member in groupMembers" class="item item-avatar">
+          <img ng-src="{{member.portrait_link}}" alt="" ng-click="newPersonalMessage(member)">
           <h3>{{member.first_name}} {{member.last_name}}</h3>
 
           <i class="icon ion-close-round removeGroupMember" ng-if="admin && !member.admin" ng-click="removeUserFromGroup(group_id, member.user_id, member.first_name, member.last_name, group.group_name)"></i>

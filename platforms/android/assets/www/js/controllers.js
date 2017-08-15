@@ -1459,7 +1459,6 @@ function ($scope, $state, $stateParams, messageFactory, $rootScope, $cordovaCame
   $rootScope.individualGroupUpdateInterval = setInterval(function () {
     messageFactory.updateGroupData().then(function(res){
       $scope.groupData = res;
-      $ionicScrollDelegate.$getByHandle('data.individualGroupScroll').scrollBottom(true);
     })
   }, 10000);
 

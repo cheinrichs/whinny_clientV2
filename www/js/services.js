@@ -99,7 +99,7 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
     logout: logout
   };
 
-  //TODO switch between databases when you push!!@?!@#!@#
+  //TODO Make sure api-url pointing to correct DB - staging or production
   //Remember to switch in the photo upload factory as well
   //Production
   var API_URL = 'https://whinny-server.herokuapp.com';
@@ -215,8 +215,6 @@ angular.module('app.services', ['ngCordova', 'ngStorage', 'ionic.cloud'])
       }
 
       groupData = groupDataUnparsed;
-
-      console.log(groupData);
 
       return groupData;
     })

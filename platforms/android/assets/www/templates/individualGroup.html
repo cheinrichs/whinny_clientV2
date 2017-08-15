@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="row" ng-if="message.from_user == currentUser.user_id">
-                  <div ng-if="!message.image">
+                  <div ng-if="!message.image" style="width:100%;">
                     <div class="col">
                       <div ng-bind-html="message.group_message_content | emoji">{{message.group_message_content}}</div>
                     </div>

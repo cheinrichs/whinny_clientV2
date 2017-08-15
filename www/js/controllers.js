@@ -751,7 +751,6 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
   $scope.data.errors = [];
 
   $scope.editGroupName = function () {
-    console.log("edit group name");
     $ionicPopup.prompt({
       title: 'Edit Group Name',
       inputType: 'text',
@@ -773,7 +772,6 @@ function ($scope, $state, $stateParams, messageFactory, contactsFactory, $ionicP
   }
 
   $scope.editGroupDescription = function () {
-    console.log("edit group description");
     $ionicPopup.prompt({
       title: 'Edit Group Description',
       inputType: 'text',

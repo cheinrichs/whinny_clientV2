@@ -1,16 +1,16 @@
 angular.module('app.directives', [])
 
-.directive('showFocus', ['$timeout', function($timeout) {
-  return function(scope, element, attrs) {
-    scope.$watch(attrs.showFocus,
-      function (newValue) {
-        $timeout(function() {
-            newValue && element[0].focus();
-            console.log("focusing");
-        }, 200);
-      }, true);
-  };
-}])
+// .directive('showFocus', ['$timeout', function($timeout) {
+//   return function(scope, element, attrs) {
+//     scope.$watch(attrs.showFocus,
+//       function (newValue) {
+//         $timeout(function() {
+//             newValue && element[0].focus();
+//             console.log("focusing");
+//         }, 200);
+//       }, true);
+//   };
+// }])
 
 .directive('emojiInput', function ($timeout) {
   return {
